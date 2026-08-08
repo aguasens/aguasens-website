@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>AguaSens · Post único — El proyecto en una imagen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="carrusel.css">
+  <style>
+    /* ── Post de una sola imagen, con foto de fondo ── */
+    .slide--foto {
+      background-image:
+        linear-gradient(to bottom, rgba(9, 13, 20, .80) 0%, rgba(9, 13, 20, .54) 38%, rgba(9, 13, 20, .72) 70%, rgba(9, 13, 20, .92) 100%),
+        url('../img/hero-bg.png');
+      background-size: cover;
+      background-position: center;
+    }
+    .slide--foto::before { display: none; } /* sin halo, ya hay foto */
+    .slide--foto .slide__inner { padding: 70px; }
+    .slide--foto .slide__head { margin-bottom: 38px; }
+    .slide--foto .slide__body { justify-content: flex-start; }
+
+    /* Tarjeta de vidrio para leer sobre la foto */
+    .glass {
+      background: rgba(13, 18, 27, .58);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+    }
+
+    .kicker-line { display: flex; align-items: center; gap: 14px; margin: 14px 0; }
+
+    /* Bloque central: los 4 nodos + la app */
+    .middle { display: flex; gap: 28px; align-items: stretch; }
+    .middle__left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+
+    .node-row {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 14px 20px;
+    }
+    .node-row .icon-badge { width: 66px; height: 66px; }
+    .node-row .icon-badge svg { width: 32px; height: 32px; }
+    .node-row__k {
+      font-family: var(--font-condensed);
+      font-weight: 700;
+      font-size: 27px;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      color: var(--blanco);
+      line-height: 1;
+      margin-bottom: 7px;
+    }
+    .node-row__v {
+      font-size: 20px;
+      line-height: 1.32;
+      font-weight: 400;
+      color: rgba(248, 250, 252, .82);
+    }
+    .node-row__v b { color: var(--verde-claro); font-weight: 600; }
+
+    /* La app en su marco */
+    .middle .phone { width: 250px; align-self: center; }
+    .middle .phone img { height: 460px; object-fit: cover; object-position: top; }
+
+    /* Panel del QR — fondo claro para que escanee bien */
+    .qr-card {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 26px 34px;
+      box-shadow: 0 20px 55px rgba(0, 0, 0, .45);
+      margin-top: auto; /* empuja la tarjeta de contacto al pie */
+    }
+    .qr-card__img { flex: none; width: 190px; height: 190px; border-radius: 8px; }
+    .qr-card__img img { width: 100%; height: 100%; }
+    .qr-card__k {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-condensed);
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--verde-vivo);
+    }
+    .qr-card__k svg { width: 30px; height: 30px; }
+    .qr-card__t { font-size: 29px; line-height: 1.22; font-weight: 600; color: var(--verde-oscuro); margin: 11px 0 11px; }
+    .qr-card__contact {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-condensed);
+      font-weight: 700;
+      font-size: 30px;
+      letter-spacing: .02em;
+      color: var(--verde-oscuro);
+    }
+    .qr-card__contact span { color: var(--gris-claro); }
+  </style>
+</head>
+
+<body>
+  <script src="icons.js"></script>
+
+  <div class="toolbar">
+    <b>Post único · El proyecto en una imagen · con QR</b>
+    <p>Para exportar: <kbd>Ctrl</kbd>+<kbd>P</kbd> → Destino <b>Guardar como PDF</b> → Márgenes <b>Ninguno</b> → Escala
+      <b>100%</b> → tildar <b>Gráficos de fondo</b>. Para PNG exacto de 1080×1350 px: <b>node export-png.mjs</b>.</p>
+  </div>
+
+  <main class="stage">
+
+    <section class="slide slide--dark slide--foto">
+      <div class="slide__inner">
+        <header class="slide__head">
+          <img src="../img/ASlogoBl.png" alt="AguaSens" style="height:56px">
+          <div class="eyebrow eyebrow--plain">Monitoreo de aguadas</div>
+        </header>
+
+        <div class="slide__body stack gap-28">
+
+          <div class="stack gap-24">
+            <h1 class="title title--sm">Controlá el agua de tu campo<span class="title__accent">desde el celular</span>
+            </h1>
+            <p class="lead" style="font-size:27px;line-height:1.55">Controlá el agua de todo el campo sin recorrerlo.
+              Se instala sobre lo que ya tenés, mide las variables críticas y sube los datos a la nube. Funciona con
+              panel solar y batería, y te avisa al celular en tiempo real.</p>
+          </div>
+
+          <div class="kicker-line">
+            <span class="kicker">Qué controlás en tu campo</span>
+            <hr class="hairline" style="flex:1;height:2px">
+          </div>
+
+          <!-- Los 4 nodos con lo que mide cada uno + la app -->
+          <div class="middle">
+            <div class="middle__left">
+              <div class="node-row glass">
+                <div class="icon-badge"><svg>
+                    <use href="#i-droplet" /></svg></div>
+                <div>
+                  <div class="node-row__k">Tanques y represas</div>
+                  <p class="node-row__v"><b>Nivel de agua y temperatura de agua.</b></p>
+                </div>
+              </div>
+              <div class="node-row glass">
+                <div class="icon-badge"><svg>
+                    <use href="#i-droplet" /></svg></div>
+                <div>
+                  <div class="node-row__k">Bebederos móviles</div>
+                  <p class="node-row__v"><b>Nivel de agua, temperatura de agua y ubicación.</b></p>
+                </div>
+              </div>
+              <div class="node-row glass">
+                <div class="icon-badge"><svg>
+                    <use href="#i-droplet" /></svg></div>
+                <div>
+                  <div class="node-row__k">Bombas eléctricas</div>
+                  <p class="node-row__v"><b>Si están funcionando, corriente consumida y el nivel del pozo.</b></p>
+                </div>
+              </div>
+              <div class="node-row glass">
+                <div class="icon-badge"><svg>
+                    <use href="#i-droplet" /></svg></div>
+                <div>
+                  <div class="node-row__k">Molinos de viento</div>
+                  <p class="node-row__v"><b>Si están dando agua y cómo están trabajando.</b></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="phone">
+              <img src="../img/app-screenshot.jpg" alt="La app de AguaSens con el mapa del campo">
+            </div>
+          </div>
+
+          
+
+          <!-- QR + CTA -->
+          <div class="qr-card">
+            <div class="qr-card__img"><img src="qr-whatsapp.jpeg" alt="Código QR de WhatsApp AguaSens"></div>
+            <div>
+              <span class="qr-card__k"><svg>
+                  <use href="#i-wa" /></svg>Escaneá y escribinos</span>
+              <p class="qr-card__t">Consultanos por el monitoreo para tu campo.</p>
+              <div class="qr-card__contact">11 5425-1823 <span>·</span> www.aguasens.com.ar</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+
+</html>

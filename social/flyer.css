@@ -1,0 +1,501 @@
+/* ═══════════════════════════════════════════════════════════════
+   AguaSens — Flyer institucional, 2 carillas A4 (210 × 297 mm)
+   Paleta y tipografías de ../css/styles.css
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --verde-oscuro: #152238;
+  --verde-medio: #2a5a8f;
+  --verde-vivo: #3472B5;
+  --verde-claro: #5a9bd5;
+  --verde-natural: #2E7D32;
+  --verde-natural-claro: #4CAF50;
+  --ocre: #d4a647;
+  --crema: #f0f4f8;
+  --blanco: #f8fafc;
+  --negro: #0f1219;
+  --gris: #5a6577;
+  --gris-claro: #e2e8f0;
+  --danger: #c95c47;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-condensed: 'Barlow Condensed', 'Barlow', sans-serif;
+
+  --pad: 13mm;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--verde-oscuro);
+  background: #4a5262;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+.page {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  padding: var(--pad);
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+  page-break-after: always;
+  break-inside: avoid;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page:last-of-type { break-after: auto; page-break-after: auto; }
+
+/* ── Cabecera y pie ──────────────────────────────────────────── */
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8mm;
+  flex: none;
+  padding-bottom: 3.5mm;
+  border-bottom: .3mm solid var(--gris-claro);
+}
+.head img { height: 10mm; width: auto; }
+
+.head__contact {
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 8pt;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gris);
+  text-align: right;
+  line-height: 1.5;
+}
+
+.page__foot {
+  margin-top: auto;
+  flex: none;
+  padding-top: 3mm;
+  border-top: .3mm solid var(--gris-claro);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6mm;
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 7.5pt;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+.page__foot span { color: var(--gris-claro); }
+
+/* ── Hero a sangre ───────────────────────────────────────────── */
+.hero {
+  position: relative;
+  flex: none;
+  margin: 0 calc(-1 * var(--pad));
+  margin-top: 4mm;
+  height: 62mm;
+  padding: 8mm var(--pad);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: var(--blanco);
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(12, 16, 23, .74) 55%, rgba(12, 16, 23, .93) 100%),
+    url('../img/hero-bg.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 27pt;
+  line-height: 1.02;
+  letter-spacing: -.01em;
+  margin: 2mm 0 3mm;
+}
+.hero h1 span { color: var(--verde-claro); display: block; }
+.hero p { font-size: 10pt; line-height: 1.45; font-weight: 300; max-width: 145mm; }
+.hero p strong { font-weight: 600; }
+
+/* ── Tipografía ──────────────────────────────────────────────── */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 2.4mm;
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 8.5pt;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--verde-medio);
+}
+.eyebrow::before {
+  content: '';
+  width: 1.6mm; height: 1.6mm;
+  border-radius: 50%;
+  background: var(--verde-vivo);
+  flex: none;
+}
+.hero .eyebrow, .band .eyebrow { color: var(--verde-claro); }
+.hero .eyebrow::before, .band .eyebrow::before { background: var(--verde-claro); }
+
+h2.sec {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 16pt;
+  line-height: 1.12;
+  margin: 1.6mm 0 3mm;
+}
+h2.sec span { color: var(--verde-vivo); }
+
+h3.blk {
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 11pt;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 1.4mm;
+}
+
+p.txt { font-size: 9pt; line-height: 1.45; color: var(--gris); }
+p.txt strong { color: var(--verde-oscuro); font-weight: 600; }
+p.lead { font-size: 9.8pt; line-height: 1.5; color: var(--gris); }
+p.lead strong { color: var(--verde-oscuro); font-weight: 600; }
+
+.src { font-size: 7pt; line-height: 1.35; font-style: italic; color: var(--gris); }
+
+.section { flex: none; margin-top: 4.5mm; }
+.section--tight { margin-top: 3.5mm; }
+
+/* ── Bloques ─────────────────────────────────────────────────── */
+.grid { display: grid; gap: 3mm; }
+.grid--2 { grid-template-columns: 1fr 1fr; }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--crema);
+  border: .3mm solid var(--gris-claro);
+  border-radius: 3mm;
+  padding: 3.6mm;
+}
+.card--plain { background: #fff; }
+
+.icon {
+  width: 9mm; height: 9mm;
+  border-radius: 50%;
+  background: rgba(52, 114, 181, .10);
+  border: .3mm solid rgba(52, 114, 181, .25);
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+  margin-bottom: 2.5mm;
+}
+.icon svg { width: 4.6mm; height: 4.6mm; color: var(--verde-vivo); }
+
+/* Ficha de nodo */
+.nodo__name {
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 12pt;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: var(--verde-oscuro);
+}
+.nodo__for {
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 8pt;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--verde-vivo);
+  margin: .8mm 0 2.4mm;
+}
+.nodo__list { list-style: none; }
+.nodo__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 2mm;
+  font-size: 8.4pt;
+  line-height: 1.4;
+  color: var(--gris);
+  margin-bottom: 1.1mm;
+}
+.nodo__list svg { width: 3.4mm; height: 3.4mm; color: var(--verde-vivo); flex: none; margin-top: .6mm; }
+
+/* Franja de ítems en línea */
+.inline-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5mm 6mm;
+  background: var(--verde-oscuro);
+  border-radius: 3mm;
+  padding: 4mm 5mm;
+  color: var(--blanco);
+}
+.inline-specs div {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  font-size: 8.6pt;
+  font-weight: 500;
+}
+.inline-specs svg { width: 4mm; height: 4mm; color: var(--verde-claro); flex: none; }
+
+/* Franja oscura con foto de producto + base común */
+.showcase {
+  display: flex;
+  align-items: center;
+  gap: 5mm;
+  background: var(--verde-oscuro);
+  border-radius: 3mm;
+  padding: 4mm;
+  color: var(--blanco);
+}
+/* La foto de origen es cuadrada (900 × 900), así que en una caja cuadrada
+   entra completa: se ve el panel solar, el mástil y el tanque. */
+.showcase__img {
+  width: 34mm;
+  height: 34mm;
+  flex: none;
+  border-radius: 2.5mm;
+  overflow: hidden;
+}
+.showcase__img img { width: 100%; height: 100%; object-fit: cover; }
+
+.showcase__body { flex: 1; min-width: 0; }
+.showcase .eyebrow { color: var(--verde-claro); margin-bottom: 3mm; }
+.showcase .eyebrow::before { background: var(--verde-claro); }
+
+.showcase__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.6mm 6mm;
+}
+.showcase__grid div {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  font-size: 8.6pt;
+  font-weight: 500;
+  line-height: 1.25;
+}
+.showcase__grid svg { width: 4mm; height: 4mm; color: var(--verde-claro); flex: none; }
+
+.showcase__cap {
+  font-size: 7pt;
+  font-style: italic;
+  color: rgba(248, 250, 252, .55);
+  margin-top: 2mm;
+}
+
+/* Paso numerado */
+.step__num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20pt;
+  line-height: 1;
+  color: var(--verde-claro);
+  margin-bottom: 1.2mm;
+}
+
+/* Lista con punto */
+.dots { list-style: none; }
+.dots li {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.2mm;
+  font-size: 8.8pt;
+  line-height: 1.42;
+  color: var(--gris);
+  margin-bottom: 1.4mm;
+}
+.dots li::before {
+  content: '';
+  flex: none;
+  width: 1.5mm; height: 1.5mm;
+  margin-top: 1.5mm;
+  border-radius: 50%;
+  background: var(--verde-vivo);
+}
+.dots strong { color: var(--verde-oscuro); font-weight: 600; }
+
+/* Píldora de sensor */
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  background: #fff;
+  border: .3mm solid var(--gris-claro);
+  border-radius: 2mm;
+  padding: 1.9mm 2.4mm;
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 8.6pt;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--verde-oscuro);
+}
+.pill svg { width: 4mm; height: 4mm; color: var(--verde-vivo); flex: none; }
+
+/* Marco de celular */
+.phone {
+  width: 40mm;
+  flex: none;
+  padding: 1.2mm;
+  border-radius: 3.4mm;
+  background: #0a0d13;
+  border: .3mm solid rgba(0, 0, 0, .3);
+}
+.phone img { width: 100%; border-radius: 3mm; }
+
+/* Dato duro */
+.stat__n {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20pt;
+  line-height: 1;
+  color: var(--danger);
+}
+.stat__l { font-size: 8.4pt; line-height: 1.35; font-weight: 600; margin: 1.2mm 0 1mm; }
+
+/* Franja oscura (CTA / cita) */
+.band {
+  background: var(--verde-oscuro);
+  border-radius: 3mm;
+  padding: 4mm 5mm;
+  color: var(--blanco);
+}
+.band p.txt { color: rgba(248, 250, 252, .85); }
+.band p.txt strong { color: var(--blanco); }
+.band h2.sec { color: var(--blanco); }
+.band h2.sec span { color: var(--verde-claro); }
+
+.cta {
+  margin: 0 calc(-1 * var(--pad)) calc(-1 * var(--pad));
+  margin-top: auto;
+  padding: 6mm var(--pad);
+  background: var(--negro);
+  color: var(--blanco);
+  flex: none;
+}
+.cta h2 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 18pt;
+  line-height: 1.1;
+  margin-bottom: 2mm;
+}
+.cta h2 span { color: var(--verde-claro); }
+.cta p { font-size: 9.4pt; line-height: 1.45; color: rgba(248, 250, 252, .8); }
+
+.cta__rows { display: flex; gap: 4mm; margin-top: 4.5mm; }
+.cta__row {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  background: rgba(255, 255, 255, .07);
+  border: .3mm solid rgba(255, 255, 255, .16);
+  border-radius: 2.5mm;
+  padding: 3.2mm 4mm;
+}
+.cta__row svg { width: 6mm; height: 6mm; color: var(--verde-claro); flex: none; }
+.cta__k {
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 7pt;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, .55);
+}
+.cta__v { font-size: 10.5pt; font-weight: 600; line-height: 1.2; }
+
+.row { display: flex; }
+.row-top { display: flex; align-items: flex-start; }
+.ac { align-items: center; }
+
+/* ── Sólo pantalla ───────────────────────────────────────────── */
+@media screen {
+  body { padding: 26mm 0 14mm; }
+
+  .toolbar {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 99;
+    background: rgba(15, 18, 25, .94);
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+    padding: 12px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: #fff;
+  }
+  .toolbar b {
+    font-family: var(--font-condensed);
+    font-size: 12pt;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--verde-claro);
+  }
+  .toolbar p { font-size: 8.5pt; color: #9aa6b8; line-height: 1.5; max-width: 620px; }
+  .toolbar kbd {
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: var(--font-condensed);
+    font-size: 8pt;
+  }
+
+  .sheet { display: flex; flex-direction: column; align-items: center; gap: 8mm; counter-reset: pg; }
+  .page {
+    box-shadow: 0 6mm 18mm rgba(0, 0, 0, .45);
+    counter-increment: pg;
+  }
+  .page::after {
+    content: "CARILLA " counter(pg) " / 2";
+    position: absolute;
+    z-index: 60;
+    top: 0; right: 0;
+    background: var(--verde-claro);
+    color: var(--negro);
+    font-family: var(--font-condensed);
+    font-weight: 700;
+    font-size: 8pt;
+    letter-spacing: .12em;
+    padding: 1.6mm 3mm;
+    border-radius: 0 0 0 2mm;
+  }
+}
+
+@media print {
+  body { background: none; padding: 0; }
+  .toolbar { display: none !important; }
+  .sheet { gap: 0; }
+  .page { box-shadow: none; }
+  .page::after { display: none !important; }
+}
+
+/* Modo exportación (lo usa export-png.mjs / flyer-pdf.mjs) */
+.export-mode { padding: 0 !important; background: #fff; }
+.export-mode .toolbar { display: none !important; }
+.export-mode .page::after { display: none !important; }
+.export-mode .sheet { gap: 0; }
+.export-mode .page { box-shadow: none; }

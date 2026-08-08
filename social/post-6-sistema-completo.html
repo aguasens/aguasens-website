@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>AguaSens · Carrusel 6 — El sistema completo (publicidad)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="carrusel.css">
+</head>
+
+<body>
+  <script src="icons.js"></script>
+
+  <div class="toolbar">
+    <b>Carrusel 6 · El sistema completo · 10 slides · pensado para pauta paga</b>
+    <p>Para exportar: <kbd>Ctrl</kbd>+<kbd>P</kbd> → Destino <b>Guardar como PDF</b> → Márgenes <b>Ninguno</b> → Escala
+      <b>100%</b> → tildar <b>Gráficos de fondo</b>. Para PNG exactos de 1080×1350 px: <b>node export-png.mjs</b>.</p>
+  </div>
+
+  <main class="stage">
+
+    <!-- ═══ 1 · HOOK ═══ -->
+    <section class="slide slide--cover">
+      <div class="slide__inner">
+        <header class="slide__head">
+          <img src="../img/ASlogoBl.png" alt="AguaSens" style="height:60px">
+        </header>
+
+        <div class="slide__body slide__body--end stack gap-28">
+          <div class="eyebrow">Monitoreo inteligente de aguadas</div>
+          <h1 class="title title--lg">Controlá el agua de tu campo<span class="title__accent">desde el celular</span>
+          </h1>
+          <p class="lead" style="max-width:850px">Tanques, bebederos, represas, bombas y molinos. En tiempo real, con
+            alertas al celular.</p>
+
+          <div class="chips" style="margin-top:6px">
+            <span class="chip"><svg>
+                <use href="#i-solar" /></svg>Energía solar</span>
+            <span class="chip"><svg>
+                <use href="#i-radio" /></svg>Comunicación inalámbrica</span>
+            <span class="chip"><svg>
+                <use href="#i-bell" /></svg>Alertas al celular</span>
+          </div>
+
+          <div class="row" style="margin-top:16px">
+            <span class="swipe">Deslizá <svg>
+                <use href="#i-arrow-right" /></svg></span>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <div class="foot-contact">aguasens.com.ar <span>·</span> 11 6845-2098</div>
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 2 · EL PROBLEMA ═══ -->
+    <section class="slide slide--light">
+      <span class="ring" style="width:700px;height:700px;top:-250px;right:-240px"></span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">El desafío tradicional</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <h2 class="title">Cuando falla el agua,<span class="title__accent">te enterás tarde</span></h2>
+
+          <ul class="mark-list mark-list--bad">
+            <li><svg>
+                <use href="#i-x" /></svg>Recorridas diarias que consumen tiempo y combustible.</li>
+            <li><svg>
+                <use href="#i-x" /></svg>Fallas descubiertas tarde, causando estrés hídrico.</li>
+            <li><svg>
+                <use href="#i-x" /></svg>Sin visibilidad del estado de tanques y represas a distancia.</li>
+            <li><svg>
+                <use href="#i-x" /></svg>Incertidumbre sobre el nivel real de consumo.</li>
+          </ul>
+
+          <div class="card" style="border-left:5px solid var(--danger)">
+            <p class="text" style="font-size:28px">Una bomba rota o un flotante atascado puede costar
+              <strong>animales, kilos y semanas de recuperación</strong>.</p>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogo.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 3 · QUÉ ES AGUASENS ═══ -->
+    <section class="slide slide--dark">
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Qué es AguaSens</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <h2 class="title title--sm">Un sistema modular<span class="title__accent">de tres piezas</span></h2>
+
+          <div class="stack gap-20">
+            <div class="card" style="padding:28px 32px">
+              <div class="row-top" style="gap:26px">
+                <div class="icon-badge" style="width:72px;height:72px"><svg style="width:36px;height:36px">
+                    <use href="#i-solar" /></svg></div>
+                <div>
+                  <div class="card__title">1 · Los nodos</div>
+                  <p class="text" style="font-size:26px">Se instalan sobre la infraestructura que ya tenés. Miden las
+                    variables críticas de cada aguada. Panel solar y batería integrada.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:28px 32px">
+              <div class="row-top" style="gap:26px">
+                <div class="icon-badge" style="width:72px;height:72px"><svg style="width:36px;height:36px">
+                    <use href="#i-radio" /></svg></div>
+                <div>
+                  <div class="card__title">2 · El Gateway</div>
+                  <p class="text" style="font-size:26px">Recibe por LoRa los datos de todos los nodos del campo y los
+                    sube a la nube por WiFi o 4G.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:28px 32px">
+              <div class="row-top" style="gap:26px">
+                <div class="icon-badge" style="width:72px;height:72px"><svg style="width:36px;height:36px">
+                    <use href="#i-smartphone" /></svg></div>
+                <div>
+                  <div class="card__title">3 · La app</div>
+                  <p class="text" style="font-size:26px">Mapa en tiempo real, alertas configurables e historial de cada
+                    punto de medición, desde donde estés.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 4 · LOS CUATRO NODOS ═══ -->
+    <section class="slide slide--dark">
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Cuatro modelos, un ecosistema</div>
+        </header>
+
+        <div class="slide__body stack gap-28">
+          <h2 class="title title--sm">Un nodo para cada aguada</h2>
+
+          <div class="stack" style="gap:14px">
+            <div class="card" style="padding:18px">
+              <div class="row" style="gap:24px">
+                <div class="node-thumb"><img src="../img/nodo-tanque.png" alt="Nodo Fijo"></div>
+                <div>
+                  <div class="card__title" style="font-size:29px;margin-bottom:8px">Nodo Fijo</div>
+                  <p class="text" style="font-size:24px">Tanques, bebederos fijos y represas.<br>Nivel y temperatura
+                    del agua.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:18px">
+              <div class="row" style="gap:24px">
+                <div class="node-thumb"><img src="../img/nodo-bebedero.png" alt="Nodo Móvil"></div>
+                <div>
+                  <div class="card__title" style="font-size:29px;margin-bottom:8px">Nodo Móvil</div>
+                  <p class="text" style="font-size:24px">Bebederos móviles.<br>Nivel, GPS, THI y temperatura del agua.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:18px">
+              <div class="row" style="gap:24px">
+                <div class="node-thumb"><img src="../img/nodo-bomba.png" alt="Nodo Bomba"></div>
+                <div>
+                  <div class="card__title" style="font-size:29px;margin-bottom:8px">Nodo Bomba</div>
+                  <p class="text" style="font-size:24px">Bombas eléctricas.<br>Flujo, consumo eléctrico y nivel de
+                    pozo.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:18px">
+              <div class="row" style="gap:24px">
+                <div class="node-thumb"><img src="../img/nodo-molino.png" alt="Nodo Molino"></div>
+                <div>
+                  <div class="card__title" style="font-size:29px;margin-bottom:8px">Nodo Molino</div>
+                  <p class="text" style="font-size:24px">Molinos de viento.<br>Flujo de agua y carrera de varilla.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 5 · QUÉ MEDÍS ═══ -->
+    <section class="slide slide--light">
+      <span class="ring" style="width:700px;height:700px;bottom:-260px;left:-240px"></span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Sensores</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <h2 class="title title--sm">8 variables<span class="title__accent">bajo control</span></h2>
+
+          <div class="grid-2" style="gap:18px">
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-waves" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Nivel de agua</div>
+              </div>
+            </div>
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-thermometer" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Temperatura del agua</div>
+              </div>
+            </div>
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-sun" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Estrés por calor (THI)</div>
+              </div>
+            </div>
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-map-pin" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Ubicación GPS</div>
+              </div>
+            </div>
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-gauge" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Flujo de agua</div>
+              </div>
+            </div>
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-zap" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Consumo eléctrico</div>
+              </div>
+            </div>
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-well" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Nivel de perforación</div>
+              </div>
+            </div>
+            <div class="card" style="padding:22px 24px">
+              <div class="row" style="gap:16px">
+                <svg style="width:34px;height:34px;color:var(--verde-vivo);flex:none">
+                  <use href="#i-rod" /></svg>
+                <div class="card__title" style="font-size:25px;margin:0">Carrera de varilla</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="text" style="font-size:26px">Cada nodo mide lo que corresponde a su tipo de aguada. Todo llega a la
+            <strong>misma app</strong>.
+          </p>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogo.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 6 · CÓMO FUNCIONA ═══ -->
+    <section class="slide slide--dark">
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Así de simple</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <h2 class="title title--sm">Cómo funciona</h2>
+
+          <div class="stack gap-28">
+            <div class="row-top" style="gap:26px">
+              <div class="feature-num" style="width:100px">01</div>
+              <div>
+                <h3 class="f-title" style="font-size:38px">Instalación del nodo</h3>
+                <p class="text" style="font-size:27px">Se instala sobre el tanque, bebedero, represa o bomba. Sin obra
+                  y con comunicación inalámbrica.</p>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="row-top" style="gap:26px">
+              <div class="feature-num" style="width:100px">02</div>
+              <div>
+                <h3 class="f-title" style="font-size:38px">Conexión con el Gateway</h3>
+                <p class="text" style="font-size:27px">El nodo se comunica por LoRa con el gateway, y el gateway se
+                  conecta a internet por WiFi o 4G.</p>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="row-top" style="gap:26px">
+              <div class="feature-num" style="width:100px">03</div>
+              <div>
+                <h3 class="f-title" style="font-size:38px">Controlá todo</h3>
+                <p class="text" style="font-size:27px">Desde el celular ves todos tus puntos de medición, recibís
+                  alertas y decidís con datos reales.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 7 · LA APP ═══ -->
+    <section class="slide slide--deep">
+      <span class="ring" style="width:820px;height:820px;top:-300px;right:-300px"></span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">La app</div>
+        </header>
+
+        <div class="slide__body">
+          <div class="row" style="gap:48px;align-items:center">
+            <div class="phone" style="width:330px">
+              <img src="../img/app-screenshot.jpg" alt="Mapa de nodos en la app AguaSens">
+            </div>
+
+            <div class="stack gap-28" style="flex:1;min-width:0">
+              <h2 class="title title--sm">Todo el campo<br>en una pantalla</h2>
+              <ul class="dot-list" style="gap:18px">
+                <li style="font-size:26px">Mapa en tiempo real con semáforo visual</li>
+                <li style="font-size:26px">Alertas por nivel mínimo o máximo</li>
+                <li style="font-size:26px">Historial de mediciones</li>
+                <li style="font-size:26px">Dashboard multi-campo y multi-nodo</li>
+                <li style="font-size:26px">Avisos por Telegram y/o mail</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 8 · LOS NÚMEROS ═══ -->
+    <section class="slide slide--dark">
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Lo que cambia en el campo</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <h2 class="title title--sm">Los números</h2>
+
+          <div class="grid-2" style="gap:20px">
+            <div class="stat">
+              <div class="stat__num">24/7</div>
+              <div class="stat__label">Monitoreo</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">−60 %</div>
+              <div class="stat__label">Recorridas</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">∞</div>
+              <div class="stat__label">Multi-nodo</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">☀️</div>
+              <div class="stat__label">Energía solar</div>
+            </div>
+          </div>
+
+          <div class="card" style="border-left:5px solid var(--verde-claro)">
+            <p class="text" style="font-size:27px">Un bovino pierde <strong>200 g de ganancia diaria de peso por cada
+                km extra</strong> de caminata al agua.</p>
+            <p class="card__src" style="margin-top:10px">Fuente: INTA E.E.A. Concepción del Uruguay. Requerimientos
+              hídricos en bovinos.</p>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 9 · POR QUÉ CONVIENE ═══ -->
+    <section class="slide slide--light">
+      <span class="ring" style="width:700px;height:700px;top:-250px;left:-230px"></span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">La alternativa</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <div class="row" style="gap:22px">
+            <svg style="width:56px;height:56px;color:var(--verde-natural)">
+              <use href="#i-check" /></svg>
+            <h2 class="title title--sm">Con AguaSens</h2>
+          </div>
+
+          <ul class="mark-list mark-list--good" style="color:var(--verde-oscuro)">
+            <li><svg style="color:var(--verde-natural)">
+                <use href="#i-check" /></svg>Monitoreo 24/7 de todos tus nodos desde el celular.</li>
+            <li><svg style="color:var(--verde-natural)">
+                <use href="#i-check" /></svg>Alertas inmediatas antes de que el nivel sea crítico.</li>
+            <li><svg style="color:var(--verde-natural)">
+                <use href="#i-check" /></svg>Un sensor en cada aguada.</li>
+            <li><svg style="color:var(--verde-natural)">
+                <use href="#i-check" /></svg>Registro de consumo para decisiones basadas en datos.</li>
+            <li><svg style="color:var(--verde-natural)">
+                <use href="#i-check" /></svg>Escalable: arrancá con 1 nodo y sumá cuando quieras.</li>
+          </ul>
+
+          <div class="card" style="border-left:5px solid var(--verde-natural)">
+            <p class="text" style="font-size:28px">El sistema detecta la falla <strong>en minutos, no en días</strong>,
+              y te avisa al celular.</p>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogo.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 10 · CTA ═══ -->
+    <section class="slide slide--deep">
+      <span class="ring" style="width:900px;height:900px;bottom:-420px;left:-260px"></span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <img src="../img/ASlogoBl.png" alt="AguaSens" style="height:60px">
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <div class="eyebrow">Contacto</div>
+          <h2 class="title">¿Cuántas aguadas<span class="title__accent">tenés sin monitoreo?</span></h2>
+          <p class="lead" style="max-width:840px">Escribinos y te ayudamos a dimensionar el sistema para tu campo.
+            <strong>Sin compromiso.</strong>
+          </p>
+
+          <div class="stack gap-20" style="margin-top:10px">
+            <div class="cta-row">
+              <svg>
+                <use href="#i-wa" /></svg>
+              <div>
+                <div class="cta-row__k">Escribinos por WhatsApp</div>
+                <div class="cta-row__v">11 6845-2098 · 11 5425-1823</div>
+              </div>
+            </div>
+            <div class="cta-row">
+              <svg>
+                <use href="#i-globe" /></svg>
+              <div>
+                <div class="cta-row__k">Web · calculadoras gratuitas</div>
+                <div class="cta-row__v">aguasens.com.ar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <div class="foot-contact">Ganadería de precisión <span>·</span> IoT campo <span>·</span> LoRa</div>
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="pips.js"></script>
+</body>
+
+</html>

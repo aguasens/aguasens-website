@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>AguaSens · Carrusel 2 — Cómo funciona</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="carrusel.css">
+</head>
+
+<body>
+  <script src="icons.js"></script>
+
+  <div class="toolbar">
+    <b>Carrusel 2 · Cómo funciona el sistema · 6 slides</b>
+    <p>Para exportar: <kbd>Ctrl</kbd>+<kbd>P</kbd> → Destino <b>Guardar como PDF</b> → Márgenes <b>Ninguno</b> → Escala
+      <b>100%</b> → tildar <b>Gráficos de fondo</b>. Para PNG exactos de 1080×1350 px: <b>node export-png.mjs</b>.</p>
+  </div>
+
+  <main class="stage">
+
+    <!-- ═══ 1 · PORTADA ═══ -->
+    <section class="slide slide--cover"
+      style="background-image:linear-gradient(to bottom, rgba(0,0,0,.42) 0%, rgba(12,16,23,.7) 52%, rgba(12,16,23,.96) 100%), url('../img/nodo-molino.png')">
+      <div class="slide__inner">
+        <header class="slide__head">
+          <img src="../img/ASlogoBl.png" alt="AguaSens" style="height:60px">
+        </header>
+
+        <div class="slide__body slide__body--end stack gap-28">
+          <div class="eyebrow">Así de simple</div>
+          <h1 class="title title--xl">Cómo funciona<span class="title__accent">el sistema</span></h1>
+          <p class="lead" style="max-width:820px">Tres pasos entre la aguada y tu celular. Sin obra, con comunicación
+            inalámbrica y sin depender de la señal del campo.</p>
+          <div class="row" style="margin-top:20px">
+            <span class="swipe">Deslizá <svg>
+                <use href="#i-arrow-right" /></svg></span>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <div class="foot-contact">aguasens.com.ar <span>·</span> 11 6845-2098</div>
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 2 · PASO 1 ═══ -->
+    <section class="slide slide--dark">
+      <span
+        style="position:absolute;right:70px;top:150px;z-index:1;font-family:var(--font-display);font-weight:900;font-size:330px;line-height:.8;color:rgba(90,155,213,.11)">01</span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Paso 1 de 3</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <div class="icon-badge"><svg>
+              <use href="#i-wrench" /></svg></div>
+          <h2 class="title title--lg">Instalación<span class="title__accent">del nodo</span></h2>
+          <p class="lead" style="max-width:840px">Se instala sobre el tanque, bebedero, represa o bomba.</p>
+
+          <div class="chips" style="margin-top:8px">
+            <span class="chip">Tanque australiano</span>
+            <span class="chip">Bebedero</span>
+            <span class="chip">Represa</span>
+            <span class="chip">Bomba</span>
+            <span class="chip">Molino</span>
+          </div>
+
+          <p class="text" style="max-width:840px;margin-top:8px">Se monta sobre la infraestructura que ya tenés. Panel
+            solar, batería integrada y <strong>comunicación inalámbrica</strong>: no necesita mantenimiento de energía.
+          </p>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 3 · PASO 2 ═══ -->
+    <section class="slide slide--dark">
+      <span
+        style="position:absolute;right:70px;top:150px;z-index:1;font-family:var(--font-display);font-weight:900;font-size:330px;line-height:.8;color:rgba(90,155,213,.11)">02</span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Paso 2 de 3</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <div class="icon-badge"><svg>
+              <use href="#i-wifi" /></svg></div>
+          <h2 class="title title--lg">Conexión<span class="title__accent">con el Gateway</span></h2>
+          <p class="lead" style="max-width:850px">El nodo se comunica de forma inalámbrica con el gateway. El gateway
+            se conecta a internet a través de WiFi o 4G.</p>
+
+          <div class="chips" style="margin-top:8px">
+            <span class="chip"><svg>
+                <use href="#i-radio" /></svg>Nodo → Gateway por LoRa</span>
+            <span class="chip"><svg>
+                <use href="#i-cloud" /></svg>Gateway → nube por WiFi o 4G</span>
+          </div>
+
+          <p class="text" style="max-width:840px;margin-top:8px">Un solo gateway concentra los datos de
+            <strong>todos</strong> los nodos del campo.</p>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 4 · PASO 3 ═══ -->
+    <section class="slide slide--dark">
+      <span
+        style="position:absolute;right:70px;top:150px;z-index:1;font-family:var(--font-display);font-weight:900;font-size:330px;line-height:.8;color:rgba(90,155,213,.11)">03</span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">Paso 3 de 3</div>
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <div class="icon-badge"><svg>
+              <use href="#i-smartphone" /></svg></div>
+          <h2 class="title title--lg">Controlá<span class="title__accent">todo</span></h2>
+          <p class="lead" style="max-width:850px">Desde el celular ves todos tus puntos de medición, recibís alertas y
+            tomás decisiones con datos reales.</p>
+
+          <div class="chips" style="margin-top:8px">
+            <span class="chip"><svg>
+                <use href="#i-map" /></svg>Mapa en tiempo real</span>
+            <span class="chip"><svg>
+                <use href="#i-bell" /></svg>Alertas configurables</span>
+            <span class="chip"><svg>
+                <use href="#i-history" /></svg>Historial de mediciones</span>
+          </div>
+
+          <p class="text" style="max-width:840px;margin-top:8px">Estés donde estés: <strong>el mismo control que si
+              estuvieras en el campo</strong>.</p>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogoBl.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 5 · DIAGRAMA ═══ -->
+    <section class="slide slide--light">
+      <span class="ring" style="width:700px;height:700px;top:-260px;right:-240px"></span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <div class="eyebrow">El camino del dato</div>
+        </header>
+
+        <div class="slide__body stack" style="gap:0">
+          <h2 class="title title--sm" style="margin-bottom:36px">De la aguada<span class="title__accent">a tu
+              celular</span></h2>
+
+          <div class="card" style="padding:26px 30px">
+            <div class="row" style="gap:24px">
+              <div class="icon-badge" style="width:66px;height:66px"><svg style="width:34px;height:34px">
+                  <use href="#i-solar" /></svg></div>
+              <div>
+                <div class="card__title" style="margin-bottom:4px">Los nodos</div>
+                <p class="text" style="font-size:25px">Miden nivel, temperatura, flujo, consumo y posición.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row jc" style="gap:16px;padding:14px 0">
+            <svg style="width:30px;height:30px;color:var(--verde-vivo)">
+              <use href="#i-arrow-down" /></svg>
+            <span class="badge">LoRa · largo alcance</span>
+          </div>
+
+          <div class="card" style="padding:26px 30px">
+            <div class="row" style="gap:24px">
+              <div class="icon-badge" style="width:66px;height:66px"><svg style="width:34px;height:34px">
+                  <use href="#i-radio" /></svg></div>
+              <div>
+                <div class="card__title" style="margin-bottom:4px">El Gateway</div>
+                <p class="text" style="font-size:25px">Concentra los datos de todos los nodos del campo.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row jc" style="gap:16px;padding:14px 0">
+            <svg style="width:30px;height:30px;color:var(--verde-vivo)">
+              <use href="#i-arrow-down" /></svg>
+            <span class="badge">WiFi o 4G</span>
+          </div>
+
+          <div class="card" style="padding:26px 30px">
+            <div class="row" style="gap:24px">
+              <div class="icon-badge" style="width:66px;height:66px"><svg style="width:34px;height:34px">
+                  <use href="#i-cloud" /></svg></div>
+              <div>
+                <div class="card__title" style="margin-bottom:4px">La nube</div>
+                <p class="text" style="font-size:25px">Guarda el historial completo de cada punto de medición.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row jc" style="gap:16px;padding:14px 0">
+            <svg style="width:30px;height:30px;color:var(--verde-vivo)">
+              <use href="#i-arrow-down" /></svg>
+          </div>
+
+          <div class="card"
+            style="padding:26px 30px;background:var(--verde-oscuro);border-color:var(--verde-oscuro);color:var(--blanco)">
+            <div class="row" style="gap:24px">
+              <div
+                style="flex:none;width:66px;height:66px;border-radius:50%;background:rgba(90,155,213,.18);display:flex;align-items:center;justify-content:center">
+                <svg style="width:34px;height:34px;color:var(--verde-claro)">
+                  <use href="#i-smartphone" /></svg>
+              </div>
+              <div>
+                <div class="card__title" style="margin-bottom:4px;color:var(--verde-claro)">Tu celular</div>
+                <p class="text" style="font-size:25px;color:rgba(248,250,252,.82)">Mapa, alertas y decisiones con datos
+                  reales.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <img src="../img/ASlogo.png" alt="AguaSens">
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══ 6 · CTA ═══ -->
+    <section class="slide slide--deep">
+      <span class="ring" style="width:900px;height:900px;bottom:-420px;left:-260px"></span>
+      <div class="slide__inner">
+        <header class="slide__head">
+          <img src="../img/ASlogoBl.png" alt="AguaSens" style="height:60px">
+        </header>
+
+        <div class="slide__body stack gap-40">
+          <div class="eyebrow">Contacto</div>
+          <h2 class="title">Te ayudamos a<span class="title__accent">armar tu sistema</span></h2>
+          <p class="lead" style="max-width:840px">Contanos cuántas aguadas tenés y te decimos qué nodos necesitás.
+            <strong>Sin compromiso.</strong>
+          </p>
+
+          <div class="stack gap-20" style="margin-top:14px">
+            <div class="cta-row">
+              <svg>
+                <use href="#i-wa" /></svg>
+              <div>
+                <div class="cta-row__k">WhatsApp</div>
+                <div class="cta-row__v">11 6845-2098 · 11 5425-1823</div>
+              </div>
+            </div>
+            <div class="cta-row">
+              <svg>
+                <use href="#i-globe" /></svg>
+              <div>
+                <div class="cta-row__k">Web</div>
+                <div class="cta-row__v">aguasens.com.ar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="slide__foot">
+          <div class="foot-contact">Ganadería de precisión <span>·</span> IoT campo <span>·</span> LoRa</div>
+          <div class="pips"></div>
+        </footer>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="pips.js"></script>
+</body>
+
+</html>

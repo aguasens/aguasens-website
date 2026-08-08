@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Calculadora de Bebederos — AguaSens</title>
+  <meta name="theme-color" content="#f7f3ec">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/calculadoras.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="calc-page">
+
+  <div class="calc-container">
+    
+    <!-- HEADER -->
+    <header class="calc-header">
+      <a href="index.html" class="calc-back-btn">
+        <i data-lucide="chevron-left"></i>
+      </a>
+      <div class="calc-header-title">
+        <span>Calculadora de</span>
+        <h1>Bebederos</h1>
+      </div>
+      <div class="calc-header-brand" style="margin-left: auto;">
+        <img src="img/ASlogo.png" alt="Logo AguaSens" class="header-logo">
+      </div>
+    </header>
+
+    <!-- RODEO -->
+    <div class="calc-section-title">
+      <i data-lucide="users"></i><h2>Rodeo</h2>
+    </div>
+    <div class="calc-card">
+      <label class="calc-field">
+        <div class="calc-field-label">Cantidad de animales</div>
+        <input type="number" id="in_animales" value="200" min="1" class="calc-input">
+      </label>
+      <label class="calc-field">
+        <div class="calc-field-label">Categoría animal</div>
+        <div class="calc-input-wrapper">
+          <select id="in_categoria" class="calc-input calc-input-select">
+            <option value="ternero">Ternero (150 kg)</option>
+            <option value="vaquillona">Vaquillona (250 kg)</option>
+            <option value="novillo_engorde" selected>Novillo engorde (350 kg)</option>
+            <option value="vaca_seca">Vaca seca (450 kg)</option>
+            <option value="vaca_cria">Vaca cría lactante (450 kg)</option>
+            <option value="vaca_lechera">Vaca lechera (600 kg)</option>
+            <option value="toro">Toro (800 kg)</option>
+          </select>
+          <i data-lucide="chevron-down" class="calc-select-icon"></i>
+        </div>
+      </label>
+      <label class="calc-field">
+        <div class="calc-field-label">Sistema productivo</div>
+        <div class="calc-input-wrapper">
+          <select id="in_sistema" class="calc-input calc-input-select">
+            <option value="pastoreo_ext">Pastoreo extensivo</option>
+            <option value="pastoreo_rot">Pastoreo rotativo (agua en parcela)</option>
+            <option value="feedlot" selected>Feedlot / corral</option>
+            <option value="tambo">Tambo / vacas lechería</option>
+          </select>
+          <i data-lucide="chevron-down" class="calc-select-icon"></i>
+        </div>
+        <div id="desc_sistema" class="calc-field-hint"></div>
+      </label>
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label"><i data-lucide="thermometer" style="width:12px;height:12px;"></i> Clima</div>
+          <div class="calc-input-wrapper">
+            <select id="in_clima" class="calc-input calc-input-select" style="font-size: 13px; padding-left: 12px;">
+              <option value="frio">Frío (< 10 °C)</option>
+              <option value="templado" selected>Templado (10–22 °C)</option>
+              <option value="calido">Cálido (22–30 °C)</option>
+              <option value="extremo">Extremo (> 30 °C)</option>
+            </select>
+            <i data-lucide="chevron-down" class="calc-select-icon"></i>
+          </div>
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label"><i data-lucide="wheat" style="width:12px;height:12px;"></i> Dieta</div>
+          <div class="calc-input-wrapper">
+            <select id="in_dieta" class="calc-input calc-input-select" style="font-size: 13px; padding-left: 12px;">
+              <option value="verde_humeda">Verdeo / húmeda</option>
+              <option value="mixta" selected>Pastura mixta</option>
+              <option value="seca_henificada">Seca / heno</option>
+            </select>
+            <i data-lucide="chevron-down" class="calc-select-icon"></i>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- BEBEDERO -->
+    <div class="calc-section-title">
+      <i data-lucide="ruler"></i><h2>Bebedero</h2>
+    </div>
+    <div class="calc-card">
+      <div class="calc-grid-2" style="margin-bottom: 8px;">
+        <div class="calc-toggle active" id="btn_rect" onclick="setTipo('rectangular')">Rectangular</div>
+        <div class="calc-toggle" id="btn_circ" onclick="setTipo('circular')">Circular</div>
+      </div>
+      
+      <!-- Campos Rectangular -->
+      <div id="cfg_rect">
+        <div class="calc-grid-2 mb-3">
+          <label class="calc-field">
+            <div class="calc-field-label">Largo (m)</div>
+            <input type="number" id="in_largo" value="3" step="0.1" min="0.1" class="calc-input">
+          </label>
+          <label class="calc-field">
+            <div class="calc-field-label">Ancho (m)</div>
+            <input type="number" id="in_ancho" value="0.6" step="0.1" min="0.1" class="calc-input">
+          </label>
+        </div>
+        <label class="calc-field mb-3">
+          <div class="calc-field-label">Acceso</div>
+          <div class="calc-input-wrapper">
+            <select id="in_acceso" class="calc-input calc-input-select">
+              <option value="un_lado_largo">Un lado (contra alambrado)</option>
+              <option value="dos_lados_largos" selected>Dos lados (en potrero)</option>
+              <option value="cuatro_lados">Cuatro lados (acceso total)</option>
+            </select>
+            <i data-lucide="chevron-down" class="calc-select-icon"></i>
+          </div>
+        </label>
+      </div>
+      
+      <!-- Campos Circular -->
+      <div id="cfg_circ" style="display: none;">
+        <label class="calc-field mb-3">
+          <div class="calc-field-label">Diámetro (m)</div>
+          <input type="number" id="in_diametro" value="2" step="0.1" min="0.1" class="calc-input">
+        </label>
+      </div>
+
+      <!-- Dibujo -->
+      <div class="svg-container">
+        <div class="svg-label">VISTA SUPERIOR</div>
+        <div id="svg_wrap" class="svg-content"></div>
+      </div>
+
+      <!-- Caudal -->
+      <label class="calc-field mt-2">
+        <div class="calc-field-label">Caudal de reposición (L/min)</div>
+        <input type="number" id="in_caudal" value="20" step="1" min="0" class="calc-input">
+        <div class="calc-field-hint">Capacidad de la conexión del agua que llena el bebedero.</div>
+      </label>
+    </div>
+
+    <!-- ECONOMICO CONFIG -->
+    <div class="calc-section-title">
+      <i data-lucide="dollar-sign"></i><h2>Análisis económico</h2>
+    </div>
+    <div class="calc-card">
+      <label class="calc-field mb-3">
+        <div class="calc-field-label">Precio kg vivo (US$)</div>
+        <input type="number" id="in_precio" value="2.94" min="0" class="calc-input">
+      </label>
+      <label class="calc-field">
+        <div class="calc-field-label"><i data-lucide="calendar" style="width:12px;height:12px;"></i> Horizonte de cálculo</div>
+        <div class="calc-grid-3 mt-1">
+          <div class="calc-toggle" id="btn_hor_mensual" onclick="setHor('mensual')">Mes</div>
+          <div class="calc-toggle" id="btn_hor_ciclo" onclick="setHor('ciclo')">Ciclo</div>
+          <div class="calc-toggle active" id="btn_hor_anual" onclick="setHor('anual')">Año</div>
+        </div>
+      </label>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="calc-section-title mt-4">
+      <i data-lucide="droplet"></i><h2>Resultados</h2>
+    </div>
+    
+    <!-- Cobertura Card -->
+    <div id="card_cobertura" class="risk-card">
+      <div class="flex justify-between items-center mb-2">
+        <div class="flex items-center gap-2">
+          <i id="icon_cobertura"></i>
+          <span id="lbl_cobertura" class="text-xs font-bold uppercase tracking-widest">ÓPTIMO</span>
+        </div>
+        <span class="metric-label">COBERTURA</span>
+      </div>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span id="val_cobertura" class="text-4xl font-bold">100</span><span class="font-bold">%</span>
+        <span id="sub_cobertura" class="text-xs text-muted ml-2">del frente útil mínimo</span>
+      </div>
+      <div class="progress-bg"><div id="bar_cobertura" class="progress-fill"></div></div>
+      <div id="warn_sobredimension" class="text-xs text-muted mt-3 pt-3 border-t" style="display:none; border-color: rgba(0,0,0,0.1)">
+        ℹ Bebedero ampliamente sobredimensionado.
+      </div>
+    </div>
+
+    <!-- Alerta Caudal -->
+    <div id="card_caudal" class="risk-card" style="display:none; padding: 16px;">
+      <div class="flex items-start gap-3">
+        <i id="icon_caudal"></i>
+        <div style="flex:1">
+          <div id="lbl_caudal" class="text-xs font-bold uppercase tracking-widest mb-1">Déficit</div>
+          <div id="txt_caudal_desc" class="text-xs text-deep leading-relaxed"></div>
+          <div id="txt_caudal_recom" class="text-xs text-muted mt-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métricas Hidráulicas -->
+    <div class="calc-grid-2 mb-4">
+      <div class="metric-card color-primary">
+        <div class="metric-label">Consumo total</div>
+        <div class="metric-value-wrap"><span id="out_consumo_tot" class="metric-value text-primary">0</span><span class="metric-unit">L/día</span></div>
+        <div id="out_consumo_ind" class="metric-sub">0 L/animal</div>
+      </div>
+      <div id="metric_balance" class="metric-card color-accent">
+        <div class="metric-label">Balance pico</div>
+        <div class="metric-value-wrap"><span id="out_balance" class="metric-value text-accent">0</span><span class="metric-unit">%</span></div>
+        <div id="out_balance_sub" class="metric-sub">✓ suministro OK</div>
+      </div>
+      <div class="metric-card color-info">
+        <div class="metric-label">Frente disponible</div>
+        <div class="metric-value-wrap"><span id="out_frente" class="metric-value text-info">0</span><span class="metric-unit">m</span></div>
+        <div id="out_frente_req" class="metric-sub">Necesario: 0 m</div>
+      </div>
+      <div id="metric_recup" class="metric-card color-accent">
+        <div class="metric-label">Recuperación</div>
+        <div class="metric-value-wrap"><span id="out_recup" class="metric-value text-accent">0</span><span class="metric-unit">min</span></div>
+        <div id="out_recup_vol" class="metric-sub">Vol: 0 L</div>
+      </div>
+    </div>
+
+    <!-- Pérdida Económica -->
+    <div id="card_eco" class="economic-card" style="display:none;">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="trending-down" style="width:16px;height:16px;"></i>
+          <span class="text-[11px] font-bold tracking-widest uppercase">Impacto económico</span>
+        </div>
+        <span id="lbl_hor_eco" class="text-[10px] font-mono px-2 py-1 rounded-full" style="background: rgba(255,255,255,0.2)">POR AÑO</span>
+      </div>
+      
+      <div class="text-center py-2 mb-3" style="border-bottom: 1px solid rgba(255,255,255,0.2)">
+        <div class="text-[10px] uppercase tracking-wider" style="color: rgba(255,255,255,0.7)">Pérdida total estimada</div>
+        <div id="out_perdida_total" class="text-3xl font-bold mt-1">US$ 0</div>
+      </div>
+
+      <div class="text-sm">
+        <div id="row_eco_gdp" class="breakdown-row" style="display:none;">
+          <div>
+            <div class="font-bold">Menor ganancia de peso</div>
+            <div id="out_eco_gdp_sub" class="text-[11px] mt-1" style="color:rgba(255,255,255,0.7)"></div>
+          </div>
+          <div id="out_eco_gdp_val" class="font-bold">US$ 0</div>
+        </div>
+        <div id="row_eco_mort" class="breakdown-row" style="display:none;">
+          <div>
+            <div class="font-bold flex items-center gap-1"><i data-lucide="skull" style="width:14px;height:14px;"></i> Mortalidad adicional</div>
+            <div id="out_eco_mort_sub" class="text-[11px] mt-1" style="color:rgba(255,255,255,0.7)"></div>
+          </div>
+          <div id="out_eco_mort_val" class="font-bold">US$ 0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mortalidad -->
+    <div class="calc-card p-5 mb-4">
+      <div class="flex items-center gap-2 mb-3">
+        <i data-lucide="skull" class="text-deep" style="width:16px;height:16px;"></i>
+        <span class="text-xs font-bold uppercase tracking-widest text-deep">Riesgo de mortalidad</span>
+      </div>
+      
+      <div class="calc-grid-2 mb-3 text-xs">
+        <div class="bg-primary" style="background: var(--calc-bg); border-radius: 12px; padding: 12px;">
+          <div class="metric-label mb-1">Tasa anual estimada</div>
+          <div class="flex items-baseline gap-1"><span id="out_mort_tasa" class="text-2xl font-bold">0</span><span>%</span></div>
+          <div id="out_mort_base" class="text-[10px] text-muted mt-1">Base: 0%</div>
+        </div>
+        <div class="bg-primary" style="background: var(--calc-bg); border-radius: 12px; padding: 12px;">
+          <div id="lbl_mort_hor" class="metric-label mb-1">Muertes / año</div>
+          <div class="flex items-baseline gap-1"><span id="out_mort_cant" class="text-2xl font-bold text-deep">0</span></div>
+          <div id="out_mort_extra" class="text-[10px] text-muted mt-1">+0 vs óptimo</div>
+        </div>
+      </div>
+
+      <div class="flex justify-between text-[10px] text-muted mb-1 px-1"><span>Bajo</span><span>Medio</span><span>Alto</span><span>Crítico</span></div>
+      <div class="progress-bg" style="background: var(--calc-border); margin-top: 4px; height: 6px;"><div id="bar_mort" class="progress-fill"></div></div>
+
+      <div id="warn_mort_extremo" class="mt-3 pt-3" style="border-top: 1px solid var(--calc-border); display: none;">
+        <div class="flex items-start gap-2">
+          <i data-lucide="alert-triangle" class="text-danger" style="width:16px;height:16px; margin-top:2px;"></i>
+          <div>
+            <div class="text-xs font-bold text-deep">Riesgo en calor extremo</div>
+            <div id="out_mort_ext_txt" class="text-[11px] text-muted mt-1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recomendación Técnica -->
+    <div class="calc-card" style="background: var(--c-deep); color: white; padding: 20px; margin-bottom: 16px;">
+      <div class="text-[10px] font-mono mb-2 tracking-widest uppercase" style="color: rgba(255,255,255,0.6)">Recomendación técnica</div>
+      <div id="out_recomendacion" class="text-sm leading-relaxed text-white"></div>
+    </div>
+
+    <!-- Referencias -->
+    <details>
+      <summary>
+        <i data-lucide="info" style="width: 16px; height: 16px; color: var(--c-accent);"></i> Supuestos y referencias
+      </summary>
+      <div class="details-content">
+        <p class="mb-1"><b class="text-deep">Consumo de agua base</b></p>
+        <p>• Los valores base están calibrados según requerimientos fisiológicos para cada categoría y un clima templado (10-22°C).</p>
+        <p>• Factores climáticos: Frío (-25%), Cálido (+50%), Extremo (+100%).</p>
+        <p>• Factores de dieta: Pastura húmeda (-15%), Seca/Heno (+30%).</p>
+        
+        <p class="mb-1 mt-3"><b class="text-deep">Dimensionamiento (Frente y Caudal)</b></p>
+        <p>• El espacio por animal varía entre 2.5 cm (terneros) hasta 5.0 cm (vacas lecheras), asumiendo un % del rodeo bebiendo simultáneamente (Bavera, 2001; NRC).</p>
+        <p>• Porcentajes de simultaneidad: Extensivo 20%, Corral 15%, Rotativo 8%, Tambo 30%.</p>
+        <p>• Se asume que en la ventana pico de mayor temperatura (4 hs) los animales consumen hasta el 60% de su requerimiento diario.</p>
+        
+        <p class="mb-1 mt-3"><b class="text-deep">Impacto económico y Mortalidad</b></p>
+        <p>• Si el agua es insuficiente (faltante de caudal o acceso), el consumo de materia seca (MS) se reduce proporcionalmente, afectando la Ganancia Diaria de Peso (GDP).</p>
+        <p>• La tasa de mortalidad base es propia de cada sistema productivo. La falta de acceso libre al agua, sumada al estrés por calor, incrementa la mortalidad de forma exponencial (factor ×1.3 en límite, ×3.5 en severo).</p>
+      </div>
+    </details>
+
+  </div> <!-- /container -->
+
+  <script src="js/bebederos.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

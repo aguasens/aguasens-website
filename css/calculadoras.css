@@ -1,0 +1,259 @@
+/* Estilos específicos para las calculadoras */
+:root {
+  --calc-bg: #f0f4f8;
+  --calc-surface: #ffffff;
+  --calc-border: #e2e8f0;
+  
+  --c-primary: #3472B5;
+  --c-accent: #5a9bd5;
+  --c-warning: #d4a647;
+  --c-danger: #c95c47;
+  --c-info: #2a5a8f;
+  --c-deep: #152238;
+  --c-muted: #5a6577;
+}
+
+body.calc-page {
+  background: var(--calc-bg);
+}
+
+.calc-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+/* Header */
+.calc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.calc-back-btn {
+  width: 40px; height: 40px;
+  border-radius: 16px;
+  background: var(--calc-surface);
+  box-shadow: var(--shadow-soft);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-deep);
+  transition: transform 0.2s;
+}
+.calc-back-btn:active { transform: scale(0.95); }
+.calc-header-title { flex: 1; }
+.calc-header-title span {
+  display: block;
+  font-size: 10px; font-family: monospace; font-weight: 600;
+  letter-spacing: 0.2em; color: var(--c-muted); text-transform: uppercase;
+}
+.calc-header-title h1 {
+  font-size: 18px; font-weight: 700; color: var(--c-deep); margin: 0;
+}
+.calc-header-icon {
+  width: 40px; height: 40px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  box-shadow: var(--shadow-soft);
+}
+.bg-primary { background: var(--c-primary); }
+.bg-accent { background: var(--c-accent); }
+
+/* Secciones */
+.calc-section-title {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px; padding: 0 4px;
+}
+.calc-section-title i {
+  color: var(--c-primary);
+  width: 16px; height: 16px;
+}
+.calc-section-title h2 {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--c-deep); margin: 0;
+}
+
+/* Cards */
+.calc-card {
+  background: var(--calc-surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* Inputs */
+.calc-field {
+  display: block;
+}
+.calc-field-label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: var(--c-muted);
+  margin-bottom: 6px; padding: 0 4px;
+}
+.calc-input-wrapper {
+  position: relative;
+}
+.calc-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--calc-bg);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  font-size: 16px; font-weight: 700; color: var(--c-deep);
+  font-family: inherit;
+  transition: all 0.2s;
+  appearance: none;
+}
+.calc-input:focus {
+  outline: none;
+  border-color: var(--c-primary);
+  background: var(--calc-surface);
+}
+.calc-input-select {
+  font-size: 14px;
+  font-weight: 600;
+  padding-right: 36px;
+  cursor: pointer;
+}
+.calc-select-icon {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--c-muted); pointer-events: none; width: 16px; height: 16px;
+}
+.calc-field-hint {
+  font-size: 11px; color: var(--c-muted); margin-top: 6px; padding: 0 4px;
+  line-height: 1.4;
+}
+
+/* Grillas */
+.calc-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.calc-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+/* Botones de opción (Toggle) */
+.calc-toggle {
+  padding: 10px;
+  border-radius: 16px;
+  font-weight: 600; font-size: 13px; text-align: center;
+  background: var(--calc-bg); color: var(--c-muted);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.calc-toggle.active {
+  background: var(--c-primary); color: white; box-shadow: var(--shadow-soft);
+}
+.calc-toggle-accent.active {
+  background: var(--c-accent); color: white;
+}
+
+/* Resultados & Métricas */
+.metric-card {
+  background: var(--calc-surface);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.metric-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+}
+.metric-card.color-primary::before { background: var(--c-primary); }
+.metric-card.color-accent::before { background: var(--c-accent); }
+.metric-card.color-info::before { background: var(--c-info); }
+.metric-card.color-warning::before { background: var(--c-warning); }
+.metric-card.color-danger::before { background: var(--c-danger); }
+
+.metric-label { font-size: 10px; font-family: monospace; text-transform: uppercase; color: var(--c-muted); }
+.metric-value-wrap { display: flex; align-items: baseline; gap: 4px; margin-top: 4px; }
+.metric-value { font-size: 24px; font-weight: 700; }
+.metric-unit { font-size: 12px; color: var(--c-muted); }
+.metric-sub { font-size: 10px; color: var(--c-muted); margin-top: 4px; }
+
+.text-primary { color: var(--c-primary); }
+.text-accent { color: var(--c-accent); }
+.text-info { color: var(--c-info); }
+.text-warning { color: var(--c-warning); }
+.text-danger { color: var(--c-danger); }
+.text-deep { color: var(--c-deep); }
+.text-muted { color: var(--c-muted); }
+
+/* SVG Container */
+.svg-container {
+  background: var(--calc-bg);
+  border-radius: 16px;
+  padding: 16px;
+}
+.svg-label {
+  font-size: 10px; font-family: monospace; color: var(--c-muted);
+  letter-spacing: 0.1em; margin-bottom: 8px;
+}
+.svg-content { width: 100%; display: block; }
+
+/* Riesgo Card (Bebederos) */
+.risk-card {
+  border-radius: 24px; border: 2px solid; padding: 20px; margin-bottom: 16px;
+}
+.risk-card.bg-accent-10 { background: rgba(90, 155, 213, 0.1); border-color: var(--c-accent); }
+.risk-card.bg-warning-10 { background: rgba(212, 166, 71, 0.1); border-color: var(--c-warning); }
+.risk-card.bg-danger-10 { background: rgba(201, 92, 71, 0.1); border-color: var(--c-danger); }
+.risk-card.bg-orange-10 { background: rgba(255, 140, 66, 0.15); border-color: #ff8c42; }
+
+/* Barra progreso */
+.progress-bg { height: 8px; background: rgba(255,255,255,0.6); border-radius: 4px; overflow: hidden; margin-top: 12px; }
+.progress-fill { height: 100%; transition: width 0.5s ease; border-radius: 4px; }
+
+/* Económico */
+.economic-card {
+  border-radius: 24px; padding: 20px; margin-bottom: 16px; color: white;
+  background: linear-gradient(135deg, var(--c-danger), #a33827);
+  box-shadow: var(--shadow-card);
+}
+.economic-card.caminata {
+  background: linear-gradient(135deg, var(--c-deep), #0a1220);
+}
+.breakdown-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.breakdown-row:last-child { border-bottom: none; }
+
+/* Mapa Caminata */
+.map-container {
+  position: relative; width: 100%; border-radius: 16px; overflow: hidden;
+  border: 2px solid var(--calc-border); cursor: crosshair;
+}
+
+/* Helpers */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-3 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 16px; }
+.mt-1 { margin-top: 4px; }
+.mt-2 { margin-top: 8px; }
+.text-center { text-align: center; }
+.font-bold { font-weight: 700; }
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+.w-full { width: 100%; }
+
+/* Ocultar flechas numéricas */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+
+/* Detalles / Info */
+details { background: var(--calc-surface); border-radius: 24px; margin-bottom: 16px; box-shadow: var(--shadow-soft); }
+summary { padding: 20px; font-weight: 600; font-size: 14px; color: var(--c-deep); cursor: pointer; display: flex; align-items: center; gap: 8px; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+.details-content { padding: 0 20px 20px; font-size: 12px; color: var(--c-muted); line-height: 1.6; }

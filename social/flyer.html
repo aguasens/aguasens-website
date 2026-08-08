@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>AguaSens · Flyer institucional A4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="flyer.css">
+</head>
+
+<body>
+  <script src="icons.js"></script>
+
+  <div class="toolbar">
+    <b>Flyer institucional · 2 carillas A4</b>
+    <p>Para exportar: <kbd>Ctrl</kbd>+<kbd>P</kbd> → Destino <b>Guardar como PDF</b> → Tamaño <b>A4</b> → Márgenes
+      <b>Ninguno</b> → Escala <b>100%</b> → tildar <b>Gráficos de fondo</b>. Deben salir exactamente 2 páginas.</p>
+  </div>
+
+  <main class="sheet">
+
+    <!-- ═══════════════════ CARILLA 1 ═══════════════════ -->
+    <section class="page">
+
+      <header class="head">
+        <img src="../img/ASlogo.png" alt="AguaSens">
+        
+      </header>
+
+      <!-- HERO -->
+      <div class="hero">
+        <div class="eyebrow">Monitoreo inteligente de aguadas</div>
+        <h1>Controlá el agua de tu campo<span>desde el celular</span></h1>
+        <p>Sistema modular de sensores para <strong>tanques, bebederos, represas, bombas y molinos</strong>. Nivel de
+          agua, alertas al celular, GPS y dashboard unificado.</p>
+      </div>
+
+      <!-- QUÉ ES -->
+      <div class="section">
+        <div class="eyebrow">Qué es AguaSens</div>
+        <h2 class="sec">Un sistema modular <span>de tres piezas</span></h2>
+        <p class="lead" style="margin-bottom:3mm">AguaSens se instala sobre cualquier infraestructura que ya
+            tengas en el campo. Nodos inteligentes miden las variables críticas de cada aguada y un módulo
+          Gateway recibe los datos para subirlos a la nube. Elegís el nodo según lo que necesites monitorear y
+          visualizás todo en la misma app.</p>
+
+        <div class="grid grid--3">
+          <div class="card">
+            <div class="icon"><svg>
+                <use href="#i-solar" /></svg></div>
+            <h3 class="blk">1 · Los nodos</h3>
+            <p class="txt">Miden las variables críticas de cada aguada. Panel solar y batería integrada.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg>
+                <use href="#i-radio" /></svg></div>
+            <h3 class="blk">2 · El Gateway</h3>
+            <p class="txt">Recibe por LoRa los datos de todos los nodos y los sube a la nube por WiFi o 4G.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg>
+                <use href="#i-smartphone" /></svg></div>
+            <h3 class="blk">3 · La app</h3>
+            <p class="txt">Mapa en tiempo real, alertas configurables e historial, desde donde estés.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOS CUATRO NODOS -->
+      <div class="section">
+        <div class="eyebrow">Cuatro modelos, un ecosistema</div>
+        <h2 class="sec">Un nodo para <span>cada aguada</span></h2>
+
+        <div class="grid grid--4">
+          <div class="card card--plain">
+            <div class="nodo__name">Nodo Fijo</div>
+            <div class="nodo__for">Tanques, bebederos fijos y represas</div>
+            <ul class="nodo__list">
+              <li><svg>
+                  <use href="#i-waves" /></svg>Nivel de agua</li>
+              <li><svg>
+                  <use href="#i-thermometer" /></svg>Temperatura del agua</li>
+            </ul>
+          </div>
+
+          <div class="card card--plain">
+            <div class="nodo__name">Nodo Móvil</div>
+            <div class="nodo__for">Bebederos móviles</div>
+            <ul class="nodo__list">
+              <li><svg>
+                  <use href="#i-waves" /></svg>Nivel de agua</li>
+              <li><svg>
+                  <use href="#i-map-pin" /></svg>GPS integrado</li>
+              <li><svg>
+                  <use href="#i-sun" /></svg>Estrés por calor (THI aire)</li>
+              <li><svg>
+                  <use href="#i-thermometer" /></svg>Temperatura del agua</li>
+            </ul>
+          </div>
+
+          <div class="card card--plain">
+            <div class="nodo__name">Nodo Bomba</div>
+            <div class="nodo__for">Bombas eléctricas</div>
+            <ul class="nodo__list">
+              <li><svg>
+                  <use href="#i-gauge" /></svg>Flujo de agua</li>
+              <li><svg>
+                  <use href="#i-zap" /></svg>Consumo eléctrico</li>
+              <li><svg>
+                  <use href="#i-well" /></svg>Nivel de pozo</li>
+            </ul>
+          </div>
+
+          <div class="card card--plain">
+            <div class="nodo__name">Nodo Molino</div>
+            <div class="nodo__for">Molinos de viento</div>
+            <ul class="nodo__list">
+              <li><svg>
+                  <use href="#i-gauge" /></svg>Flujo de agua</li>
+              <li><svg>
+                  <use href="#i-rod" /></svg>Carrera de varilla</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- BASE COMÚN + FOTO DEL NODO -->
+      <div class="section section--tight">
+        <div class="showcase">
+          <div class="showcase__img">
+            <img src="../img/nodo-tanque.png" alt="Nodo Fijo instalado sobre un tanque australiano">
+          </div>
+
+          <div class="showcase__body">
+            <div class="eyebrow">Base común en cada nodo</div>
+            <div class="showcase__grid">
+              <div><svg>
+                  <use href="#i-solar" /></svg>Panel solar y batería integrada</div>
+              <div><svg>
+                  <use href="#i-radio" /></svg>Comunicación inalámbrica de largo alcance (LoRa)</div>
+              <div><svg>
+                  <use href="#i-clock" /></svg>Reporte automático con intervalo configurable</div>
+              <div><svg>
+                  <use href="#i-wrench" /></svg>Instalación simple</div>
+            </div>
+            <p class="showcase__cap">En la foto: Nodo Fijo instalado sobre un tanque australiano.</p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="page__foot">
+        <div>Ganadería de precisión</div>
+        <div>aguasens.com.ar</div>
+      </footer>
+    </section>
+
+    <!-- ═══════════════════ CARILLA 2 ═══════════════════ -->
+    <section class="page">
+
+      <header class="head">
+        <img src="../img/ASlogo.png" alt="AguaSens">
+        
+      </header>
+
+      <!-- CÓMO FUNCIONA -->
+      <div class="section section--tight">
+        <div class="eyebrow">Así de simple</div>
+        <h2 class="sec">Cómo funciona</h2>
+
+        <div class="grid grid--3">
+          <div class="card">
+            <div class="step__num">01</div>
+            <h3 class="blk">Instalación del nodo</h3>
+            <p class="txt">Se instala sobre el tanque, bebedero, represa o bomba. Instalación simple y con comunicación
+              inalámbrica.</p>
+          </div>
+          <div class="card">
+            <div class="step__num">02</div>
+            <h3 class="blk">Conexión con el Gateway</h3>
+            <p class="txt">El nodo se comunica por LoRa con el gateway, y el gateway se conecta a internet por WiFi o 4G.</p>
+          </div>
+          <div class="card">
+            <div class="step__num">03</div>
+            <h3 class="blk">Controlá todo</h3>
+            <p class="txt">Desde el celular ves todos tus puntos de medición, recibís alertas y decidís con datos
+              reales.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LA APP + SENSORES -->
+      <div class="section">
+        <div class="row" style="gap:8mm">
+          <div class="phone">
+            <img src="../img/app-screenshot.jpg" alt="App AguaSens: mapa de nodos en tiempo real">
+          </div>
+
+          <div style="flex:1;min-width:0">
+            <div class="eyebrow">La app</div>
+            <h2 class="sec">Todo el campo <span>en una pantalla</span></h2>
+            <ul class="dots">
+              <li>Mapa en tiempo real con <strong>semáforo visual</strong> de los sensores</li>
+              <li>Alertas configurables por nivel mínimo o máximo</li>
+              <li>Historial de mediciones</li>
+              <li>Dashboard multi-campo y multi-nodo</li>
+              <li>Notificaciones por Telegram y/o mail</li>
+            </ul>
+
+            <div class="eyebrow" style="margin-top:5mm">8 variables bajo control</div>
+            <div class="grid grid--2" style="gap:2mm;margin-top:2.5mm">
+              <div class="pill"><svg>
+                  <use href="#i-waves" /></svg>Nivel de agua</div>
+              <div class="pill"><svg>
+                  <use href="#i-thermometer" /></svg>Temp. del agua</div>
+              <div class="pill"><svg>
+                  <use href="#i-sun" /></svg>Estrés por calor (THI)</div>
+              <div class="pill"><svg>
+                  <use href="#i-map-pin" /></svg>Ubicación GPS</div>
+              <div class="pill"><svg>
+                  <use href="#i-gauge" /></svg>Flujo de agua</div>
+              <div class="pill"><svg>
+                  <use href="#i-zap" /></svg>Consumo eléctrico</div>
+              <div class="pill"><svg>
+                  <use href="#i-well" /></svg>Nivel de perforación</div>
+              <div class="pill"><svg>
+                  <use href="#i-rod" /></svg>Carrera de varilla</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POR QUÉ IMPORTA -->
+      <div class="section">
+        <div class="eyebrow">¿Por qué es vital?</div>
+        <h2 class="sec">El agua es el nutriente <span>más crítico en la ganadería</span></h2>
+
+        <div class="grid grid--3">
+          <div class="card">
+            <div class="stat__n">−12 %</div>
+            <div class="stat__l">Consumo de materia seca por restricción hídrica del 20 %</div>
+            <div class="src">NRC (2000). <em>Nutrient Requirements of Beef Cattle</em>.</div>
+          </div>
+          <div class="card">
+            <div class="stat__n">−200 g</div>
+            <div class="stat__l">De ganancia diaria de peso por cada km extra de caminata al agua</div>
+            <div class="src">INTA E.E.A. Concepción del Uruguay.</div>
+          </div>
+          <div class="card">
+            <div class="stat__n">−20 %</div>
+            <div class="stat__l">Eficiencia de conversión en verano por estrés térmico sin agua fresca</div>
+            <div class="src">IPCVA (2019). <em>Estrés térmico en bovinos de carne</em>.</div>
+          </div>
+        </div>
+
+        <div class="band" style="margin-top:3mm">
+          <p class="txt" style="font-size:9.2pt">El acceso permanente y sin restricciones al agua es la
+            <strong>intervención de menor costo y mayor retorno</strong> en cualquier sistema ganadero. Monitorearlo en
+            tiempo real no es tecnología de lujo: es el paso siguiente al alambrado eléctrico.
+          </p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta">
+        <h2>¿Cuántas aguadas tenés <span>sin monitoreo?</span></h2>
+        <p>Escribinos y te ayudamos a dimensionar el sistema para tu campo.</p>
+
+        <div class="cta__rows">
+          <div class="cta__row">
+            <svg>
+              <use href="#i-wa" /></svg>
+            <div>
+              <div class="cta__k">WhatsApp</div>
+              <div class="cta__v">11 6845-2098  ·  11 5425-1823</div>
+            </div>
+          </div>
+          <div class="cta__row">
+            <svg>
+              <use href="#i-globe" /></svg>
+            <div>
+              <div class="cta__k">Web</div>
+              <div class="cta__v">aguasens.com.ar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+
+</html>
