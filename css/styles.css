@@ -144,7 +144,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ═══════════════════════════════════════════ */
 .hero {
   position: relative; min-height: 100vh; display: flex; align-items: center;
-  background: url('../img/hero-bg.png') center/cover no-repeat; 
+  background: url('../img/hero-bg.webp') center/cover no-repeat; 
   overflow: hidden;
   max-width: 100%;
 }
