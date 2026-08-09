@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Enlace LoRa</title>
+    <meta name="description" content="Calculadora de presupuesto de enlace (link budget) para radios LoRa con mapa interactivo, perfil de terreno y análisis de zona de Fresnel.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ═══════════════ HEADER ═══════════════ -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-brand">
+                <div class="header-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="18" stroke="url(#grad1)" stroke-width="2" fill="none"/>
+                        <path d="M12 28 L20 8 L28 28" stroke="url(#grad1)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14.5 23 H25.5" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round"/>
+                        <!-- Signal waves -->
+                        <path d="M30 12 Q34 14 30 16" stroke="#00e5a0" stroke-width="1.5" fill="none" opacity="0.6" stroke-linecap="round"/>
+                        <path d="M32 10 Q38 14 32 18" stroke="#00e5a0" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#00e5a0"/>
+                                <stop offset="100%" stop-color="#00b4d8"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div>
+                    <h1>LoRa Link Calculator</h1>
+                    <p class="header-subtitle">Calculadora de Enlace</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="badge-freq">915 MHz</span>
+                <span class="badge-tech">LoRa</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
+    <main class="app-main">
+
+        <!-- ─── MAP + CONFIG ROW ─── -->
+        <section class="map-config-section">
+            <!-- MAP -->
+            <div class="panel map-panel">
+                <div class="panel-header">
+                    <h2><span class="icon">🗺️</span> Mapa del Enlace</h2>
+                    <div class="map-distance-badge" id="mapDistanceBadge">
+                        <span class="distance-value" id="mapDistanceValue">—</span>
+                        <span class="distance-unit">km</span>
+                    </div>
+                </div>
+                <div id="map" class="map-container"></div>
+                <div class="map-actions">
+                    <button id="btnMyLocation" class="btn-accent" title="Coloca el marcador en tu posición actual (GPS)">📍 Mi ubicación</button>
+                    <span class="geo-status" id="geoStatus"></span>
+                </div>
+                <div class="map-coords">
+                    <div class="coord-group">
+                        <label>📡 Tx:</label>
+                        <input type="number" id="txLat" step="0.0001" placeholder="Lat">
+                        <input type="number" id="txLon" step="0.0001" placeholder="Lon">
+                    </div>
+                    <div class="coord-group">
+                        <label>📡 Rx:</label>
+                        <input type="number" id="rxLat" step="0.0001" placeholder="Lat">
+                        <input type="number" id="rxLon" step="0.0001" placeholder="Lon">
+                    </div>
+                    <button id="btnUpdateMap" class="btn-accent" title="Actualizar posiciones en el mapa">📍 Actualizar</button>
+                </div>
+            </div>
+
+            <!-- CONFIG PANEL -->
+            <div class="config-panel">
+                <!-- TX CONFIG -->
+                <div class="panel config-card">
+                    <div class="panel-header">
+                        <h2><span class="icon tx-icon">📡</span> Transmisor (Sitio A)</h2>
+                    </div>
+                    <div class="config-body">
+                        <div class="param-group">
+                            <label for="txPower">Potencia Tx</label>
+                            <div class="slider-row">
+                                <input type="range" id="txPower" min="0" max="30" step="1" value="20">
+                                <span class="param-value"><span id="txPowerVal">20</span> dBm</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="txAntennaSelect">Antena Tx</label>
+                            <select id="txAntennaSelect" class="antenna-select">
+                                <optgroup label="── Omnidireccionales ──"></optgroup>
+                                <optgroup label="── Direccionales ──"></optgroup>
+                                <optgroup label="── Personalizada ──"></optgroup>
+                            </select>
+                            <div class="antenna-gain-row">
+                                <span class="antenna-gain-label">Ganancia:</span>
+                                <input type="number" id="txGain" min="0" max="25" step="0.1" value="2" class="gain-input">
+                                <span class="param-unit">dBi</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="txCableLoss">Pérdida cable/conector</label>
+                            <div class="slider-row">
+                                <input type="range" id="txCableLoss" min="0" max="10" step="0.1" value="0.5">
+                                <span class="param-value"><span id="txCableLossVal">0.5</span> dB</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="txHeight">Altura antena</label>
+                            <div class="slider-row">
+                                <input type="range" id="txHeight" min="1" max="100" step="1" value="3">
+                                <span class="param-value"><span id="txHeightVal">3</span> m</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="txSiteClutter" title="Pérdida por lo que rodea al mástil: arboleda, casas, paredes. El modelo de terreno no lo ve.">Entorno del sitio</label>
+                            <select id="txSiteClutter" class="param-select"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RX CONFIG -->
+                <div class="panel config-card">
+                    <div class="panel-header">
+                        <h2><span class="icon rx-icon">📡</span> Receptor (Sitio B)</h2>
+                    </div>
+                    <div class="config-body">
+                        <div class="param-group">
+                            <label for="rxAntennaSelect">Antena Rx</label>
+                            <select id="rxAntennaSelect" class="antenna-select">
+                                <optgroup label="── Omnidireccionales ──"></optgroup>
+                                <optgroup label="── Direccionales ──"></optgroup>
+                                <optgroup label="── Personalizada ──"></optgroup>
+                            </select>
+                            <div class="antenna-gain-row">
+                                <span class="antenna-gain-label">Ganancia:</span>
+                                <input type="number" id="rxGain" min="0" max="25" step="0.1" value="5.8" class="gain-input">
+                                <span class="param-unit">dBi</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="rxCableLoss">Pérdida cable/conector</label>
+                            <div class="slider-row">
+                                <input type="range" id="rxCableLoss" min="0" max="10" step="0.1" value="0.5">
+                                <span class="param-value"><span id="rxCableLossVal">0.5</span> dB</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="rxHeight">Altura antena</label>
+                            <div class="slider-row">
+                                <input type="range" id="rxHeight" min="1" max="100" step="1" value="10">
+                                <span class="param-value"><span id="rxHeightVal">10</span> m</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="rxSiteClutter" title="Pérdida por lo que rodea al mástil: arboleda, casas, paredes. El modelo de terreno no lo ve.">Entorno del sitio</label>
+                            <select id="rxSiteClutter" class="param-select"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENTORNO Y PROPAGACIÓN -->
+                <div class="panel config-card">
+                    <div class="panel-header">
+                        <h2><span class="icon">🌳</span> Entorno y Propagación</h2>
+                    </div>
+                    <div class="config-body">
+                        <div class="param-group">
+                            <label for="pathClutter" title="El DEM de Open-Meteo (Copernicus ~90 m) es terreno desnudo: no trae árboles ni edificios. Esta altura se suma al perfil para el cálculo de difracción.">Cobertura del trayecto</label>
+                            <select id="pathClutter" class="param-select"></select>
+                        </div>
+                        <div class="param-group">
+                            <label for="groundRefl" title="Con antenas bajas, la onda reflejada en el suelo cancela parcialmente la directa y la pérdida crece con n=4 en vez de n=2. Sobre terreno muy irregular o boscoso la reflexión especular se destruye.">Reflexión de suelo (two-ray)</label>
+                            <select id="groundRefl" class="param-select">
+                                <option value="auto" selected>Automática (según rugosidad)</option>
+                                <option value="yes">Total — campo llano, agua</option>
+                                <option value="partial">Parcial — terreno ondulado</option>
+                                <option value="no">Nula — sólo espacio libre</option>
+                            </select>
+                            <span class="param-hint" id="reflInfo">—</span>
+                        </div>
+                        <div class="param-group">
+                            <label for="noiseExcess" title="Ruido ambiente de la banda ISM por encima del piso térmico, más el margen de implementación del módulo respecto de su datasheet. Rural ~2-3 dB, suburbano ~6 dB, urbano ~10-15 dB.">Ruido ambiente + implementación</label>
+                            <div class="slider-row">
+                                <input type="range" id="noiseExcess" min="0" max="20" step="1" value="3">
+                                <span class="param-value"><span id="noiseExcessVal">3</span> dB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LORA PARAMS -->
+                <div class="panel config-card">
+                    <div class="panel-header">
+                        <h2><span class="icon lora-icon">⚙️</span> Parámetros LoRa</h2>
+                    </div>
+                    <div class="config-body">
+                        <div class="param-group">
+                            <label for="bandSelect">Banda / Frecuencia</label>
+                            <select id="bandSelect" class="param-select">
+                                <option value="433">433 MHz (AS/EU433)</option>
+                                <option value="868">868 MHz (EU868)</option>
+                                <option value="915" selected>915 MHz (AU915/US915)</option>
+                            </select>
+                        </div>
+                        <div class="param-group">
+                            <label for="spreadingFactor">Spreading Factor</label>
+                            <div class="sf-selector" id="sfSelector">
+                                <button data-sf="7" class="sf-btn">SF7</button>
+                                <button data-sf="8" class="sf-btn">SF8</button>
+                                <button data-sf="9" class="sf-btn">SF9</button>
+                                <button data-sf="10" class="sf-btn active">SF10</button>
+                                <button data-sf="11" class="sf-btn">SF11</button>
+                                <button data-sf="12" class="sf-btn">SF12</button>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="bandwidth">Ancho de Banda</label>
+                            <div class="bw-selector" id="bwSelector">
+                                <button data-bw="62500" class="bw-btn">62.5 kHz</button>
+                                <button data-bw="125000" class="bw-btn active">125 kHz</button>
+                                <button data-bw="250000" class="bw-btn">250 kHz</button>
+                                <button data-bw="500000" class="bw-btn">500 kHz</button>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="codingRate">Coding Rate</label>
+                            <select id="codingRate" class="param-select">
+                                <option value="5" selected>4/5</option>
+                                <option value="6">4/6</option>
+                                <option value="7">4/7</option>
+                                <option value="8">4/8</option>
+                            </select>
+                        </div>
+                        <div class="param-group">
+                            <label for="extraMargin">Margen requerido (fading, obstrucciones)</label>
+                            <div class="slider-row">
+                                <input type="range" id="extraMargin" min="0" max="30" step="1" value="10">
+                                <span class="param-value"><span id="extraMarginVal">10</span> dB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRAFFIC / TIME-ON-AIR PARAMS -->
+                <div class="panel config-card">
+                    <div class="panel-header">
+                        <h2><span class="icon lora-icon">📦</span> Tráfico (Time-on-Air)</h2>
+                    </div>
+                    <div class="config-body">
+                        <div class="param-group">
+                            <label for="payload">Payload</label>
+                            <div class="slider-row">
+                                <input type="range" id="payload" min="1" max="222" step="1" value="20">
+                                <span class="param-value"><span id="payloadVal">20</span> bytes</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="txInterval">Intervalo entre transmisiones</label>
+                            <div class="slider-row">
+                                <input type="range" id="txInterval" min="1" max="3600" step="1" value="60">
+                                <span class="param-value"><span id="txIntervalVal">60</span> s</span>
+                            </div>
+                        </div>
+                        <div class="param-group">
+                            <label for="preamble">Símbolos de preámbulo</label>
+                            <div class="slider-row">
+                                <input type="range" id="preamble" min="6" max="16" step="1" value="8">
+                                <span class="param-value"><span id="preambleVal">8</span> sym</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── TERRAIN PROFILE CHART ─── -->
+        <section class="panel profile-section">
+            <div class="panel-header">
+                <h2><span class="icon">📊</span> Perfil de Terreno y Zona de Fresnel</h2>
+                <div class="profile-status" id="profileStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Colocá los dos extremos del enlace</span>
+                </div>
+            </div>
+            <div class="profile-chart-wrapper">
+                <canvas id="profileChart"></canvas>
+                <div class="chart-tooltip" id="chartTooltip"></div>
+            </div>
+            <div class="profile-legend">
+                <span class="legend-item"><span class="legend-color" style="background: #4a6741;"></span> Terreno</span>
+                <span class="legend-item"><span class="legend-color" style="background: #00e5a0;"></span> Línea de Vista</span>
+                <span class="legend-item"><span class="legend-color" style="background: rgba(122, 165, 90, 0.6);"></span> Vegetación / edificación</span>
+                <span class="legend-item"><span class="legend-color" style="background: rgba(0, 180, 216, 0.3); border: 1px solid #00b4d8;"></span> Zona Fresnel (60%)</span>
+                <span class="legend-item"><span class="legend-color" style="background: #ff4757;"></span> Obstrucción</span>
+                <span class="legend-item"><span class="legend-color" style="border: 2px solid #ffa502; background: transparent;"></span> Filo dominante (difracción)</span>
+            </div>
+        </section>
+
+        <!-- ─── RESULTS ─── -->
+        <section class="results-section">
+            <div class="panel-header results-header">
+                <h2><span class="icon">📋</span> Resultados del Enlace</h2>
+            </div>
+            
+            <div class="evaluation-banner" id="evalBanner">
+               <div class="traffic-light">
+                   <div class="light red" id="lightRed"></div>
+                   <div class="light yellow" id="lightYellow"></div>
+                   <div class="light green" id="lightGreen"></div>
+               </div>
+               <div class="eval-text">
+                   <h3 id="evalTitle">Estado del Enlace</h3>
+                   <p id="evalDesc">Calculando...</p>
+               </div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" id="cardPathLoss" title="Pérdida total del trayecto: espacio libre + reflexión de suelo (two-ray) + difracción por obstáculos + entorno de los sitios. Es la que realmente se descuenta del presupuesto.">
+                    <div class="result-icon">📉</div>
+                    <div class="result-label">Pérdida Total</div>
+                    <div class="result-value" id="resPathLoss">—</div>
+                    <div class="result-unit">dB</div>
+                    <div class="result-desc" id="resLossBreakdown">—</div>
+                </div>
+                <div class="result-card" id="cardRxPower" title="Nivel de señal que llega efectivamente al receptor. Debería coincidir con el RSSI que reporta tu radio: usalo para comparar contra mediciones reales.">
+                    <div class="result-icon">📶</div>
+                    <div class="result-label">RSSI Estimado</div>
+                    <div class="result-value" id="resRxPower">—</div>
+                    <div class="result-unit">dBm</div>
+                    <div class="result-desc">Potencia recibida</div>
+                </div>
+                <div class="result-card highlight" id="cardMargin" title="Margen del enlace = RSSI estimado − sensibilidad efectiva. Es el número que decide la viabilidad. Se compara contra el margen requerido que fijás en Parámetros LoRa.">
+                    <div class="result-icon">🎯</div>
+                    <div class="result-label">Margen de Enlace</div>
+                    <div class="result-value" id="resMargin">—</div>
+                    <div class="result-unit">dB</div>
+                    <div class="result-desc" id="resMarginDesc">Sobre sensibilidad</div>
+                    <div class="margin-bar-container">
+                        <div class="margin-bar" id="marginBar"></div>
+                    </div>
+                </div>
+                <div class="result-card" id="cardAvailability" title="Probabilidad de que el desvanecimiento por sombra (log-normal) no se coma el margen disponible. Con mediciones cargadas usa el σ real de tus datos.">
+                    <div class="result-icon">✅</div>
+                    <div class="result-label">Disponibilidad</div>
+                    <div class="result-value" id="resAvailability">—</div>
+                    <div class="result-unit">%</div>
+                    <div class="result-desc" id="resAvailDesc">Estimada</div>
+                </div>
+                <div class="result-card" id="cardRange" title="Alcance realista sobre terreno llano y despejado, con el mismo modelo del enlace actual (two-ray + entorno) y reservando el margen requerido. Este es el número a mirar, no el de espacio libre.">
+                    <div class="result-icon">📏</div>
+                    <div class="result-label">Alcance Estimado</div>
+                    <div class="result-value" id="resRange">—</div>
+                    <div class="result-unit">km</div>
+                    <div class="result-desc" id="resRangeDesc">Terreno llano</div>
+                </div>
+                <div class="result-card" id="cardSensitivity" title="Nivel mínimo de señal que el receptor puede interpretar, incluyendo el ruido ambiente de la banda y el margen de implementación del módulo.">
+                    <div class="result-icon">👂</div>
+                    <div class="result-label">Sensibilidad Rx</div>
+                    <div class="result-value" id="resSensitivity">—</div>
+                    <div class="result-unit">dBm</div>
+                    <div class="result-desc" id="resSensDesc">Efectiva</div>
+                </div>
+                <div class="result-card" id="cardDiffraction" title="Pérdida por difracción de los obstáculos del terreno (filo de cuchillo ITU-R P.526 con construcción de Deygout, hasta 3 filos). Ya está incluida en la pérdida total.">
+                    <div class="result-icon">⛰️</div>
+                    <div class="result-label">Pérdida Difracción</div>
+                    <div class="result-value" id="resDiffraction">—</div>
+                    <div class="result-unit">dB</div>
+                    <div class="result-desc" id="resDiffDesc">Por obstrucción del terreno</div>
+                </div>
+                <div class="result-card" id="cardFresnel" title="Porcentaje de la primera zona de Fresnel libre de obstáculos (informativo). Un despeje bajo NO invalida el enlace por sí solo: se traduce en la pérdida por difracción, ya incluida en el margen.">
+                    <div class="result-icon">🔵</div>
+                    <div class="result-label">Fresnel Clearance</div>
+                    <div class="result-value" id="resFresnel">—</div>
+                    <div class="result-unit">%</div>
+                    <div class="result-desc">Despeje 1ra zona (info)</div>
+                </div>
+                <div class="result-card" id="cardEIRP" title="Potencia Equivalente Radiada Isotrópicamente: potencia real emitida por la antena Tx incluyendo ganancias y pérdidas.">
+                    <div class="result-icon">📡</div>
+                    <div class="result-label">EIRP</div>
+                    <div class="result-value" id="resEIRP">—</div>
+                    <div class="result-unit">dBm</div>
+                    <div class="result-desc">Potencia irradiada efectiva</div>
+                </div>
+                <div class="result-card" id="cardFSPL" title="Atenuación en espacio libre puro. Sólo se cumple con la primera zona de Fresnel totalmente despejada y sin reflexión de suelo: en enlaces terrestres reales es un piso optimista.">
+                    <div class="result-icon">📐</div>
+                    <div class="result-label">FSPL</div>
+                    <div class="result-value" id="resFSPL">—</div>
+                    <div class="result-unit">dB</div>
+                    <div class="result-desc">Referencia teórica</div>
+                </div>
+                <div class="result-card" id="cardMaxDist" title="Distancia máxima invirtiendo sólo FSPL. Es el número 'de folleto': no contempla reflexión de suelo, obstáculos ni vegetación. Compará contra el Alcance Estimado.">
+                    <div class="result-icon">🏔️</div>
+                    <div class="result-label">Dist. Espacio Libre</div>
+                    <div class="result-value" id="resMaxDist">—</div>
+                    <div class="result-unit">km</div>
+                    <div class="result-desc">Optimista, no usar</div>
+                </div>
+                <div class="result-card" id="cardDataRate" title="Velocidad teórica de transferencia de datos con la configuración LoRa seleccionada.">
+                    <div class="result-icon">⚡</div>
+                    <div class="result-label">Data Rate</div>
+                    <div class="result-value" id="resDataRate">—</div>
+                    <div class="result-unit">kbps</div>
+                    <div class="result-desc">Tasa de datos</div>
+                </div>
+                <div class="result-card" id="cardToA" title="Tiempo en aire del paquete: cuánto dura una transmisión con este SF, BW, CR y payload. Afecta consumo y probabilidad de colisión.">
+                    <div class="result-icon">⏱️</div>
+                    <div class="result-label">Time-on-Air</div>
+                    <div class="result-value" id="resToA">—</div>
+                    <div class="result-unit">ms</div>
+                    <div class="result-desc">Duración del paquete</div>
+                </div>
+                <div class="result-card" id="cardDuty" title="Fracción del tiempo que el transmisor ocupa el canal (Time-on-Air / intervalo). Debe respetar el límite regulatorio de la banda.">
+                    <div class="result-icon">📻</div>
+                    <div class="result-label">Duty Cycle</div>
+                    <div class="result-value" id="resDuty">—</div>
+                    <div class="result-unit">%</div>
+                    <div class="result-desc" id="dutyLimitDesc">Ocupación del canal</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── CALIBRACIÓN CON MEDICIONES DE CAMPO ─── -->
+        <section class="panel calib-section">
+            <div class="panel-header">
+                <h2>
+                    <span class="icon">🎚️</span> Calibración con mediciones de campo
+                    <span class="calib-badge" id="calibBadge">activa</span>
+                </h2>
+                <label class="calib-toggle" title="Reemplaza el modelo teórico (espacio libre + two-ray + entorno) por el ajuste log-distancia de tus propias mediciones. La difracción del perfil se sigue sumando.">
+                    <input type="checkbox" id="calibUse">
+                    <span>Usar modelo calibrado</span>
+                </label>
+            </div>
+
+            <p class="calib-intro">
+                Cargá pares <strong>distancia real / RSSI medido</strong> de tus pruebas de campo y la app ajusta por mínimos
+                cuadrados el modelo <code>L = A + 10·n·log₁₀(d)</code> a tu terreno. Es la forma de pasar de un cálculo
+                teórico a uno que refleja lo que efectivamente te pasa. Las mediciones quedan guardadas en el navegador.
+            </p>
+            <p class="calib-intro calib-seed">
+                Vienen precargadas las <strong>4 mediciones de la prueba de alcance en sierras</strong> (915 MHz, Ptx 17 dBm,
+                nodo fijo a 198 m, móvil a 3.49 y 8.07 km, Yagi y Super J-Pole). Se asumió Yagi 12 dBi y whip 2 dBi en el nodo
+                fijo: si tus ganancias reales son otras, el exponente <em>n</em> no cambia y el offset se cancela al predecir
+                con la misma configuración cargada acá. Podés borrarlas y reponerlas cuando quieras.
+            </p>
+
+            <div class="calib-form">
+                <div class="calib-field">
+                    <label for="calibDist">Distancia</label>
+                    <input type="number" id="calibDist" step="0.01" min="0" placeholder="km">
+                </div>
+                <div class="calib-field">
+                    <label for="calibRssi">RSSI medido</label>
+                    <input type="number" id="calibRssi" step="1" placeholder="dBm (ej. −112)">
+                </div>
+                <div class="calib-field">
+                    <label for="calibSnr" title="Importante con SNR negativo: el RSSI del SX127x satura en el piso de ruido y la potencia real de señal es RSSI + SNR.">SNR <span class="calib-opt">(recomendado)</span></label>
+                    <input type="number" id="calibSnr" step="0.1" placeholder="dB (ej. −14.2)">
+                </div>
+                <div class="calib-field calib-field-wide">
+                    <label for="calibNote">Nota</label>
+                    <input type="text" id="calibNote" maxlength="60" placeholder="antena, SF/BW, condiciones…">
+                </div>
+                <button id="calibUseMap" class="btn-ghost" title="Copiar la distancia actual del mapa">📍 Distancia del mapa</button>
+                <button id="calibAdd" class="btn-accent">➕ Agregar medición</button>
+                <button id="calibRestore" class="btn-ghost" title="Reponer las mediciones de la prueba de alcance en sierras">↺ Mediciones de campo</button>
+                <button id="calibClear" class="btn-ghost btn-danger" title="Borrar todas las mediciones">🗑 Vaciar</button>
+            </div>
+
+            <p class="calib-note">
+                <strong>Cargá siempre el SNR.</strong> En LoRa se demodula por debajo del piso de ruido: con SNR negativo el
+                RSSI que reporta el módulo satura en el ruido del canal y la potencia real de señal es <code>RSSI + SNR</code>.
+                Sin esa corrección, dos antenas con 8 dB de diferencia de ganancia pueden reportar el mismo RSSI y la
+                calibración sale errada por más de 15 dB.
+            </p>
+            <p class="calib-note">
+                La medición se guarda ya convertida a pérdida de trayecto usando la configuración de potencia, ganancias y
+                cables <em>vigente al momento de cargarla</em>. Cargá cada punto con la config real de esa prueba. Un error
+                en las ganancias absolutas se cancela solo, siempre que uses la misma config al predecir.
+            </p>
+
+            <div class="calib-table-wrap">
+                <table class="calib-table">
+                    <thead>
+                        <tr><th>Distancia (km)</th><th>RSSI (dBm)</th><th>SNR (dB)</th><th>Señal real (dBm)</th><th>Pérdida medida (dB)</th><th>Nota</th><th></th></tr>
+                    </thead>
+                    <tbody id="calibTableBody"></tbody>
+                </table>
+                <p class="calib-empty" id="calibEmpty">Todavía no cargaste mediciones.</p>
+            </div>
+
+            <div class="calib-summary" id="calibSummary">—</div>
+        </section>
+
+        <!-- ─── FORMULAS REFERENCE ─── -->
+        <section class="panel formulas-section">
+            <div class="panel-header">
+                <h2><span class="icon">📐</span> Fórmulas de Referencia</h2>
+                <button class="btn-toggle" id="btnToggleFormulas" aria-expanded="false">▼</button>
+            </div>
+            <div class="formulas-content" id="formulasContent">
+                <div class="formula-grid">
+                    <div class="formula-card">
+                        <h3>Pérdida total del trayecto</h3>
+                        <code>L = FSPL + max(L<sub>suelo</sub>, L<sub>dif</sub>) + L<sub>entorno</sub>
+L<sub>suelo</sub> = k·max(0, L<sub>2rayos</sub> − FSPL)</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>FSPL (Free Space Path Loss)</h3>
+                        <code>FSPL = 20·log₁₀(d<sub>km</sub>) + 20·log₁₀(f<sub>MHz</sub>) + 32.45</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Reflexión de suelo (two-ray)</h3>
+                        <code>L₂ = 40·log₁₀(d<sub>m</sub>) − 20·log₁₀(h₁) − 20·log₁₀(h₂)
+quiebre: d<sub>bp</sub> = 4π·h₁·h₂ / λ</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>EIRP</h3>
+                        <code>EIRP = P<sub>tx</sub> + G<sub>tx</sub> − L<sub>cable_tx</sub></code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Potencia Recibida (RSSI)</h3>
+                        <code>P<sub>rx</sub> = EIRP + G<sub>rx</sub> − L<sub>cable_rx</sub> − L</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Sensibilidad efectiva</h3>
+                        <code>S = −174 + 10·log₁₀(BW) + NF + SNR<sub>min</sub> + N<sub>amb</sub></code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Margen de enlace</h3>
+                        <code>M = P<sub>rx</sub> − S   (viable si M ≥ M<sub>req</sub>)</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Difracción (ITU-R P.526)</h3>
+                        <code>ν = h·√(2(d₁+d₂) / (λ·d₁·d₂))
+J(ν) = 6.9 + 20·log₁₀(√((ν−0.1)²+1) + ν − 0.1)</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Deygout (3 filos)</h3>
+                        <code>L<sub>dif</sub> = J₁ + T·(J₂ + J₃)
+T = 1 − e<sup>−J₁/6</sup></code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Disponibilidad (sombra log-normal)</h3>
+                        <code>P = ½·[1 + erf(M / (σ·√2))]</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Calibración de campo</h3>
+                        <code>L = A + 10·n·log₁₀(d<sub>km</sub>)
+(A y n por mínimos cuadrados sobre tus RSSI)</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Radio Fresnel</h3>
+                        <code>r = 17.32 · √(d₁·d₂ / (D·f<sub>GHz</sub>))</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Data Rate</h3>
+                        <code>R<sub>b</sub> = SF · (BW / 2<sup>SF</sup>) · (4 / CR)</code>
+                    </div>
+                    <div class="formula-card">
+                        <h3>Time-on-Air</h3>
+                        <code>T<sub>oA</sub> = (n<sub>pre</sub> + 4.25 + n<sub>payload</sub>) · 2<sup>SF</sup>/BW</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="app-footer">
+        <p>LoRa Link Calculator</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="app.js"></script>
+</body>
+</html>

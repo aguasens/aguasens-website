@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /loraLinkCalculator/
 
 Sitemap: https://www.aguasens.com.ar/sitemap.xml
