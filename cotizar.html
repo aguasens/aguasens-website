@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedí tu presupuesto — Mapa de instalación | AguaSens</title>
+  <meta name="description"
+    content="Marcá en el mapa satelital dónde tenés las aguadas a monitorear y dónde tenés señal para el Gateway. Te mandamos el presupuesto a medida.">
+  <meta name="theme-color" content="#152238">
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <link rel="stylesheet" href="css/styles.css?v=4">
+  <link rel="stylesheet" href="css/cotizar.css">
+</head>
+
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="header" id="top">
+    <div class="container">
+      <a href="index.html" class="header-brand">
+        <img src="img/ASlogoBl.png" alt="Logo AguaSens" class="header-logo">
+      </a>
+      <nav class="nav" id="main-nav">
+        <a href="index.html#producto">Producto</a>
+        <a href="index.html#sensores">Sensores</a>
+        <a href="index.html#economia">Economía</a>
+        <a href="index.html#herramientas">Herramientas</a>
+        <a href="index.html#nosotros">Nosotros</a>
+        <a href="cotizar.html" class="active">Pedir presupuesto</a>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="index.html#producto">Producto</a>
+    <a href="index.html#sensores">Sensores</a>
+    <a href="index.html#economia">Economía</a>
+    <a href="index.html#herramientas">Herramientas</a>
+    <a href="index.html#nosotros">Nosotros</a>
+    <a href="cotizar.html">Pedir presupuesto</a>
+  </div>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="cotizar-hero">
+    <div class="container">
+      <div class="section-label">Pedí tu presupuesto</div>
+      <h1>Marcá en el mapa dónde va cada cosa</h1>
+      <p>Ubicá tus aguadas y el lugar donde tenés señal de internet (WiFi o datos) para el Gateway. Con eso te
+        armamos una propuesta a medida para tu campo.</p>
+    </div>
+  </section>
+
+  <!-- ═══ MAPA + FORM ═══ -->
+  <section class="cotizar">
+    <div class="container">
+      <div class="cotizar-layout">
+
+        <!-- MAPA -->
+        <div class="map-panel">
+          <div class="map-toolbar">
+            <button type="button" id="mode-aguada" class="map-mode-btn">
+              <i data-lucide="droplet"></i> Marcar aguada
+            </button>
+            <button type="button" id="mode-internet" class="map-mode-btn">
+              <i data-lucide="wifi"></i> Marcar punto con señal
+            </button>
+            <button type="button" id="btn-locate" class="map-mode-btn">
+              <i data-lucide="locate-fixed"></i> Mi ubicación
+            </button>
+          </div>
+          <div class="map-search">
+            <input type="text" id="map-search-input" placeholder="Buscar localidad, campo o dirección…">
+            <button type="button" id="map-search-btn" aria-label="Buscar"><i data-lucide="search"></i></button>
+            <div class="map-search__results" id="map-search-results"></div>
+          </div>
+          <div id="map"></div>
+          <div class="map-hint">
+            <i data-lucide="info"></i>
+            <span>Elegí "Marcar aguada" o "Marcar punto con señal" y después hacé clic en el mapa (podés marcar
+              varias). Arrastrá un pin para ajustarlo, o doble clic para borrarlo.</span>
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="form-panel">
+          <div id="form-panel-body">
+            <h2>Tus datos</h2>
+            <div class="points-summary" id="points-summary"></div>
+
+            <form id="quote-form" novalidate>
+              <div class="field field--honeypot">
+                <label for="f-website">No completar</label>
+                <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="f-name">Nombre *</label>
+                <input type="text" id="f-name" required autocomplete="name">
+              </div>
+              <div class="field">
+                <label for="f-phone">WhatsApp / Teléfono</label>
+                <input type="tel" id="f-phone" autocomplete="tel" placeholder="11 6845-2098">
+              </div>
+              <div class="field">
+                <label for="f-email">Email</label>
+                <input type="email" id="f-email" autocomplete="email">
+              </div>
+              <div class="field">
+                <label for="f-comment">Comentario (opcional)</label>
+                <textarea id="f-comment" placeholder="Cantidad de aguadas, tipo de energía disponible, etc."></textarea>
+              </div>
+              <button type="submit" id="submit-btn" class="btn btn--primary">Enviar consulta</button>
+              <div class="form-msg" id="form-msg"></div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__brand"><img src="img/ASlogoBl.png" alt="AguaSens" style="height: 48px; display: block;">
+      </div>
+      <div class="footer__tags">
+        <span class="footer__tag">Ganadería de Precisión</span>
+        <span class="footer__tag">Monitoreo inteligente</span>
+        <span class="footer__tag">Agricultura 4.0</span>
+        <span class="footer__tag">IoT Campo</span>
+        <span class="footer__tag">LoRa</span>
+      </div>
+      <div class="footer__copy">© 2026 AguaSens&reg;. Todos los derechos reservados.</div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/main.js?v=2"></script>
+  <script src="js/cotizar.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>

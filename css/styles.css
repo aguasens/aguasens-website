@@ -593,7 +593,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-weight: 700; color: #fff; margin-bottom: 8px;
 }
 .tools__sub { font-size: 17px; color: rgba(255,255,255,.55); margin-bottom: 40px; max-width: 500px; }
-.tools__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; z-index: 1; }
+.tools__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; position: relative; z-index: 1; }
 .tool-card {
   background: rgba(255,255,255,.07); border: .5px solid rgba(255,255,255,.15);
   border-radius: var(--radius-lg); padding: 36px 32px;
@@ -607,6 +607,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .tool-card__icon--agua { background: rgba(76,201,240,.15); }
 .tool-card__icon--walk { background: rgba(25,199,163,.15); }
+.tool-card__icon--mapa { background: rgba(212,166,71,.18); }
 .tool-card h3 {
   font-family: var(--font-condensed); font-size: 24px; font-weight: 700;
   color: #fff; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 10px;
