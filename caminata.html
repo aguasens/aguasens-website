@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Calculadora de Caminata — AguaSens</title>
+  <meta name="theme-color" content="#f7f3ec">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/calculadoras.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="calc-page">
+
+  <div class="calc-container">
+    
+    <!-- HEADER -->
+    <header class="calc-header">
+      <a href="index.html" class="calc-back-btn">
+        <i data-lucide="chevron-left"></i>
+      </a>
+      <div class="calc-header-title">
+        <span>Calculadora de</span>
+        <h1>Caminata</h1>
+      </div>
+      <div class="calc-header-brand" style="margin-left: auto;">
+        <img src="img/ASlogo.png" alt="Logo AguaSens" style="height: 48px; width: auto; display: block;">
+      </div>
+    </header>
+
+    <!-- LOTE -->
+    <div class="calc-section-title">
+      <i data-lucide="move" class="text-accent"></i><h2>Lote</h2>
+    </div>
+    <div class="calc-card">
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Largo (m)</div>
+          <input type="number" id="in_largo" value="800" min="50" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Ancho (m)</div>
+          <input type="number" id="in_ancho" value="500" min="50" class="calc-input">
+        </label>
+      </div>
+      <div class="flex items-center justify-between px-4 py-3 mt-2" style="background: rgba(114,196,138,0.1); border-radius: 16px;">
+        <span class="text-xs font-bold text-deep">Superficie total</span>
+        <span id="out_area" class="text-lg font-bold text-accent">0 ha</span>
+      </div>
+    </div>
+
+    <!-- MAPA -->
+    <div class="calc-section-title">
+      <i data-lucide="target" class="text-accent"></i><h2>Bebederos en el lote</h2>
+    </div>
+    <div class="calc-card">
+      <div class="calc-field-hint mb-3">Tocá el mapa para colocar bebederos. Doble clic para eliminarlos.</div>
+      
+      <div id="map_container" class="map-container" style="padding-bottom: 60%;">
+        <svg id="svg_map" viewBox="0 0 100 60" preserveAspectRatio="none" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></svg>
+      </div>
+      
+      <div class="flex items-center gap-2 mt-3 text-[10px] font-mono text-muted">
+        <span>CERCA</span>
+        <div style="flex:1; height:8px; border-radius:4px; background: linear-gradient(to right, rgba(25,199,163,0.5), rgba(255,181,71,0.6), rgba(255,107,107,0.85))"></div>
+        <span>LEJOS · <span id="out_max_d">0</span>m</span>
+      </div>
+
+      <div class="flex items-center justify-between mt-4 pb-2">
+        <span class="text-xs text-muted">Bebederos colocados:</span>
+        <span id="out_bebederos_cant" class="text-2xl font-bold text-deep">1</span>
+      </div>
+      
+      <div class="calc-grid-2 mb-2">
+        <div class="calc-toggle" onclick="setPos(1)">1 centro</div>
+        <div class="calc-toggle" onclick="setPos(2)">1 esquina</div>
+        <div class="calc-toggle" onclick="setPos(3)">2 lados</div>
+        <div class="calc-toggle" onclick="setPos(4)">4 puntos</div>
+      </div>
+      <div class="calc-toggle" style="color: var(--c-danger); background: rgba(201,92,71,0.1)" onclick="setPos(0)">Limpiar mapa</div>
+    </div>
+
+    <!-- RODEO -->
+    <div class="calc-section-title">
+      <i data-lucide="map-pin" class="text-accent"></i><h2>Rodeo</h2>
+    </div>
+    <div class="calc-card">
+      <label class="calc-field mb-3">
+        <div class="calc-field-label">Cantidad de animales</div>
+        <input type="number" id="in_animales" value="200" min="1" class="calc-input text-2xl font-bold">
+      </label>
+      <label class="calc-field mb-3">
+        <div class="calc-field-label">Categoría animal</div>
+        <div class="calc-input-wrapper">
+          <select id="in_categoria" class="calc-input calc-input-select">
+            <option value="ternero">Ternero (150 kg)</option>
+            <option value="vaquillona">Vaquillona (250 kg)</option>
+            <option value="novillo_engorde" selected>Novillo engorde (350 kg)</option>
+            <option value="novillo_recria">Novillo recría (200 kg)</option>
+            <option value="vaca_seca">Vaca seca (450 kg)</option>
+            <option value="vaca_cria">Vaca cría lactante (450 kg)</option>
+            <option value="vaca_lechera">Vaca lechera (600 kg)</option>
+          </select>
+          <i data-lucide="chevron-down" class="calc-select-icon"></i>
+        </div>
+      </label>
+      <label class="calc-field mb-3">
+        <div class="calc-field-label"><i data-lucide="activity" style="width:12px;height:12px;"></i> Situación climática</div>
+        <div class="calc-input-wrapper">
+          <select id="in_clima" class="calc-input calc-input-select">
+            <option value="invierno">Invierno fresco (< 15 °C)</option>
+            <option value="templado">Templado (15–25 °C)</option>
+            <option value="verano_calido" selected>Verano cálido (25–32 °C)</option>
+            <option value="verano_extremo">Verano extremo (> 32 °C)</option>
+          </select>
+          <i data-lucide="chevron-down" class="calc-select-icon"></i>
+        </div>
+        <div class="calc-field-hint">Determina cuántas visitas/día harán los animales (<span id="out_hint_visitas">0</span> estimadas).</div>
+      </label>
+      <label class="calc-field">
+        <div class="calc-field-label"><i data-lucide="calendar" style="width:12px;height:12px;"></i> Días en el lote</div>
+        <input type="number" id="in_dias" value="45" min="1" class="calc-input">
+      </label>
+
+      <details style="box-shadow: none; margin: 8px 0 0; background: none; border-top: 1px solid var(--calc-border); border-radius: 0;">
+        <summary style="padding: 12px 4px; font-size: 13px; color: var(--c-muted);"><i data-lucide="settings-2" style="width:16px;height:16px;"></i> Configuración avanzada</summary>
+        <div class="details-content" style="padding: 0 4px;">
+          <label class="calc-field mb-3">
+            <div class="calc-field-label">Pendiente promedio (%)</div>
+            <input type="number" id="in_pendiente" value="0" min="0" class="calc-input">
+          </label>
+          <label class="calc-field mb-3">
+            <div class="calc-field-label"><i data-lucide="wind" style="width:12px;height:12px;"></i> Estado del camino</div>
+            <div class="calc-input-wrapper">
+              <select id="in_camino" class="calc-input calc-input-select" style="font-size: 13px; padding-left: 12px;">
+                <option value="firme">Firme/seco</option>
+                <option value="normal" selected>Normal</option>
+                <option value="barroso">Barroso/anegado</option>
+                <option value="arenoso">Arenoso/profundo</option>
+              </select>
+              <i data-lucide="chevron-down" class="calc-select-icon"></i>
+            </div>
+          </label>
+          <label class="calc-field">
+            <div class="calc-field-label"><i data-lucide="dollar-sign" style="width:12px;height:12px;"></i> Precio kg vivo (US$)</div>
+            <input type="number" id="in_precio" value="2.94" min="0" class="calc-input">
+          </label>
+        </div>
+      </details>
+    </div>
+
+    <!-- ANÁLISIS -->
+    <div class="calc-section-title mt-4">
+      <i data-lucide="footprints" class="text-accent"></i><h2>Análisis</h2>
+    </div>
+
+    <div id="card_sin_bebederos" class="risk-card bg-danger-10" style="display:none; padding: 16px;">
+      <div class="text-sm font-bold text-danger">Sin bebederos en el lote</div>
+      <div class="text-xs text-muted mt-1">Colocá al menos un bebedero en el mapa.</div>
+    </div>
+
+    <div id="resultados_wrap">
+      
+      <!-- Metrics -->
+      <div class="calc-grid-2 mb-4">
+        <div class="metric-card color-primary">
+          <div class="metric-label">Distancia prom</div>
+          <div class="metric-value-wrap"><span id="out_dist_prom" class="metric-value text-primary">0</span><span class="metric-unit">m</span></div>
+        </div>
+        <div id="metric_max_dist" class="metric-card color-info">
+          <div class="metric-label">Distancia máx</div>
+          <div class="metric-value-wrap"><span id="out_dist_max" class="metric-value text-info">0</span><span class="metric-unit">m</span></div>
+        </div>
+        <div class="metric-card color-accent">
+          <div class="metric-label">Visitas est.</div>
+          <div class="metric-value-wrap"><span id="out_visitas" class="metric-value text-accent">0</span><span class="metric-unit">/día</span></div>
+        </div>
+        <div id="metric_caminata" class="metric-card color-accent">
+          <div class="metric-label">Caminata diaria</div>
+          <div class="metric-value-wrap"><span id="out_caminata" class="metric-value text-accent">0</span><span class="metric-unit">km</span></div>
+        </div>
+      </div>
+
+      <!-- Comida Extra -->
+      <div id="card_comida" class="calc-card" style="display:none; border-left: 4px solid var(--c-warning);">
+        <div class="flex items-center gap-2 mb-2">
+          <i data-lucide="zap" class="text-warning" style="width:16px;height:16px;"></i>
+          <span class="text-[11px] font-bold tracking-widest uppercase text-deep">Comida extra para compensar</span>
+        </div>
+        <div class="text-sm text-muted mb-3 leading-relaxed">
+          Cada animal necesita un <b id="out_comida_pct" class="text-warning text-xl">0%</b> más de comida diaria para mantener el GDP objetivo a pesar de la caminata.
+        </div>
+        <div class="calc-grid-2 text-xs">
+          <div style="background: var(--calc-bg); border-radius: 12px; padding: 12px;">
+            <div class="metric-label mb-1">MS Basal</div>
+            <div id="out_ms_basal" class="text-base font-bold text-deep">0 kg/día</div>
+          </div>
+          <div style="background: rgba(212,166,71,0.1); border-radius: 12px; padding: 12px;">
+            <div class="metric-label mb-1">MS Extra</div>
+            <div id="out_ms_extra" class="text-base font-bold text-warning">+0 kg/día</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agua -->
+      <div id="card_agua" class="calc-card" style="display:none; border-left: 4px solid var(--c-info);">
+        <div class="flex items-center gap-2 mb-2">
+          <i data-lucide="droplet" class="text-info" style="width:16px;height:16px;"></i>
+          <span class="text-[11px] font-bold tracking-widest uppercase text-deep">Consumo de agua</span>
+        </div>
+        <div class="text-sm text-muted mb-3 leading-relaxed">
+          Por la distancia al bebedero, los animales beben <b class="text-info"><span id="out_agua_pct">0</span>% menos agua</b> de lo que necesitarían.
+        </div>
+        <div class="calc-grid-2 text-xs">
+          <div style="background: var(--calc-bg); border-radius: 12px; padding: 12px;">
+            <div class="metric-label mb-1">Ideal</div>
+            <div id="out_agua_ideal" class="text-base font-bold text-deep">0 L/día</div>
+          </div>
+          <div style="background: rgba(46,107,66,0.1); border-radius: 12px; padding: 12px;">
+            <div class="metric-label mb-1">Real</div>
+            <div id="out_agua_real" class="text-base font-bold text-info">0 L/día</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impacto Económico -->
+      <div id="card_eco_caminata" class="economic-card caminata" style="display:none;">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="trending-down" class="text-accent" style="width:16px;height:16px;"></i>
+          <span id="lbl_hor_caminata" class="text-[10px] font-bold tracking-widest uppercase text-accent">Impacto económico · 45 días</span>
+        </div>
+        <div class="mb-3">
+          <div class="text-[10px] uppercase tracking-wider" style="color: rgba(255,255,255,0.6)">GDP esperado vs actual</div>
+          <div class="flex items-baseline gap-2 mt-1">
+            <span id="out_gdp_esp" class="text-2xl font-bold" style="color:rgba(255,255,255,0.6); text-decoration: line-through;">0 g</span>
+            <span id="out_gdp_real" class="text-3xl font-bold text-accent">→ 0 g/día</span>
+          </div>
+          <div id="out_gdp_perdido" class="text-xs mt-1" style="color:rgba(255,255,255,0.7)">-0 g/día por animal</div>
+        </div>
+        <div class="calc-grid-2 pt-3" style="border-top: 1px solid rgba(255,255,255,0.15)">
+          <div>
+            <div class="text-[10px] uppercase tracking-wider" style="color: rgba(255,255,255,0.6)">Rodeo total</div>
+            <div id="out_eco_kg" class="text-2xl font-bold text-accent mt-1">0 kg</div>
+            <div class="text-[10px]" style="color:rgba(255,255,255,0.6)">carne perdida</div>
+          </div>
+          <div>
+            <div class="text-[10px] uppercase tracking-wider" style="color: rgba(255,255,255,0.6)">En US$</div>
+            <div id="out_eco_pesos" class="text-2xl font-bold text-accent mt-1">$0</div>
+            <div class="text-[10px]" style="color:rgba(255,255,255,0.6)">de ingreso perdido</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desglose de pérdida diaria -->
+      <details id="card_desglose" style="display: none;">
+        <summary>
+          <i data-lucide="activity" style="width: 16px; height: 16px; color: var(--c-primary);"></i> Desglose de la pérdida diaria
+        </summary>
+        <div class="details-content space-y-3">
+          <div class="mb-3">
+            <div class="flex items-center justify-between text-xs mb-1">
+              <span class="text-deep">Energía pura para caminar (NRC)</span>
+              <span class="font-bold text-deep"><span id="out_desg_energia_val">0</span> g/día <span class="text-muted">(<span id="out_desg_energia_pct">0</span>%)</span></span>
+            </div>
+            <div class="progress-bg" style="height: 6px; background: var(--calc-bg); margin-top: 0;"><div id="bar_desg_energia" class="progress-fill" style="background: var(--c-info);"></div></div>
+          </div>
+          <div class="mb-3">
+            <div class="flex items-center justify-between text-xs mb-1">
+              <span class="text-deep">Menor consumo de MS por menos agua</span>
+              <span class="font-bold text-deep"><span id="out_desg_agua_val">0</span> g/día <span class="text-muted">(<span id="out_desg_agua_pct">0</span>%)</span></span>
+            </div>
+            <div class="progress-bg" style="height: 6px; background: var(--calc-bg); margin-top: 0;"><div id="bar_desg_agua" class="progress-fill" style="background: var(--c-warning);"></div></div>
+          </div>
+          <div class="mb-3">
+            <div class="flex items-center justify-between text-xs mb-1">
+              <span class="text-deep">Menos tiempo de pastoreo</span>
+              <span class="font-bold text-deep"><span id="out_desg_tiempo_val">0</span> g/día <span class="text-muted">(<span id="out_desg_tiempo_pct">0</span>%)</span></span>
+            </div>
+            <div class="progress-bg" style="height: 6px; background: var(--calc-bg); margin-top: 0;"><div id="bar_desg_tiempo" class="progress-fill" style="background: var(--c-danger);"></div></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Recomendación Técnica -->
+      <div class="calc-card" style="background: var(--c-deep); color: white; padding: 20px; margin-bottom: 16px;">
+        <div class="text-[10px] font-mono mb-2 tracking-widest uppercase" style="color: rgba(255,255,255,0.6)">Recomendación técnica</div>
+        <div id="out_recomendacion" class="text-sm leading-relaxed text-white"></div>
+      </div>
+
+      <!-- Referencias -->
+      <details>
+        <summary>
+          <i data-lucide="info" style="width: 16px; height: 16px; color: var(--c-accent);"></i> Supuestos y referencias
+        </summary>
+        <div class="details-content">
+          <p class="mb-1"><b class="text-deep">Visitas por día según distancia</b></p>
+          <p>• Curva calibrada con datos observados de Ohio State University: vaquillonas a &lt;366m hicieron 3 visitas/día con 17 L de agua, mientras que a 816m bajaron a 2 visitas y 11 L.</p>
+          <p>• Ajustada por factor climático (<span id="ref_clima_nombre"></span>, factor visitas × <span id="ref_clima_factor"></span>).</p>
+          <p>• Visitas estimadas en este caso: <b id="ref_visitas"></b>.</p>
+          
+          <p class="mb-1 mt-3"><b class="text-deep">Consumo de agua y pasto</b></p>
+          <p>• Reducción de consumo de agua según distancia (Ohio State, Pinheiro Machado et al.): a 250m ~5%, a 500m ~18%, a 1000m ~35%.</p>
+          <p>• Cada 1% menos de agua → ~0,7% menos consumo de MS → ~0,7% menos GDP (relación lineal en rango operativo).</p>
+          <p>• Tiempo de pastoreo perdido: caminata a 3 km/h, cada hora menos pastoreando = ~5% menos consumo MS.</p>
+          
+          <p class="mb-1 mt-3"><b class="text-deep">Energía de caminata</b></p>
+          <p>• Costo horizontal: 0,00045 Mcal NEm/kg PV/km — NRC Dairy Cattle (2001), confirmado por Tedeschi & Fox.</p>
+          <p>• Costo vertical: 0,0067 Mcal NEm/kg/km de elevación.</p>
+          <p>• Conversión energía → ganancia: 6,5 Mcal NEm equivalentes por kg PV en engorde.</p>
+          <p>• Conversión MS → energía: 2,5 Mcal NEm/kg de MS (dieta engorde típica).</p>
+          
+          <p class="mb-1 mt-3"><b class="text-deep">Distancia recomendada</b></p>
+          <p>• Máxima recomendada: 250m (Pinheiro Machado et al., NIH PMC8116948).</p>
+          <p>• OMAFRA Ontario: novillo recría hasta 250m, vaca cría hasta 500m sin afectar producción.</p>
+          <p>• Estudio bebedero vs represa: bebedero +0,10 kg/día GDP (Brasil, NIH PMC8116948).</p>
+        </div>
+      </details>
+
+    </div>
+
+  </div> <!-- /container -->
+
+  <script src="js/caminata.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
