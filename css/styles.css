@@ -608,6 +608,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .tool-card__icon--agua { background: rgba(76,201,240,.15); }
 .tool-card__icon--walk { background: rgba(25,199,163,.15); }
 .tool-card__icon--mapa { background: rgba(212,166,71,.18); }
+.tool-card__icon--roi { background: rgba(46,125,50,.18); }
 .tool-card h3 {
   font-family: var(--font-condensed); font-size: 24px; font-weight: 700;
   color: #fff; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 10px;

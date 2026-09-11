@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Calculadora de Retorno — AguaSens</title>
+  <meta name="description"
+    content="Cargá tus propios datos de recorridas y de fallas de agua del último año, y calculá en cuánto tiempo se paga el sistema de monitoreo en tu campo.">
+  <meta name="theme-color" content="#f7f3ec">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/calculadoras.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="calc-page">
+
+  <div class="calc-container">
+
+    <!-- HEADER -->
+    <header class="calc-header">
+      <a href="index.html" class="calc-back-btn">
+        <i data-lucide="chevron-left"></i>
+      </a>
+      <div class="calc-header-title">
+        <span>Calculadora de</span>
+        <h1>Retorno</h1>
+      </div>
+      <div class="calc-header-brand" style="margin-left: auto;">
+        <img src="img/ASlogo.png" alt="Logo AguaSens" style="height: 48px; width: auto; display: block;">
+      </div>
+    </header>
+
+    <div class="calc-card" style="background: var(--c-deep); color: white; padding: 20px;">
+      <div class="text-sm leading-relaxed" style="color: rgba(255,255,255,0.85);">
+        Esta herramienta usa <b>tus números</b>, no los nuestros. Los valores que vienen cargados son conservadores
+        a propósito: si con ellos el sistema no se paga, la calculadora te lo va a decir.
+      </div>
+    </div>
+
+    <!-- ═══ RECORRIDAS ═══ -->
+    <div class="calc-section-title">
+      <i data-lucide="truck" class="text-accent"></i><h2>Tus recorridas hoy</h2>
+    </div>
+    <div class="calc-card">
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Aguadas a monitorear</div>
+          <input type="number" id="in_aguadas" value="6" min="1" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Recorridas por semana</div>
+          <input type="number" id="in_recorridas_sem" value="3" min="0.25" step="0.25" class="calc-input">
+        </label>
+      </div>
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">km por recorrida</div>
+          <input type="number" id="in_km" value="25" min="0" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Costo por km (US$)</div>
+          <input type="number" id="in_costo_km" value="0.35" min="0" step="0.05" class="calc-input">
+        </label>
+      </div>
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Horas por recorrida</div>
+          <input type="number" id="in_horas" value="1.5" min="0" step="0.25" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Costo hora personal (US$)</div>
+          <input type="number" id="in_costo_hora" value="4" min="0" step="0.5" class="calc-input">
+        </label>
+      </div>
+      <label class="calc-field">
+        <div class="calc-field-label"><i data-lucide="percent" style="width:12px;height:12px;"></i> Recorridas que dejarías de hacer (%)</div>
+        <input type="number" id="in_pct_evitadas" value="40" min="0" max="100" class="calc-input">
+        <div class="calc-field-hint">Arranca en 40 y no en 100 a propósito: al campo se va igual. Este campo es el
+          más discutible de toda la cuenta, así que quedó a la vista y lo podés bajar.</div>
+      </label>
+    </div>
+
+    <!-- ═══ LO QUE PASÓ ═══ -->
+    <div class="calc-section-title">
+      <i data-lucide="alert-triangle" class="text-accent"></i><h2>Lo que te pasó el último año</h2>
+    </div>
+    <div class="calc-card">
+      <label class="calc-field">
+        <div class="calc-field-label">Veces que encontraste un problema de agua ya instalado</div>
+        <input type="number" id="in_eventos" value="3" min="0" class="calc-input text-2xl font-bold">
+        <div class="calc-field-hint">Tanque vacío, bomba parada, flotante trabado, molino sin bombear.</div>
+      </label>
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Animales afectados por evento</div>
+          <input type="number" id="in_animales_afectados" value="100" min="0" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Animales muertos por falta de agua</div>
+          <input type="number" id="in_muertos" value="0" min="0" class="calc-input">
+        </label>
+      </div>
+      <label class="calc-field">
+        <div class="calc-field-label">Categoría animal</div>
+        <div class="calc-input-wrapper">
+          <select id="in_categoria" class="calc-input calc-input-select">
+            <option value="ternero">Ternero (150 kg)</option>
+            <option value="vaquillona">Vaquillona (250 kg)</option>
+            <option value="novillo_engorde" selected>Novillo engorde (350 kg)</option>
+            <option value="novillo_recria">Novillo recría (200 kg)</option>
+            <option value="vaca_seca">Vaca seca (450 kg)</option>
+            <option value="vaca_cria">Vaca cría lactante (450 kg)</option>
+            <option value="vaca_lechera">Vaca lechera (600 kg)</option>
+          </select>
+          <i data-lucide="chevron-down" class="calc-select-icon"></i>
+        </div>
+      </label>
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Reparaciones por trabajar en seco (US$)</div>
+          <input type="number" id="in_reparaciones" value="0" min="0" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Precio kg vivo (US$)</div>
+          <input type="number" id="in_precio" value="2.85" min="0" step="0.05" class="calc-input">
+        </label>
+      </div>
+    </div>
+
+    <!-- ═══ EL SISTEMA ═══ -->
+    <div class="calc-section-title">
+      <i data-lucide="cpu" class="text-accent"></i><h2>El sistema que necesitás</h2>
+    </div>
+    <div class="calc-card">
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Nodos Fijos (US$ 659)</div>
+          <input type="number" id="in_n_fijo" value="4" min="0" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Nodos Móviles (US$ 729)</div>
+          <input type="number" id="in_n_movil" value="0" min="0" class="calc-input">
+        </label>
+      </div>
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Nodos Bomba (US$ 529)</div>
+          <input type="number" id="in_n_bomba" value="2" min="0" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Nodos Molino (US$ 639)</div>
+          <input type="number" id="in_n_molino" value="0" min="0" class="calc-input">
+        </label>
+      </div>
+      <div class="calc-grid-2">
+        <label class="calc-field">
+          <div class="calc-field-label">Gateways (US$ 449)</div>
+          <input type="number" id="in_gateway" value="1" min="0" class="calc-input">
+        </label>
+        <label class="calc-field">
+          <div class="calc-field-label">Vida útil (años)</div>
+          <input type="number" id="in_vida_util" value="5" min="1" class="calc-input">
+        </label>
+      </div>
+
+      <details style="box-shadow: none; margin: 8px 0 0; background: none; border-top: 1px solid var(--calc-border); border-radius: 0;">
+        <summary style="padding: 12px 4px; font-size: 13px; color: var(--c-muted);"><i data-lucide="settings-2" style="width:16px;height:16px;"></i> Instalación y mantenimiento</summary>
+        <div class="details-content" style="padding: 0 4px;">
+          <label class="calc-field mb-3">
+            <div class="calc-field-label">Instalación (US$)</div>
+            <input type="number" id="in_instalacion" value="0" min="0" class="calc-input">
+            <div class="calc-field-hint">No viene cargada porque depende de cada campo: distancia, infraestructura
+              existente y cantidad de puntos. <a href="cotizar.html" style="color: var(--c-primary); font-weight: 600;">Pedí
+                tu presupuesto</a> y cargá acá el número real.</div>
+          </label>
+          <div class="calc-grid-2">
+            <label class="calc-field">
+              <div class="calc-field-label">Batería gel de repuesto (US$)</div>
+              <input type="number" id="in_costo_bateria" value="60" min="0" class="calc-input">
+            </label>
+            <label class="calc-field">
+              <div class="calc-field-label">Se cambia cada (años)</div>
+              <input type="number" id="in_vida_bateria" value="4" min="1" class="calc-input">
+            </label>
+          </div>
+          <div class="calc-field-hint">La gel no dura lo mismo que el equipo. Sumarla evita que el cálculo quede
+            optimista de arranque.</div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ═══ RESULTADOS ═══ -->
+    <div class="calc-section-title mt-4">
+      <i data-lucide="trending-up" class="text-accent"></i><h2>Resultado</h2>
+    </div>
+
+    <!-- Veredicto -->
+    <div id="card_veredicto" class="risk-card" style="padding: 16px;">
+      <div class="flex items-start gap-3">
+        <i data-lucide="target" style="width:18px;height:18px; margin-top:2px;"></i>
+        <div style="flex:1">
+          <div id="lbl_veredicto" class="text-xs font-bold uppercase tracking-widest mb-1">—</div>
+          <div id="txt_veredicto" class="text-xs text-deep leading-relaxed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- El problema que se vende: la ventana de detección -->
+    <div class="calc-card" style="border-left: 4px solid var(--c-danger);">
+      <div class="flex items-center gap-2 mb-2">
+        <i data-lucide="clock" class="text-danger" style="width:16px;height:16px;"></i>
+        <span class="text-[11px] font-bold tracking-widest uppercase text-deep">El problema real</span>
+      </div>
+      <div class="text-sm text-muted leading-relaxed">
+        Cuando el agua falla, hoy te enterás en promedio
+        <b id="out_det_sin" class="text-danger text-xl">0 h</b> después.
+        Con AguaSens, en <b class="text-accent">15 minutos</b>.
+      </div>
+      <div id="out_det_cadencia" class="text-[10px] text-muted mt-2"></div>
+    </div>
+
+    <!-- Métricas -->
+    <div class="calc-grid-2 mb-4">
+      <div class="metric-card color-accent">
+        <div class="metric-label">Beneficio anual</div>
+        <div class="metric-value-wrap"><span class="metric-unit">US$</span><span id="out_beneficio" class="metric-value text-accent">0</span></div>
+        <div class="metric-sub">lo que te ahorra</div>
+      </div>
+      <div class="metric-card color-info">
+        <div class="metric-label">Costo anual</div>
+        <div class="metric-value-wrap"><span class="metric-unit">US$</span><span id="out_costo" class="metric-value text-info">0</span></div>
+        <div id="out_costo_aguada" class="metric-sub">—</div>
+      </div>
+      <div id="metric_neto" class="metric-card color-accent">
+        <div class="metric-label">Neto por año</div>
+        <div class="metric-value-wrap"><span class="metric-unit">US$</span><span id="out_neto" class="metric-value text-accent">0</span></div>
+        <div class="metric-sub">beneficio − costo</div>
+      </div>
+      <div id="metric_payback" class="metric-card color-accent">
+        <div class="metric-label">Se paga en</div>
+        <div class="metric-value-wrap"><span id="out_payback" class="metric-value text-accent">0</span><span id="out_payback_unit" class="metric-unit">meses</span></div>
+        <div class="metric-sub">recupero de la inversión</div>
+      </div>
+    </div>
+
+    <!-- Desglose del beneficio -->
+    <details id="card_desglose" open>
+      <summary>
+        <i data-lucide="pie-chart" style="width: 16px; height: 16px; color: var(--c-primary);"></i> De dónde sale el beneficio
+      </summary>
+      <div class="details-content">
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="text-deep">Recorridas que dejás de hacer</span>
+            <span id="out_desg_recorridas" class="font-bold text-deep">US$ 0</span>
+          </div>
+          <div class="progress-bg" style="height: 6px; background: var(--calc-bg); margin-top: 0;"><div id="bar_desg_recorridas" class="progress-fill" style="background: var(--c-info);"></div></div>
+        </div>
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="text-deep">Fallas detectadas a tiempo</span>
+            <span id="out_desg_fallas" class="font-bold text-deep">US$ 0</span>
+          </div>
+          <div class="progress-bg" style="height: 6px; background: var(--calc-bg); margin-top: 0;"><div id="bar_desg_fallas" class="progress-fill" style="background: var(--c-primary);"></div></div>
+          <div class="text-[10px] text-muted mt-1">Cada evento detectado a tiempo salva <b id="out_kg_evento">0 kg</b>.</div>
+        </div>
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="text-deep">Mortandad evitada</span>
+            <span id="out_desg_mortandad" class="font-bold text-deep">US$ 0</span>
+          </div>
+          <div class="progress-bg" style="height: 6px; background: var(--calc-bg); margin-top: 0;"><div id="bar_desg_mortandad" class="progress-fill" style="background: var(--c-danger);"></div></div>
+        </div>
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="text-deep">Reparaciones evitadas</span>
+            <span id="out_desg_reparac" class="font-bold text-deep">US$ 0</span>
+          </div>
+          <div class="progress-bg" style="height: 6px; background: var(--calc-bg); margin-top: 0;"><div id="bar_desg_reparac" class="progress-fill" style="background: var(--c-warning);"></div></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Desglose del costo -->
+    <details>
+      <summary>
+        <i data-lucide="receipt" style="width: 16px; height: 16px; color: var(--c-primary);"></i> De qué se compone el costo
+      </summary>
+      <div class="details-content">
+        <div class="breakdown-row" style="border-color: var(--calc-border);">
+          <div><div class="font-bold text-deep">Equipos</div><div id="out_nodos_cant" class="text-[11px] text-muted mt-1"></div></div>
+          <div id="out_equipos" class="font-bold text-deep">US$ 0</div>
+        </div>
+        <div class="breakdown-row" style="border-color: var(--calc-border);">
+          <div><div class="font-bold text-deep">Amortización anual</div><div class="text-[11px] text-muted mt-1">equipos + instalación ÷ vida útil</div></div>
+          <div id="out_amortiz" class="font-bold text-deep">US$ 0</div>
+        </div>
+        <div class="breakdown-row" style="border-color: var(--calc-border);">
+          <div><div class="font-bold text-deep">Reposición de baterías</div><div class="text-[11px] text-muted mt-1">prorrateada por año</div></div>
+          <div id="out_baterias" class="font-bold text-deep">US$ 0</div>
+        </div>
+        <div class="breakdown-row" style="border-color: var(--calc-border);">
+          <div><div class="font-bold text-deep">Suscripción</div><div id="out_susc_mes" class="text-[11px] text-muted mt-1"></div></div>
+          <div id="out_susc" class="font-bold text-deep">US$ 0</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Recomendación -->
+    <div class="calc-card" style="background: var(--c-deep); color: white; padding: 20px; margin-bottom: 16px;">
+      <div class="text-[10px] font-mono mb-2 tracking-widest uppercase" style="color: rgba(255,255,255,0.6)">Cómo leer este número</div>
+      <div id="out_recomendacion" class="text-sm leading-relaxed text-white"></div>
+    </div>
+
+    <!-- CTA -->
+    <a href="cotizar.html" class="calc-card" style="display:block; text-decoration:none; background: var(--c-primary); color:white; padding: 20px; text-align:center;">
+      <div class="text-base font-bold mb-1">Pedí tu presupuesto</div>
+      <div class="text-xs" style="color: rgba(255,255,255,0.85);">Marcá tus aguadas en el mapa y te cotizamos equipos e
+        instalación para tu campo.</div>
+    </a>
+
+    <!-- Supuestos -->
+    <details>
+      <summary>
+        <i data-lucide="info" style="width: 16px; height: 16px; color: var(--c-accent);"></i> Supuestos y fórmulas
+      </summary>
+      <div class="details-content">
+        <p class="mb-1"><b class="text-deep">Recorridas evitadas</b></p>
+        <p>• <code>recorridas/año = recorridas por semana × 52</code></p>
+        <p>• <code>costo = recorridas/año × (km × costo por km + horas × costo hora)</code></p>
+        <p>• El ahorro es ese costo por el % que indiques. Nunca asumimos que se eliminan todas.</p>
+
+        <p class="mb-1 mt-3"><b class="text-deep">Fallas detectadas a tiempo</b></p>
+        <p>• Sin monitoreo, el tiempo promedio hasta enterarse es <b>la mitad</b> de la ventana entre recorridas.
+          Con monitoreo se toma 15 minutos.</p>
+        <p>• Cada evento cuesta <code>(horas ganadas ÷ 24) × 2 × GDP objetivo × animales afectados</code> kilos.
+          El factor 2 asume que un día sin agua cuesta el día de ganancia más un día de recuperación.</p>
+        <p>• Para categorías sin GDP objetivo (vaca seca, cría, lechera) este término da cero: sólo se cuentan
+          mortandad y reparaciones. El impacto reproductivo es real pero no se monetiza acá, así que el resultado
+          es un piso.</p>
+
+        <p class="mb-1 mt-3"><b class="text-deep">Costos</b></p>
+        <p>• <code>costo anual = (equipos + instalación) ÷ vida útil + baterías ÷ vida de batería + suscripción</code></p>
+        <p>• Suscripción: US$ 29,99/mes el primer nodo y US$ 4,99/mes cada nodo adicional.</p>
+        <p>• <code>payback = (equipos + instalación) ÷ (beneficio − suscripción − baterías) × 12</code>, en meses.</p>
+
+        <p class="mb-1 mt-3"><b class="text-deep">Lo que esta cuenta NO incluye</b></p>
+        <p>• AguaSens no acorta la caminata de los animales ni mueve bebederos: ese beneficio no está contado acá.
+          Si te interesa esa parte, está en la <a href="caminata.html" style="color: var(--c-primary);">calculadora de
+            caminata</a>.</p>
+        <p>• Tampoco se cuenta el valor de poder controlar el campo a distancia sin depender del encargado, que suele
+          ser el motivo real de compra y no tiene precio de lista.</p>
+
+        <p class="mb-1 mt-3"><b class="text-deep">Precio de la hacienda</b></p>
+        <p>• Valor por defecto: US$ 2,85/kg vivo (SIO Carnes, semana 34 de 2026: $4.355,10/kg vivo al dólar oficial
+          de esos días). Cambialo por el que estés cobrando vos.</p>
+      </div>
+    </details>
+
+  </div> <!-- /container -->
+
+  <script src="js/retorno.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
