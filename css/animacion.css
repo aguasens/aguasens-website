@@ -362,9 +362,6 @@
   81%, 97%   { opacity: 1; }
   100%       { opacity: .38; }
 }
-  81%, 97%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
-  100%       { opacity: .45; color: var(--gris); background: transparent; }
-}
 
 /* ═══════════════════════════════════════════
    REPRODUCCIÓN: sólo corre cuando está a la vista
