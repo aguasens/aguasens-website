@@ -1,15 +1,20 @@
 /* ═══════════════════════════════════════════
    AGUASENS — Animación "Cómo funciona"
-   SVG + CSS, sin imágenes ni librerías.
+   SVG + CSS, sin librerías.
 
-   Una sola línea de tiempo de 16 s dividida en 4 actos:
-     acto 1   0 – 25 %   se corta el agua
-     acto 2  25 – 50 %   pasa el día y la noche, nadie se entera
-     acto 3  50 – 75 %   el nodo detecta y avisa (LoRa → gateway → nube → celular)
-     acto 4  75 – 100 %  el productor va derecho al problema
+   Una sola línea de tiempo de 20 s partida en dos mitades que se comparan:
 
-   Todos los elementos animados comparten duration: 16s / infinite y reservan
-   su acto con porcentajes, así nunca se desfasan entre sí.
+     SIN AGUASENS   0 – 50 %   el campo sin nada instalado
+       acto 1   0 – 25 %   se corta el agua
+       acto 2  25 – 50 %   pasan el día y la noche y nadie se entera
+     CORTE         50 – 60 %   se superpone el logo y aparece el sistema
+     CON AGUASENS  60 – 100 %
+       acto 3  60 – 80 %   el nodo detecta y avisa (LoRa → gateway → nube → celular)
+       acto 4  80 – 100 %  el productor va derecho al problema
+
+   Todos los elementos animados comparten duration: 20s / infinite y reservan
+   su momento con porcentajes, así nunca se desfasan entre sí.
+   Al 100 % todo vuelve al estado del 0 % para que el loop cierre sin salto.
    ═══════════════════════════════════════════ */
 
 /* ─── CONTENEDOR ─── */
@@ -23,12 +28,74 @@
   padding: 24px 24px 20px;
 }
 
+.cf-anim__escena {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
 .cf-anim__svg {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: var(--radius);
-  overflow: hidden;
+}
+
+/* ─── CARTEL DE FASE: sin / con ─── */
+.cf-anim__fase {
+  position: absolute;
+  top: 3.5%;
+  left: 2.5%;
+  pointer-events: none;
+}
+.cf-anim__fase span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  font-family: var(--font-condensed);
+  font-size: clamp(12px, 1.9vw, 17px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .35em .85em;
+  border-radius: 999px;
+  border: 1.5px solid;
+}
+.cf-anim__fase-sin {
+  background: #fdecec; border-color: #e0aeae; color: #9b4040;
+  animation: cf-fase-sin 20s linear infinite;
+}
+.cf-anim__fase-con {
+  background: var(--verde-pale); border-color: #9cc4e8; color: var(--verde-oscuro);
+  opacity: 0;
+  animation: cf-fase-con 20s linear infinite;
+}
+
+/* ─── CORTE CON EL LOGO ─── */
+.cf-anim__corte {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5%;
+  background: rgba(248, 250, 252, .93);
+  pointer-events: none;
+  opacity: 0;
+  animation: cf-corte 20s linear infinite;
+}
+.cf-anim__corte img {
+  width: min(46%, 320px);
+  height: auto;
+}
+.cf-anim__corte b {
+  font-family: var(--font-condensed);
+  font-size: clamp(13px, 2.1vw, 19px);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--verde-medio);
 }
 
 /* ─── RÓTULOS DE LOS ACTOS ─── */
@@ -103,8 +170,8 @@
 .cf-equipo      { fill: #fff; stroke: #93a3b8; stroke-width: 2.5; }
 .cf-equipo-det  { fill: #cfdbe8; }
 .cf-antena-punta{ fill: var(--verde-oscuro); }
-.cf-antena     { stroke: var(--verde-oscuro); stroke-width: 3.5; stroke-linecap: round; fill: none; }
-.cf-led        { fill: var(--verde-natural-claro); opacity: .15; }
+.cf-antena      { stroke: var(--verde-oscuro); stroke-width: 3.5; stroke-linecap: round; fill: none; }
+.cf-led         { fill: var(--verde-natural-claro); opacity: 0; }
 
 .cf-onda       { stroke: var(--verde-vivo); stroke-width: 3.5; stroke-linecap: round; fill: none; opacity: 0; }
 .cf-gw-glow    { fill: var(--verde-vivo); opacity: 0; }
@@ -122,13 +189,12 @@
 .cf-ok-tilde     { stroke: var(--verde-natural); stroke-width: 4; stroke-linecap: round;
                    stroke-linejoin: round; fill: none; }
 
-
 .cf-check-circulo { fill: var(--verde-natural); }
 .cf-check-tilde   { stroke: #fff; stroke-width: 4.5; stroke-linecap: round;
                     stroke-linejoin: round; fill: none; }
 
-/* estados que arrancan ocultos (también es el cuadro en pausa) */
-.cf-alerta, .cf-ok, .cf-check, .cf-camioneta { opacity: 0; }
+/* lo que todavía no está instalado, y lo que aún no pasó */
+.cf-sistema, .cf-alerta, .cf-ok, .cf-check, .cf-camioneta { opacity: 0; }
 
 /* ═══════════════════════════════════════════
    ANIMACIONES
@@ -136,137 +202,160 @@
 .cf-agua {
   transform-box: fill-box;
   transform-origin: bottom;
-  animation: cf-agua-nivel 16s linear infinite;
+  animation: cf-agua-nivel 20s linear infinite;
 }
-.cf-astros     { transform-origin: 450px 620px; animation: cf-astros-giro 16s linear infinite; }
-.cf-noche      { animation: cf-noche 16s linear infinite; }
-.cf-led        { animation: cf-led 16s linear infinite; }
+.cf-astros     { transform-origin: 450px 620px; animation: cf-astros-giro 20s linear infinite; }
+.cf-noche      { animation: cf-noche 20s linear infinite; }
+.cf-sistema    { animation: cf-sistema 20s linear infinite; }
+.cf-led        { animation: cf-led 20s linear infinite; }
 .cf-onda       { transform-box: fill-box; transform-origin: left center; }
-.cf-onda--a    { animation: cf-onda-a 16s linear infinite; }
-.cf-onda--b    { animation: cf-onda-b 16s linear infinite; }
-.cf-onda--c    { animation: cf-onda-c 16s linear infinite; }
+.cf-onda--a    { animation: cf-onda-a 20s linear infinite; }
+.cf-onda--b    { animation: cf-onda-b 20s linear infinite; }
+.cf-onda--c    { animation: cf-onda-c 20s linear infinite; }
 .cf-gw-glow    { transform-box: fill-box; transform-origin: center;
-                 animation: cf-gw-glow 16s linear infinite; }
-.cf-enlace--subida { animation: cf-subida 16s linear infinite; }
-.cf-enlace--bajada { animation: cf-bajada 16s linear infinite; }
-.cf-alerta     { animation: cf-alerta 16s linear infinite; }
-.cf-camioneta  { animation: cf-camioneta 16s linear infinite; }
-.cf-check      { animation: cf-check 16s linear infinite; }
-.cf-ok         { animation: cf-ok 16s linear infinite; }
+                 animation: cf-gw-glow 20s linear infinite; }
+.cf-enlace--subida { animation: cf-subida 20s linear infinite; }
+.cf-enlace--bajada { animation: cf-bajada 20s linear infinite; }
+.cf-alerta     { animation: cf-alerta 20s linear infinite; }
+.cf-camioneta  { animation: cf-camioneta 20s linear infinite; }
+.cf-check      { animation: cf-check 20s linear infinite; }
+.cf-ok         { animation: cf-ok 20s linear infinite; }
 
-.cf-anim__paso:nth-child(1) { animation: cf-paso-1 16s linear infinite; }
-.cf-anim__paso:nth-child(2) { animation: cf-paso-2 16s linear infinite; }
-.cf-anim__paso:nth-child(3) { animation: cf-paso-3 16s linear infinite; }
-.cf-anim__paso:nth-child(4) { animation: cf-paso-4 16s linear infinite; }
+.cf-anim__paso:nth-child(1) { animation: cf-paso-1 20s linear infinite; }
+.cf-anim__paso:nth-child(2) { animation: cf-paso-2 20s linear infinite; }
+.cf-anim__paso:nth-child(3) { animation: cf-paso-3 20s linear infinite; }
+.cf-anim__paso:nth-child(4) { animation: cf-paso-4 20s linear infinite; }
 
-/* ─── ACTO 1: baja el nivel · ACTO 4: vuelve a subir ─── */
+/* ─── EL AGUA: baja en el acto 1, vuelve en el acto 4 ─── */
 @keyframes cf-agua-nivel {
   0%, 4%     { transform: scaleY(1); }
-  22%        { transform: scaleY(.05); }
-  88%        { transform: scaleY(.05); }
-  98%, 100%  { transform: scaleY(1); }
+  20%        { transform: scaleY(.05); }
+  86%        { transform: scaleY(.05); }
+  96%, 100%  { transform: scaleY(1); }
 }
 
-/* ─── ACTO 2: pasa el día y la noche ─── */
+/* ─── SIN AGUASENS: pasan el día y la noche ─── */
 @keyframes cf-astros-giro {
   0%, 25%    { transform: rotate(0deg); }
   50%, 100%  { transform: rotate(360deg); }
 }
 @keyframes cf-noche {
   0%, 28%    { opacity: 0; }
-  35%, 43%   { opacity: .5; }
+  34%, 44%   { opacity: .5; }
   50%, 100%  { opacity: 0; }
 }
+@keyframes cf-fase-sin {
+  0%, 47%    { opacity: 1; }
+  50%, 97%   { opacity: 0; }
+  100%       { opacity: 1; }
+}
 
-/* ─── ACTO 3: detecta y transmite ─── */
+/* ─── EL CORTE: el logo, y detrás aparece el sistema instalado ─── */
+@keyframes cf-corte {
+  0%, 49%    { opacity: 0; }
+  52%, 58%   { opacity: 1; }
+  62%, 100%  { opacity: 0; }
+}
+@keyframes cf-sistema {
+  0%, 55%    { opacity: 0; }
+  61%, 96%   { opacity: 1; }
+  100%       { opacity: 0; }
+}
+@keyframes cf-fase-con {
+  0%, 57%    { opacity: 0; }
+  61%, 97%   { opacity: 1; }
+  100%       { opacity: 0; }
+}
+
+/* ─── CON AGUASENS: detecta y transmite ─── */
 @keyframes cf-led {
-  0%, 50%    { opacity: .15; }
-  52%        { opacity: 1; }
-  54%        { opacity: .2; }
-  56%        { opacity: 1; }
-  58%        { opacity: .2; }
-  60%, 92%   { opacity: 1; }
-  100%       { opacity: .15; }
+  0%, 57%    { opacity: 0; }
+  61%        { opacity: .25; }
+  63%        { opacity: 1; }
+  64%        { opacity: .25; }
+  66%        { opacity: 1; }
+  68%, 96%   { opacity: 1; }
+  100%       { opacity: 0; }
 }
 @keyframes cf-onda-a {
-  0%, 50%    { opacity: 0; transform: scale(.35); }
-  53%        { opacity: .95; transform: scale(.7); }
-  60%        { opacity: 0; transform: scale(1.5); }
+  0%, 61%    { opacity: 0; transform: scale(.35); }
+  63%        { opacity: .95; transform: scale(.7); }
+  68%        { opacity: 0; transform: scale(1.5); }
   100%       { opacity: 0; transform: scale(.35); }
 }
 @keyframes cf-onda-b {
-  0%, 52%    { opacity: 0; transform: scale(.35); }
-  55%        { opacity: .95; transform: scale(.7); }
-  62%        { opacity: 0; transform: scale(1.5); }
+  0%, 63%    { opacity: 0; transform: scale(.35); }
+  65%        { opacity: .95; transform: scale(.7); }
+  70%        { opacity: 0; transform: scale(1.5); }
   100%       { opacity: 0; transform: scale(.35); }
 }
 @keyframes cf-onda-c {
-  0%, 54%    { opacity: 0; transform: scale(.35); }
-  57%        { opacity: .95; transform: scale(.7); }
-  64%        { opacity: 0; transform: scale(1.5); }
+  0%, 65%    { opacity: 0; transform: scale(.35); }
+  67%        { opacity: .95; transform: scale(.7); }
+  72%        { opacity: 0; transform: scale(1.5); }
   100%       { opacity: 0; transform: scale(.35); }
 }
 @keyframes cf-gw-glow {
-  0%, 58%    { opacity: 0; transform: scale(.7); }
-  63%        { opacity: .55; transform: scale(1); }
-  70%, 100%  { opacity: 0; transform: scale(1.3); }
+  0%, 67%    { opacity: 0; transform: scale(.7); }
+  70%        { opacity: .55; transform: scale(1); }
+  75%, 100%  { opacity: 0; transform: scale(1.3); }
 }
 @keyframes cf-subida {
-  0%, 61%    { opacity: 0; stroke-dashoffset: 96; }
-  64%        { opacity: 1; }
-  69%        { opacity: 1; stroke-dashoffset: 0; }
-  73%, 100%  { opacity: 0; stroke-dashoffset: 0; }
+  0%, 69%    { opacity: 0; stroke-dashoffset: 96; }
+  71%        { opacity: 1; }
+  75%        { opacity: 1; stroke-dashoffset: 0; }
+  78%, 100%  { opacity: 0; stroke-dashoffset: 0; }
 }
 @keyframes cf-bajada {
-  0%, 67%    { opacity: 0; stroke-dashoffset: 96; }
-  70%        { opacity: 1; }
-  75%        { opacity: 1; stroke-dashoffset: 0; }
-  79%, 100%  { opacity: 0; stroke-dashoffset: 0; }
+  0%, 74%    { opacity: 0; stroke-dashoffset: 96; }
+  76%        { opacity: 1; }
+  79%        { opacity: 1; stroke-dashoffset: 0; }
+  82%, 100%  { opacity: 0; stroke-dashoffset: 0; }
 }
 @keyframes cf-alerta {
-  0%, 73%    { opacity: 0; transform: translateY(12px); }
-  77%        { opacity: 1; transform: translateY(0); }
+  0%, 78%    { opacity: 0; transform: translateY(12px); }
+  81%        { opacity: 1; transform: translateY(0); }
   92%        { opacity: 1; transform: translateY(0); }
-  95%, 100%  { opacity: 0; transform: translateY(0); }
+  94%, 100%  { opacity: 0; transform: translateY(0); }
 }
 
-/* ─── ACTO 4: vas derecho al problema ─── */
+/* ─── CON AGUASENS: vas derecho al problema ─── */
 @keyframes cf-camioneta {
-  0%, 75%    { opacity: 0; transform: translateX(900px); }
-  76%        { opacity: 1; transform: translateX(890px); }
-  89%, 99%   { opacity: 1; transform: translateX(130px); }
+  0%, 82%    { opacity: 0; transform: translateX(900px); }
+  84%        { opacity: 1; transform: translateX(890px); }
+  93%, 97%   { opacity: 1; transform: translateX(130px); }
   100%       { opacity: 0; transform: translateX(130px); }
 }
 @keyframes cf-ok {
   0%, 93%    { opacity: 0; }
-  96%, 99%   { opacity: 1; }
+  95%, 97%   { opacity: 1; }
   100%       { opacity: 0; }
 }
 @keyframes cf-check {
-  0%, 92%    { opacity: 0; }
-  96%, 99%   { opacity: 1; }
+  0%, 93%    { opacity: 0; }
+  95%, 97%   { opacity: 1; }
   100%       { opacity: 0; }
 }
 
-/* ─── RÓTULOS ─── */
+/* ─── RÓTULOS: los dos primeros en rojo (sin), los dos últimos en azul (con) ─── */
 @keyframes cf-paso-1 {
-  0%, 23%    { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  0%, 23%    { opacity: 1; color: #9b4040; background: #fdecec; }
   26%, 97%   { opacity: .45; color: var(--gris); background: transparent; }
-  100%       { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  100%       { opacity: 1; color: #9b4040; background: #fdecec; }
 }
 @keyframes cf-paso-2 {
   0%, 23%    { opacity: .45; color: var(--gris); background: transparent; }
-  26%, 48%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  26%, 48%   { opacity: 1; color: #9b4040; background: #fdecec; }
   51%, 100%  { opacity: .45; color: var(--gris); background: transparent; }
 }
 @keyframes cf-paso-3 {
-  0%, 48%    { opacity: .45; color: var(--gris); background: transparent; }
-  51%, 73%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
-  76%, 100%  { opacity: .45; color: var(--gris); background: transparent; }
+  0%, 58%    { opacity: .45; color: var(--gris); background: transparent; }
+  61%, 78%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  81%, 100%  { opacity: .45; color: var(--gris); background: transparent; }
 }
 @keyframes cf-paso-4 {
-  0%, 73%    { opacity: .45; color: var(--gris); background: transparent; }
-  76%, 97%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  0%, 78%    { opacity: .45; color: var(--gris); background: transparent; }
+  81%, 97%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
   100%       { opacity: .45; color: var(--gris); background: transparent; }
 }
 
@@ -275,10 +364,14 @@
    (la clase .playing la pone el IntersectionObserver de js/main.js)
    ═══════════════════════════════════════════ */
 .cf-anim__svg *,
-.cf-anim__paso { animation-play-state: paused; }
+.cf-anim__paso,
+.cf-anim__fase span,
+.cf-anim__corte { animation-play-state: paused; }
 
 .cf-anim.playing .cf-anim__svg *,
-.cf-anim.playing .cf-anim__paso { animation-play-state: running; }
+.cf-anim.playing .cf-anim__paso,
+.cf-anim.playing .cf-anim__fase span,
+.cf-anim.playing .cf-anim__corte { animation-play-state: running; }
 
 /* ═══════════════════════════════════════════
    RESPONSIVE
@@ -288,29 +381,35 @@
   .cf-anim__pasos { grid-template-columns: repeat(2, 1fr); gap: 6px; }
   .cf-anim__paso { font-size: 14px; padding: 7px 8px; }
   .cf-anim__cierre { font-size: 14px; text-align: left; }
+  .cf-anim__corte img { width: 62%; }
 }
 
 /* ═══════════════════════════════════════════
    MOVIMIENTO REDUCIDO
-   La escena queda quieta en el momento de la alerta, que es el que cuenta
-   la historia entera, y se prenden los cuatro rótulos a la vez.
+   Queda quieta en el momento de la alerta, ya con el sistema instalado,
+   que es el cuadro que cuenta la historia entera.
    ═══════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   .cf-anim__svg *,
-  .cf-anim__paso { animation: none !important; }
+  .cf-anim__paso,
+  .cf-anim__fase span,
+  .cf-anim__corte { animation: none !important; }
 
-  .cf-agua  { transform: scaleY(.05); }
-  .cf-led    { opacity: 1; }
-  .cf-onda   { opacity: .9; }
-  .cf-onda--b { transform: scale(1); }
-  .cf-onda--c { transform: scale(1); }
-  .cf-enlace { opacity: 1; stroke-dashoffset: 0; }
-  .cf-alerta { opacity: 1; }
+  .cf-agua    { transform: scaleY(.05); }
+  .cf-sistema { opacity: 1; }
+  .cf-led     { opacity: 1; }
+  .cf-onda    { opacity: .9; }
+  .cf-enlace  { opacity: 1; stroke-dashoffset: 0; }
+  .cf-alerta  { opacity: 1; }
   .cf-noche, .cf-camioneta, .cf-ok, .cf-check, .cf-gw-glow { opacity: 0; }
 
-  .cf-anim__paso {
-    opacity: 1;
-    color: var(--verde-oscuro);
-    background: var(--verde-pale);
-  }
+  .cf-anim__corte    { opacity: 0; }
+  .cf-anim__fase-sin { opacity: 0; }
+  .cf-anim__fase-con { opacity: 1; }
+
+  .cf-anim__paso { opacity: 1; }
+  .cf-anim__paso:nth-child(1),
+  .cf-anim__paso:nth-child(2) { color: #9b4040; background: #fdecec; }
+  .cf-anim__paso:nth-child(3),
+  .cf-anim__paso:nth-child(4) { color: var(--verde-oscuro); background: var(--verde-pale); }
 }

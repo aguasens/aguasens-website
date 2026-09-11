@@ -20,7 +20,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <link rel="stylesheet" href="css/styles.css?v=4">
-  <link rel="stylesheet" href="css/animacion.css?v=1">
+  <link rel="stylesheet" href="css/animacion.css?v=2">
 </head>
 
 <body>
@@ -269,12 +269,14 @@
       <h2 class="como-funciona__heading reveal">Cómo funciona</h2>
       <!-- ─── Animación: el bebedero sin agua y la alerta ─── -->
       <div class="cf-anim reveal">
+        <div class="cf-anim__escena">
         <svg class="cf-anim__svg" viewBox="0 0 900 400" role="img"
              aria-labelledby="cfAnimTitulo cfAnimDesc" preserveAspectRatio="xMidYMid meet">
           <title id="cfAnimTitulo">Cómo funciona AguaSens</title>
-          <desc id="cfAnimDesc">El bebedero se queda sin agua. Sin monitoreo pasan el día y la noche
-            sin que nadie se entere. Con AguaSens el nodo lo detecta y manda la alerta por radio LoRa
-            al gateway, de ahí a internet y al celular del productor, que va derecho al problema.</desc>
+          <desc id="cfAnimDesc">Primero el campo sin AguaSens: el bebedero se queda sin agua y pasan
+            el día y la noche sin que nadie se entere. Después, ya con AguaSens instalado, el nodo lo
+            detecta y manda la alerta por radio LoRa al gateway, de ahí a internet y al celular del
+            productor, que va derecho al problema el mismo día.</desc>
 
           <defs>
             <linearGradient id="cfCielo" x1="0" y1="0" x2="0" y2="1">
@@ -321,10 +323,10 @@
             <image href="img/vaca.svg" x="392" y="260" width="70" height="44" opacity=".82"/>
 
             <!-- nodo sobre el bebedero -->
-            <line class="cf-poste" x1="44" y1="312" x2="44" y2="200"/>
-            <line class="cf-antena" x1="44" y1="160" x2="44" y2="128"/>
-            <rect class="cf-equipo" x="26" y="160" width="36" height="40" rx="5"/>
-            <rect class="cf-equipo-det" x="32" y="168" width="24" height="9" rx="2"/>
+            <line class="cf-sistema cf-poste" x1="44" y1="312" x2="44" y2="200"/>
+            <line class="cf-sistema cf-antena" x1="44" y1="160" x2="44" y2="128"/>
+            <rect class="cf-sistema cf-equipo" x="26" y="160" width="36" height="40" rx="5"/>
+            <rect class="cf-sistema cf-equipo-det" x="32" y="168" width="24" height="9" rx="2"/>
             <circle class="cf-led" cx="54" cy="192" r="4"/>
 
             <!-- ondas LoRa -->
@@ -335,12 +337,12 @@
             </g>
 
             <!-- gateway -->
-            <line class="cf-poste" x1="470" y1="312" x2="470" y2="158"/>
+            <line class="cf-sistema cf-poste" x1="470" y1="312" x2="470" y2="158"/>
             <circle class="cf-gw-glow" cx="472" cy="140" r="36"/>
-            <line class="cf-antena" x1="472" y1="118" x2="472" y2="90"/>
-            <circle class="cf-antena-punta" cx="472" cy="88" r="4"/>
-            <rect class="cf-equipo" x="450" y="118" width="44" height="44" rx="6"/>
-            <rect class="cf-equipo-det" x="457" y="127" width="30" height="10" rx="2"/>
+            <line class="cf-sistema cf-antena" x1="472" y1="118" x2="472" y2="90"/>
+            <circle class="cf-sistema cf-antena-punta" cx="472" cy="88" r="4"/>
+            <rect class="cf-sistema cf-equipo" x="450" y="118" width="44" height="44" rx="6"/>
+            <rect class="cf-sistema cf-equipo-det" x="457" y="127" width="30" height="10" rx="2"/>
 
             <!-- la camioneta llega (img/pickup.webp, plano de adelante; va antes del celular para que la pantalla la tape) -->
             <g transform="translate(0,322)">
@@ -350,12 +352,12 @@
             </g>
 
             <!-- celular -->
-            <rect class="cf-cel-marco" x="742" y="128" width="118" height="208" rx="16"/>
-            <rect class="cf-cel-pantalla" x="752" y="146" width="98" height="172" rx="7"/>
-            <rect class="cf-cel-marco" x="780" y="133" width="42" height="7" rx="3.5"/>
-            <rect class="cf-cel-fila" x="760" y="248" width="82" height="10" rx="5"/>
-            <rect class="cf-cel-fila" x="760" y="268" width="62" height="10" rx="5"/>
-            <rect class="cf-cel-fila" x="760" y="288" width="74" height="10" rx="5"/>
+            <rect class="cf-sistema cf-cel-marco" x="742" y="128" width="118" height="208" rx="16"/>
+            <rect class="cf-sistema cf-cel-pantalla" x="752" y="146" width="98" height="172" rx="7"/>
+            <rect class="cf-sistema cf-cel-marco" x="780" y="133" width="42" height="7" rx="3.5"/>
+            <rect class="cf-sistema cf-cel-fila" x="760" y="248" width="82" height="10" rx="5"/>
+            <rect class="cf-sistema cf-cel-fila" x="760" y="268" width="62" height="10" rx="5"/>
+            <rect class="cf-sistema cf-cel-fila" x="760" y="288" width="74" height="10" rx="5"/>
 
             <g class="cf-alerta">
               <rect class="cf-alerta-caja" x="760" y="162" width="82" height="66" rx="7"/>
@@ -388,6 +390,17 @@
             </g>
           </g>
         </svg>
+
+          <p class="cf-anim__fase" aria-hidden="true">
+            <span class="cf-anim__fase-sin">Sin AguaSens</span>
+            <span class="cf-anim__fase-con">Con AguaSens</span>
+          </p>
+
+          <div class="cf-anim__corte" aria-hidden="true">
+            <img src="img/ASlogo.webp" alt="" width="684" height="206" loading="lazy" decoding="async">
+            <b>Ahora, con AguaSens</b>
+          </div>
+        </div>
 
         <ol class="cf-anim__pasos">
           <li class="cf-anim__paso"><span class="cf-anim__punto"></span>Se corta el agua</li>
