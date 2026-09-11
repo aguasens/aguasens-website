@@ -120,10 +120,14 @@
   text-align: left;
   padding: 8px 10px;
   border-radius: var(--radius);
-  opacity: .45;
-  color: var(--gris);
-  background: transparent;
+  border: 1px solid;
+  opacity: .38;
 }
+/* el color no se anima: cada rotulo lleva fijo el de su mitad */
+.cf-anim__paso:nth-child(1),
+.cf-anim__paso:nth-child(2) { color: #9b4040; background: #fdecec; border-color: #eecccc; }
+.cf-anim__paso:nth-child(3),
+.cf-anim__paso:nth-child(4) { color: var(--verde-oscuro); background: var(--verde-pale); border-color: #b8d5ef; }
 
 .cf-anim__punto {
   flex: 0 0 auto;
@@ -337,24 +341,27 @@
   100%       { opacity: 0; }
 }
 
-/* ─── RÓTULOS: los dos primeros en rojo (sin), los dos últimos en azul (con) ─── */
+/* ─── RÓTULOS: solo opacidad, para que corran en el mismo hilo que el SVG ─── */
 @keyframes cf-paso-1 {
-  0%, 23%    { opacity: 1; color: #9b4040; background: #fdecec; }
-  26%, 97%   { opacity: .45; color: var(--gris); background: transparent; }
-  100%       { opacity: 1; color: #9b4040; background: #fdecec; }
+  0%, 23%    { opacity: 1; }
+  26%, 97%   { opacity: .38; }
+  100%       { opacity: 1; }
 }
 @keyframes cf-paso-2 {
-  0%, 23%    { opacity: .45; color: var(--gris); background: transparent; }
-  26%, 48%   { opacity: 1; color: #9b4040; background: #fdecec; }
-  51%, 100%  { opacity: .45; color: var(--gris); background: transparent; }
+  0%, 23%    { opacity: .38; }
+  26%, 48%   { opacity: 1; }
+  51%, 100%  { opacity: .38; }
 }
 @keyframes cf-paso-3 {
-  0%, 58%    { opacity: .45; color: var(--gris); background: transparent; }
-  61%, 78%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
-  81%, 100%  { opacity: .45; color: var(--gris); background: transparent; }
+  0%, 58%    { opacity: .38; }
+  61%, 78%   { opacity: 1; }
+  81%, 100%  { opacity: .38; }
 }
 @keyframes cf-paso-4 {
-  0%, 78%    { opacity: .45; color: var(--gris); background: transparent; }
+  0%, 78%    { opacity: .38; }
+  81%, 97%   { opacity: 1; }
+  100%       { opacity: .38; }
+}
   81%, 97%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
   100%       { opacity: .45; color: var(--gris); background: transparent; }
 }
@@ -372,6 +379,14 @@
 .cf-anim.playing .cf-anim__paso,
 .cf-anim.playing .cf-anim__fase span,
 .cf-anim.playing .cf-anim__corte { animation-play-state: running; }
+
+/* Un instante con animation:none destruye todas las animaciones a la vez; al
+   sacar la clase se recrean con el mismo arranque. js/main.js lo usa cada vez
+   que la escena vuelve a entrar en pantalla, para que nunca queden corridas. */
+.cf-anim.reiniciar .cf-anim__svg *,
+.cf-anim.reiniciar .cf-anim__paso,
+.cf-anim.reiniciar .cf-anim__fase span,
+.cf-anim.reiniciar .cf-anim__corte { animation: none !important; }
 
 /* ═══════════════════════════════════════════
    RESPONSIVE
@@ -408,8 +423,4 @@
   .cf-anim__fase-con { opacity: 1; }
 
   .cf-anim__paso { opacity: 1; }
-  .cf-anim__paso:nth-child(1),
-  .cf-anim__paso:nth-child(2) { color: #9b4040; background: #fdecec; }
-  .cf-anim__paso:nth-child(3),
-  .cf-anim__paso:nth-child(4) { color: var(--verde-oscuro); background: var(--verde-pale); }
 }

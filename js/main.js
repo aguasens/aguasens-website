@@ -56,13 +56,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ─── ANIMACIÓN "CÓMO FUNCIONA" ─── */
-  /* Sólo corre cuando está a la vista: fuera de pantalla no gasta batería. */
+  /* Sólo corre cuando está a la vista: fuera de pantalla no gasta batería.
+     Al volver a entrar NO se reanuda donde quedó, sino que se reinicia: pausar
+     y reanudar desfasa las animaciones del SVG (que van por el compositor) de
+     las de los rótulos, y el error se acumula scroll tras scroll. Reiniciar las
+     recrea todas con el mismo arranque, igual que una recarga de la página. */
   const anim = document.querySelector('.cf-anim');
   if (anim) {
     if ('IntersectionObserver' in window) {
+      let corriendo = false;
       const animObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => anim.classList.toggle('playing', entry.isIntersecting));
-      }, { threshold: 0.15 });
+        entries.forEach(entry => {
+          if (entry.intersectionRatio >= 0.2 && !corriendo) {
+            corriendo = true;
+            anim.classList.remove('playing');
+            anim.classList.add('reiniciar');
+            void anim.offsetWidth;              // fuerza el reflow: las destruye
+            anim.classList.remove('reiniciar');  // y acá se recrean, todas juntas
+            anim.classList.add('playing');
+          } else if (entry.intersectionRatio === 0 && corriendo) {
+            corriendo = false;
+            anim.classList.remove('playing');
+          }
+        });
+      }, { threshold: [0, 0.2] });   // histéresis: entra al 20 %, sale al salir del todo
       animObserver.observe(anim);
     } else {
       anim.classList.add('playing');
