@@ -73,6 +73,25 @@ body.calc-page {
   letter-spacing: 0.1em; color: var(--c-deep); margin: 0;
 }
 
+/* Separador de mitad: lo que pasa hoy vs. lo que cambiaría con AguaSens.
+   Mismo codigo de color que la animacion del home (rojo = sin, azul = con). */
+.calc-fase {
+  display: flex; align-items: center; gap: 10px;
+  margin: 30px 4px 14px;
+  font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+
+.calc-fase span {
+  padding: 5px 12px; border-radius: 999px; border: 1.5px solid;
+}
+.calc-fase::after {
+  content: ''; flex: 1; height: 1px; background: currentColor; opacity: .22;
+}
+.calc-fase--sin       { color: #9b4040; margin-top: 18px; }
+.calc-fase--sin span  { background: #fdecec; border-color: #e0aeae; }
+.calc-fase--con       { color: var(--c-primary); }
+.calc-fase--con span  { background: #e4eefa; border-color: #9cc4e8; }
+
 /* Cards */
 .calc-card {
   background: var(--calc-surface);

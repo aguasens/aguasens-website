@@ -38,10 +38,12 @@
 
     <div class="calc-card" style="background: var(--c-deep); color: white; padding: 20px;">
       <div class="text-sm leading-relaxed" style="color: rgba(255,255,255,0.85);">
-        Esta herramienta usa <b>tus números</b>, no los nuestros. Los valores que vienen cargados son conservadores
-        a propósito: si con ellos el sistema no se paga, la calculadora te lo va a decir.
+        Completá con <b>tus números</b>. Los valores que están cargados son conservadores.
       </div>
     </div>
+
+    <!-- ═══ MITAD 1: SIN AGUASENS — lo que pasa hoy ═══ -->
+    <div class="calc-fase calc-fase--sin"><span>Hoy, sin AguaSens</span></div>
 
     <!-- ═══ RECORRIDAS ═══ -->
     <div class="calc-section-title">
@@ -78,12 +80,6 @@
           <input type="number" id="in_costo_hora" value="4" min="0" step="0.5" class="calc-input">
         </label>
       </div>
-      <label class="calc-field">
-        <div class="calc-field-label"><i data-lucide="percent" style="width:12px;height:12px;"></i> Recorridas que dejarías de hacer (%)</div>
-        <input type="number" id="in_pct_evitadas" value="40" min="0" max="100" class="calc-input">
-        <div class="calc-field-hint">Arranca en 40 y no en 100 a propósito: al campo se va igual. Este campo es el
-          más discutible de toda la cuenta, así que quedó a la vista y lo podés bajar.</div>
-      </label>
     </div>
 
     <!-- ═══ LO QUE PASÓ ═══ -->
@@ -123,7 +119,7 @@
       </label>
       <div class="calc-grid-2">
         <label class="calc-field">
-          <div class="calc-field-label">Reparaciones por trabajar en seco (US$)</div>
+          <div class="calc-field-label">Reparaciones de bombas por trabajar en seco o trabadas (US$)</div>
           <input type="number" id="in_reparaciones" value="0" min="0" class="calc-input">
         </label>
         <label class="calc-field">
@@ -131,6 +127,22 @@
           <input type="number" id="in_precio" value="2.85" min="0" step="0.05" class="calc-input">
         </label>
       </div>
+    </div>
+
+    <!-- ═══ MITAD 2: CON AGUASENS — lo que cambiaría y cuánto cuesta ═══ -->
+    <div class="calc-fase calc-fase--con"><span>Con AguaSens</span></div>
+
+    <!-- ═══ LO QUE CAMBIARÍA ═══ -->
+    <div class="calc-section-title">
+      <i data-lucide="percent" class="text-accent"></i><h2>Lo que cambiaría</h2>
+    </div>
+    <div class="calc-card">
+      <label class="calc-field">
+        <div class="calc-field-label">Recorridas que dejarías de hacer (%)</div>
+        <input type="number" id="in_pct_evitadas" value="40" min="0" max="100" class="calc-input">
+        <div class="calc-field-hint">Arranca en 40 y no en 100 porque al campo se va igual. Es el único
+          supuesto de toda la cuenta: bajalo hasta donde te parezca creíble.</div>
+      </label>
     </div>
 
     <!-- ═══ EL SISTEMA ═══ -->
@@ -175,22 +187,22 @@
           <label class="calc-field mb-3">
             <div class="calc-field-label">Instalación (US$)</div>
             <input type="number" id="in_instalacion" value="0" min="0" class="calc-input">
-            <div class="calc-field-hint">No viene cargada porque depende de cada campo: distancia, infraestructura
+            <div class="calc-field-hint">El valor de la instalación depende de cada campo: distancia, infraestructura
               existente y cantidad de puntos. <a href="cotizar.html" style="color: var(--c-primary); font-weight: 600;">Pedí
                 tu presupuesto</a> y cargá acá el número real.</div>
           </label>
           <div class="calc-grid-2">
             <label class="calc-field">
-              <div class="calc-field-label">Batería gel de repuesto (US$)</div>
-              <input type="number" id="in_costo_bateria" value="60" min="0" class="calc-input">
+              <div class="calc-field-label">Batería de repuesto (US$)</div>
+              <input type="number" id="in_costo_bateria" value="15" min="0" class="calc-input">
             </label>
             <label class="calc-field">
               <div class="calc-field-label">Se cambia cada (años)</div>
-              <input type="number" id="in_vida_bateria" value="4" min="1" class="calc-input">
+              <input type="number" id="in_vida_bateria" value="2" min="1" class="calc-input">
             </label>
           </div>
-          <div class="calc-field-hint">La gel no dura lo mismo que el equipo. Sumarla evita que el cálculo quede
-            optimista de arranque.</div>
+          <div class="calc-field-hint">La duración de la batería es una estimación.
+            </div>
         </div>
       </details>
     </div>
