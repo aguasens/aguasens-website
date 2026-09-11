@@ -291,7 +291,7 @@
 
             <!-- sol y luna: giran una vuelta entera durante el acto 2 -->
             <g class="cf-astros">
-              <circle class="cf-sol" cx="292" cy="180" r="26"/>
+              <circle class="cf-sol" cx="300" cy="104" r="27"/>
             </g>
 
             <!-- campo -->
@@ -316,19 +316,9 @@
             <rect class="cf-cuba" x="54" y="246" width="200" height="66" rx="8"/>
             <rect class="cf-estructura" x="54" y="238" width="200" height="12" rx="6"/>
 
-            <!-- hacienda -->
-            <g transform="translate(400,270) scale(-1,1)">
-              <path class="cf-vaca" d="M4 12 C4 6 9 3 16 3 L40 3 C47 3 51 7 51 13 L51 21 C51 25 49 27 45 27 L10 27 C6 27 4 25 4 21 Z"/>
-              <path class="cf-vaca" d="M49 8 L60 5 C63 4 65 6 64 9 L62 16 C61 19 59 20 56 19 L49 17 Z"/>
-              <path class="cf-vaca" d="M9 27 h5.5 v14 H9 Z M20 27 h5.5 v14 H20 Z M34 27 h5.5 v14 H34 Z M44 27 h5.5 v14 H44 Z"/>
-              <path class="cf-vaca-cola" d="M4 12 C0 15 -1 21 1 27"/>
-            </g>
-            <g transform="translate(455,266) scale(-0.78,0.78)" opacity=".7">
-              <path class="cf-vaca" d="M4 12 C4 6 9 3 16 3 L40 3 C47 3 51 7 51 13 L51 21 C51 25 49 27 45 27 L10 27 C6 27 4 25 4 21 Z"/>
-              <path class="cf-vaca" d="M49 8 L60 5 C63 4 65 6 64 9 L62 16 C61 19 59 20 56 19 L49 17 Z"/>
-              <path class="cf-vaca" d="M9 27 h5.5 v14 H9 Z M20 27 h5.5 v14 H20 Z M34 27 h5.5 v14 H34 Z M44 27 h5.5 v14 H44 Z"/>
-              <path class="cf-vaca-cola" d="M4 12 C0 15 -1 21 1 27"/>
-            </g>
+            <!-- hacienda (img/vaca.svg, mira hacia el bebedero) -->
+            <image href="img/vaca.svg" x="300" y="251.5" width="96" height="60.4"/>
+            <image href="img/vaca.svg" x="392" y="260" width="70" height="44" opacity=".82"/>
 
             <!-- nodo sobre el bebedero -->
             <line class="cf-poste" x1="44" y1="312" x2="44" y2="200"/>
@@ -348,20 +338,14 @@
             <line class="cf-poste" x1="470" y1="312" x2="470" y2="158"/>
             <circle class="cf-gw-glow" cx="472" cy="140" r="36"/>
             <line class="cf-antena" x1="472" y1="118" x2="472" y2="90"/>
-            <circle class="cf-equipo" cx="472" cy="88" r="4"/>
-            <polygon class="cf-panel" points="490,116 534,100 540,110 496,126"/>
-            <path class="cf-panel-linea" d="M504 111 l6 10 M518 106 l6 10"/>
+            <circle class="cf-antena-punta" cx="472" cy="88" r="4"/>
             <rect class="cf-equipo" x="450" y="118" width="44" height="44" rx="6"/>
             <rect class="cf-equipo-det" x="457" y="127" width="30" height="10" rx="2"/>
 
-            <!-- la camioneta llega al problema (va antes del celular: sale de atras de la pantalla) -->
-            <g transform="translate(0,265)">
+            <!-- la camioneta llega (img/pickup.webp, plano de adelante; va antes del celular para que la pantalla la tape) -->
+            <g transform="translate(0,322)">
               <g class="cf-camioneta">
-                <rect class="cf-camioneta-cuerpo" x="0" y="24" width="92" height="16" rx="4"/>
-                <path class="cf-camioneta-cuerpo" d="M8 26 L18 5 H43 V26 Z"/>
-                <path class="cf-camioneta-vidrio" d="M16 23 L23 9 H40 V23 Z"/>
-                <circle class="cf-camioneta-rueda" cx="20" cy="40" r="7"/>
-                <circle class="cf-camioneta-rueda" cx="73" cy="40" r="7"/>
+                <image href="img/pickup.webp" x="0" y="0" width="176" height="65.8"/>
               </g>
             </g>
 
@@ -400,7 +384,7 @@
             <!-- la noche del acto 2 -->
             <rect class="cf-noche" x="0" y="0" width="900" height="400"/>
             <g clip-path="url(#cfSoloCielo)">
-              <g class="cf-astros"><circle class="cf-luna" cx="608" cy="1060" r="20"/></g>
+              <g class="cf-astros"><circle class="cf-luna" cx="600" cy="1136" r="21"/></g>
             </g>
           </g>
         </svg>
