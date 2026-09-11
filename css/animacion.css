@@ -1,0 +1,322 @@
+/* ═══════════════════════════════════════════
+   AGUASENS — Animación "Cómo funciona"
+   SVG + CSS, sin imágenes ni librerías.
+
+   Una sola línea de tiempo de 16 s dividida en 4 actos:
+     acto 1   0 – 25 %   se corta el agua
+     acto 2  25 – 50 %   pasa el día y la noche, nadie se entera
+     acto 3  50 – 75 %   el nodo detecta y avisa (LoRa → gateway → nube → celular)
+     acto 4  75 – 100 %  el productor va derecho al problema
+
+   Todos los elementos animados comparten duration: 16s / infinite y reservan
+   su acto con porcentajes, así nunca se desfasan entre sí.
+   ═══════════════════════════════════════════ */
+
+/* ─── CONTENEDOR ─── */
+.cf-anim {
+  max-width: 880px;
+  margin: 0 auto 48px;
+  background: #fff;
+  border: .5px solid var(--gris-claro);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 24px 24px 20px;
+}
+
+.cf-anim__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* ─── RÓTULOS DE LOS ACTOS ─── */
+.cf-anim__pasos {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+}
+
+.cf-anim__paso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-condensed);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.25;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  opacity: .45;
+  color: var(--gris);
+  background: transparent;
+}
+
+.cf-anim__punto {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ─── CIERRE ─── */
+.cf-anim__cierre {
+  margin: 16px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--gris-claro);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--gris);
+  text-align: center;
+}
+.cf-anim__cierre strong { color: var(--verde-oscuro); font-weight: 700; }
+.cf-anim__cierre a {
+  color: var(--verde-vivo);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.cf-anim__cierre a:hover { text-decoration: underline; }
+
+/* ═══════════════════════════════════════════
+   PALETA DE LA ESCENA
+   ═══════════════════════════════════════════ */
+.cf-loma       { fill: #cfdcc2; }
+.cf-suelo      { fill: #bccdad; }
+.cf-sol        { fill: #f2c14e; }
+.cf-luna       { fill: #fdfbef; }
+.cf-noche      { fill: var(--verde-oscuro); opacity: 0; }
+
+.cf-estructura { fill: #fff; stroke: #93a3b8; stroke-width: 2.5; }
+.cf-cuba       { fill: none; stroke: #93a3b8; stroke-width: 2.5; }
+.cf-cuba-fondo { fill: #eaf1f8; }
+.cf-poste      { stroke: #93a3b8; stroke-width: 6; stroke-linecap: round; }
+.cf-agua       { fill: var(--verde-claro); }
+.cf-vaca       { fill: #7d6750; }
+.cf-vaca-cola  { stroke: #7d6750; stroke-width: 2.5; fill: none; stroke-linecap: round; }
+
+.cf-equipo     { fill: var(--verde-oscuro); }
+.cf-equipo-det { fill: #48607f; }
+.cf-antena     { stroke: var(--verde-oscuro); stroke-width: 3.5; stroke-linecap: round; fill: none; }
+.cf-panel      { fill: #2c4a70; stroke: var(--verde-oscuro); stroke-width: 1.5; }
+.cf-led        { fill: var(--verde-natural-claro); opacity: .15; }
+
+.cf-onda       { stroke: var(--verde-vivo); stroke-width: 3.5; stroke-linecap: round; fill: none; opacity: 0; }
+.cf-gw-glow    { fill: var(--verde-vivo); opacity: 0; }
+.cf-nube       { fill: #fbfdff; }
+.cf-enlace     { stroke: var(--verde-vivo); stroke-width: 3; stroke-linecap: round; fill: none;
+                 stroke-dasharray: 7 9; opacity: 0; }
+
+.cf-cel-marco    { fill: var(--verde-oscuro); }
+.cf-cel-pantalla { fill: #fff; }
+.cf-cel-fila     { fill: #e4eaf1; }
+.cf-alerta-caja  { fill: #fdecec; stroke: #d95c5c; stroke-width: 2; }
+.cf-alerta-icono { fill: #d95c5c; }
+.cf-alerta-linea { fill: #e39b9b; }
+.cf-ok-caja      { fill: #e9f4ea; stroke: var(--verde-natural); stroke-width: 2; }
+.cf-ok-tilde     { stroke: var(--verde-natural); stroke-width: 4; stroke-linecap: round;
+                   stroke-linejoin: round; fill: none; }
+
+.cf-camioneta-cuerpo { fill: var(--verde-oscuro); }
+.cf-camioneta-vidrio { fill: #9fb6d0; }
+.cf-camioneta-rueda  { fill: #2c3648; }
+.cf-panel-linea      { stroke: #7d97bb; stroke-width: 1.4; fill: none; }
+
+.cf-check-circulo { fill: var(--verde-natural); }
+.cf-check-tilde   { stroke: #fff; stroke-width: 4.5; stroke-linecap: round;
+                    stroke-linejoin: round; fill: none; }
+
+/* estados que arrancan ocultos (también es el cuadro en pausa) */
+.cf-alerta, .cf-ok, .cf-check, .cf-camioneta { opacity: 0; }
+
+/* ═══════════════════════════════════════════
+   ANIMACIONES
+   ═══════════════════════════════════════════ */
+.cf-agua {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: cf-agua-nivel 16s linear infinite;
+}
+.cf-astros     { transform-origin: 450px 620px; animation: cf-astros-giro 16s linear infinite; }
+.cf-noche      { animation: cf-noche 16s linear infinite; }
+.cf-led        { animation: cf-led 16s linear infinite; }
+.cf-onda       { transform-box: fill-box; transform-origin: left center; }
+.cf-onda--a    { animation: cf-onda-a 16s linear infinite; }
+.cf-onda--b    { animation: cf-onda-b 16s linear infinite; }
+.cf-onda--c    { animation: cf-onda-c 16s linear infinite; }
+.cf-gw-glow    { transform-box: fill-box; transform-origin: center;
+                 animation: cf-gw-glow 16s linear infinite; }
+.cf-enlace--subida { animation: cf-subida 16s linear infinite; }
+.cf-enlace--bajada { animation: cf-bajada 16s linear infinite; }
+.cf-alerta     { animation: cf-alerta 16s linear infinite; }
+.cf-camioneta  { animation: cf-camioneta 16s linear infinite; }
+.cf-check      { animation: cf-check 16s linear infinite; }
+.cf-ok         { animation: cf-ok 16s linear infinite; }
+
+.cf-anim__paso:nth-child(1) { animation: cf-paso-1 16s linear infinite; }
+.cf-anim__paso:nth-child(2) { animation: cf-paso-2 16s linear infinite; }
+.cf-anim__paso:nth-child(3) { animation: cf-paso-3 16s linear infinite; }
+.cf-anim__paso:nth-child(4) { animation: cf-paso-4 16s linear infinite; }
+
+/* ─── ACTO 1: baja el nivel · ACTO 4: vuelve a subir ─── */
+@keyframes cf-agua-nivel {
+  0%, 4%     { transform: scaleY(1); }
+  22%        { transform: scaleY(.05); }
+  88%        { transform: scaleY(.05); }
+  98%, 100%  { transform: scaleY(1); }
+}
+
+/* ─── ACTO 2: pasa el día y la noche ─── */
+@keyframes cf-astros-giro {
+  0%, 25%    { transform: rotate(0deg); }
+  50%, 100%  { transform: rotate(360deg); }
+}
+@keyframes cf-noche {
+  0%, 28%    { opacity: 0; }
+  35%, 43%   { opacity: .5; }
+  50%, 100%  { opacity: 0; }
+}
+
+/* ─── ACTO 3: detecta y transmite ─── */
+@keyframes cf-led {
+  0%, 50%    { opacity: .15; }
+  52%        { opacity: 1; }
+  54%        { opacity: .2; }
+  56%        { opacity: 1; }
+  58%        { opacity: .2; }
+  60%, 92%   { opacity: 1; }
+  100%       { opacity: .15; }
+}
+@keyframes cf-onda-a {
+  0%, 50%    { opacity: 0; transform: scale(.35); }
+  53%        { opacity: .95; transform: scale(.7); }
+  60%        { opacity: 0; transform: scale(1.5); }
+  100%       { opacity: 0; transform: scale(.35); }
+}
+@keyframes cf-onda-b {
+  0%, 52%    { opacity: 0; transform: scale(.35); }
+  55%        { opacity: .95; transform: scale(.7); }
+  62%        { opacity: 0; transform: scale(1.5); }
+  100%       { opacity: 0; transform: scale(.35); }
+}
+@keyframes cf-onda-c {
+  0%, 54%    { opacity: 0; transform: scale(.35); }
+  57%        { opacity: .95; transform: scale(.7); }
+  64%        { opacity: 0; transform: scale(1.5); }
+  100%       { opacity: 0; transform: scale(.35); }
+}
+@keyframes cf-gw-glow {
+  0%, 58%    { opacity: 0; transform: scale(.7); }
+  63%        { opacity: .55; transform: scale(1); }
+  70%, 100%  { opacity: 0; transform: scale(1.3); }
+}
+@keyframes cf-subida {
+  0%, 61%    { opacity: 0; stroke-dashoffset: 96; }
+  64%        { opacity: 1; }
+  69%        { opacity: 1; stroke-dashoffset: 0; }
+  73%, 100%  { opacity: 0; stroke-dashoffset: 0; }
+}
+@keyframes cf-bajada {
+  0%, 67%    { opacity: 0; stroke-dashoffset: 96; }
+  70%        { opacity: 1; }
+  75%        { opacity: 1; stroke-dashoffset: 0; }
+  79%, 100%  { opacity: 0; stroke-dashoffset: 0; }
+}
+@keyframes cf-alerta {
+  0%, 73%    { opacity: 0; transform: translateY(12px); }
+  77%        { opacity: 1; transform: translateY(0); }
+  92%        { opacity: 1; transform: translateY(0); }
+  95%, 100%  { opacity: 0; transform: translateY(0); }
+}
+
+/* ─── ACTO 4: vas derecho al problema ─── */
+@keyframes cf-camioneta {
+  0%, 75%    { opacity: 0; transform: translateX(880px); }
+  76%        { opacity: 1; transform: translateX(870px); }
+  89%, 99%   { opacity: 1; transform: translateX(250px); }
+  100%       { opacity: 0; transform: translateX(250px); }
+}
+@keyframes cf-ok {
+  0%, 93%    { opacity: 0; }
+  96%, 99%   { opacity: 1; }
+  100%       { opacity: 0; }
+}
+@keyframes cf-check {
+  0%, 92%    { opacity: 0; }
+  96%, 99%   { opacity: 1; }
+  100%       { opacity: 0; }
+}
+
+/* ─── RÓTULOS ─── */
+@keyframes cf-paso-1 {
+  0%, 23%    { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  26%, 97%   { opacity: .45; color: var(--gris); background: transparent; }
+  100%       { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+}
+@keyframes cf-paso-2 {
+  0%, 23%    { opacity: .45; color: var(--gris); background: transparent; }
+  26%, 48%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  51%, 100%  { opacity: .45; color: var(--gris); background: transparent; }
+}
+@keyframes cf-paso-3 {
+  0%, 48%    { opacity: .45; color: var(--gris); background: transparent; }
+  51%, 73%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  76%, 100%  { opacity: .45; color: var(--gris); background: transparent; }
+}
+@keyframes cf-paso-4 {
+  0%, 73%    { opacity: .45; color: var(--gris); background: transparent; }
+  76%, 97%   { opacity: 1; color: var(--verde-oscuro); background: var(--verde-pale); }
+  100%       { opacity: .45; color: var(--gris); background: transparent; }
+}
+
+/* ═══════════════════════════════════════════
+   REPRODUCCIÓN: sólo corre cuando está a la vista
+   (la clase .playing la pone el IntersectionObserver de js/main.js)
+   ═══════════════════════════════════════════ */
+.cf-anim__svg *,
+.cf-anim__paso { animation-play-state: paused; }
+
+.cf-anim.playing .cf-anim__svg *,
+.cf-anim.playing .cf-anim__paso { animation-play-state: running; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .cf-anim { padding: 14px 14px 16px; margin-bottom: 36px; }
+  .cf-anim__pasos { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .cf-anim__paso { font-size: 14px; padding: 7px 8px; }
+  .cf-anim__cierre { font-size: 14px; text-align: left; }
+}
+
+/* ═══════════════════════════════════════════
+   MOVIMIENTO REDUCIDO
+   La escena queda quieta en el momento de la alerta, que es el que cuenta
+   la historia entera, y se prenden los cuatro rótulos a la vez.
+   ═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .cf-anim__svg *,
+  .cf-anim__paso { animation: none !important; }
+
+  .cf-agua  { transform: scaleY(.05); }
+  .cf-led    { opacity: 1; }
+  .cf-onda   { opacity: .9; }
+  .cf-onda--b { transform: scale(1); }
+  .cf-onda--c { transform: scale(1); }
+  .cf-enlace { opacity: 1; stroke-dashoffset: 0; }
+  .cf-alerta { opacity: 1; }
+  .cf-noche, .cf-camioneta, .cf-ok, .cf-check, .cf-gw-glow { opacity: 0; }
+
+  .cf-anim__paso {
+    opacity: 1;
+    color: var(--verde-oscuro);
+    background: var(--verde-pale);
+  }
+}

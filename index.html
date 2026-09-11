@@ -20,6 +20,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <link rel="stylesheet" href="css/styles.css?v=4">
+  <link rel="stylesheet" href="css/animacion.css?v=1">
 </head>
 
 <body>
@@ -266,6 +267,157 @@
     <div class="container">
       <div class="section-label reveal">Así de simple</div>
       <h2 class="como-funciona__heading reveal">Cómo funciona</h2>
+      <!-- ─── Animación: el bebedero sin agua y la alerta ─── -->
+      <div class="cf-anim reveal">
+        <svg class="cf-anim__svg" viewBox="0 0 900 400" role="img"
+             aria-labelledby="cfAnimTitulo cfAnimDesc" preserveAspectRatio="xMidYMid meet">
+          <title id="cfAnimTitulo">Cómo funciona AguaSens</title>
+          <desc id="cfAnimDesc">El bebedero se queda sin agua. Sin monitoreo pasan el día y la noche
+            sin que nadie se entere. Con AguaSens el nodo lo detecta y manda la alerta por radio LoRa
+            al gateway, de ahí a internet y al celular del productor, que va derecho al problema.</desc>
+
+          <defs>
+            <linearGradient id="cfCielo" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#dbe9f8"/>
+              <stop offset="1" stop-color="#f4f8fc"/>
+            </linearGradient>
+            <clipPath id="cfMarco"><rect x="0" y="0" width="900" height="400" rx="8"/></clipPath>
+            <clipPath id="cfSoloCielo"><rect x="0" y="0" width="900" height="312"/></clipPath>
+          </defs>
+
+          <g clip-path="url(#cfMarco)">
+            <!-- cielo -->
+            <rect x="0" y="0" width="900" height="400" fill="url(#cfCielo)"/>
+
+            <!-- sol y luna: giran una vuelta entera durante el acto 2 -->
+            <g class="cf-astros">
+              <circle class="cf-sol" cx="292" cy="180" r="26"/>
+            </g>
+
+            <!-- campo -->
+            <path class="cf-loma" d="M0 300 C120 262 210 300 320 288 C440 274 520 300 640 282 C760 264 840 296 900 286 L900 400 L0 400 Z"/>
+            <rect class="cf-suelo" x="0" y="312" width="900" height="88"/>
+
+            <!-- nube (internet) -->
+            <g class="cf-nube">
+              <ellipse cx="612" cy="76" rx="34" ry="22"/>
+              <ellipse cx="648" cy="72" rx="28" ry="24"/>
+              <ellipse cx="632" cy="56" rx="26" ry="20"/>
+              <rect x="586" y="74" width="82" height="22" rx="11"/>
+            </g>
+
+            <!-- enlaces gateway → nube → celular -->
+            <path class="cf-enlace cf-enlace--subida" d="M472 88 C500 56 548 48 590 68"/>
+            <path class="cf-enlace cf-enlace--bajada" d="M666 82 C704 98 722 116 746 148"/>
+
+            <!-- bebedero -->
+            <rect class="cf-cuba-fondo" x="54" y="246" width="200" height="66" rx="8"/>
+            <rect class="cf-agua" x="62" y="254" width="184" height="50" rx="3"/>
+            <rect class="cf-cuba" x="54" y="246" width="200" height="66" rx="8"/>
+            <rect class="cf-estructura" x="54" y="238" width="200" height="12" rx="6"/>
+
+            <!-- hacienda -->
+            <g transform="translate(400,270) scale(-1,1)">
+              <path class="cf-vaca" d="M4 12 C4 6 9 3 16 3 L40 3 C47 3 51 7 51 13 L51 21 C51 25 49 27 45 27 L10 27 C6 27 4 25 4 21 Z"/>
+              <path class="cf-vaca" d="M49 8 L60 5 C63 4 65 6 64 9 L62 16 C61 19 59 20 56 19 L49 17 Z"/>
+              <path class="cf-vaca" d="M9 27 h5.5 v14 H9 Z M20 27 h5.5 v14 H20 Z M34 27 h5.5 v14 H34 Z M44 27 h5.5 v14 H44 Z"/>
+              <path class="cf-vaca-cola" d="M4 12 C0 15 -1 21 1 27"/>
+            </g>
+            <g transform="translate(455,266) scale(-0.78,0.78)" opacity=".7">
+              <path class="cf-vaca" d="M4 12 C4 6 9 3 16 3 L40 3 C47 3 51 7 51 13 L51 21 C51 25 49 27 45 27 L10 27 C6 27 4 25 4 21 Z"/>
+              <path class="cf-vaca" d="M49 8 L60 5 C63 4 65 6 64 9 L62 16 C61 19 59 20 56 19 L49 17 Z"/>
+              <path class="cf-vaca" d="M9 27 h5.5 v14 H9 Z M20 27 h5.5 v14 H20 Z M34 27 h5.5 v14 H34 Z M44 27 h5.5 v14 H44 Z"/>
+              <path class="cf-vaca-cola" d="M4 12 C0 15 -1 21 1 27"/>
+            </g>
+
+            <!-- nodo sobre el bebedero -->
+            <line class="cf-poste" x1="44" y1="312" x2="44" y2="200"/>
+            <line class="cf-antena" x1="44" y1="160" x2="44" y2="128"/>
+            <rect class="cf-equipo" x="26" y="160" width="36" height="40" rx="5"/>
+            <rect class="cf-equipo-det" x="32" y="168" width="24" height="9" rx="2"/>
+            <circle class="cf-led" cx="54" cy="192" r="4"/>
+
+            <!-- ondas LoRa -->
+            <g transform="translate(54,128)">
+              <path class="cf-onda cf-onda--a" d="M0 -13 A13 13 0 0 1 0 13"/>
+              <path class="cf-onda cf-onda--b" d="M0 -21 A21 21 0 0 1 0 21"/>
+              <path class="cf-onda cf-onda--c" d="M0 -29 A29 29 0 0 1 0 29"/>
+            </g>
+
+            <!-- gateway -->
+            <line class="cf-poste" x1="470" y1="312" x2="470" y2="158"/>
+            <circle class="cf-gw-glow" cx="472" cy="140" r="36"/>
+            <line class="cf-antena" x1="472" y1="118" x2="472" y2="90"/>
+            <circle class="cf-equipo" cx="472" cy="88" r="4"/>
+            <polygon class="cf-panel" points="490,116 534,100 540,110 496,126"/>
+            <path class="cf-panel-linea" d="M504 111 l6 10 M518 106 l6 10"/>
+            <rect class="cf-equipo" x="450" y="118" width="44" height="44" rx="6"/>
+            <rect class="cf-equipo-det" x="457" y="127" width="30" height="10" rx="2"/>
+
+            <!-- la camioneta llega al problema (va antes del celular: sale de atras de la pantalla) -->
+            <g transform="translate(0,265)">
+              <g class="cf-camioneta">
+                <rect class="cf-camioneta-cuerpo" x="0" y="24" width="92" height="16" rx="4"/>
+                <path class="cf-camioneta-cuerpo" d="M8 26 L18 5 H43 V26 Z"/>
+                <path class="cf-camioneta-vidrio" d="M16 23 L23 9 H40 V23 Z"/>
+                <circle class="cf-camioneta-rueda" cx="20" cy="40" r="7"/>
+                <circle class="cf-camioneta-rueda" cx="73" cy="40" r="7"/>
+              </g>
+            </g>
+
+            <!-- celular -->
+            <rect class="cf-cel-marco" x="742" y="128" width="118" height="208" rx="16"/>
+            <rect class="cf-cel-pantalla" x="752" y="146" width="98" height="172" rx="7"/>
+            <rect class="cf-cel-marco" x="780" y="133" width="42" height="7" rx="3.5"/>
+            <rect class="cf-cel-fila" x="760" y="248" width="82" height="10" rx="5"/>
+            <rect class="cf-cel-fila" x="760" y="268" width="62" height="10" rx="5"/>
+            <rect class="cf-cel-fila" x="760" y="288" width="74" height="10" rx="5"/>
+
+            <g class="cf-alerta">
+              <rect class="cf-alerta-caja" x="760" y="162" width="82" height="66" rx="7"/>
+              <circle class="cf-alerta-icono" cx="776" cy="181" r="9"/>
+              <rect fill="#fdecec" x="774.8" y="176" width="2.4" height="6" rx="1.2"/>
+              <rect fill="#fdecec" x="774.8" y="184" width="2.4" height="2.4" rx="1.2"/>
+              <rect class="cf-alerta-linea" x="792" y="175" width="42" height="7" rx="3.5"/>
+              <rect class="cf-alerta-linea" x="792" y="187" width="28" height="6" rx="3"/>
+              <rect class="cf-alerta-linea" x="768" y="204" width="66" height="6" rx="3"/>
+              <rect class="cf-alerta-linea" x="768" y="215" width="48" height="6" rx="3"/>
+            </g>
+
+            <g class="cf-ok">
+              <rect class="cf-ok-caja" x="760" y="162" width="82" height="66" rx="7"/>
+              <path class="cf-ok-tilde" d="M779 196 l9 10 l19 -24"/>
+            </g>
+
+            <!-- resuelto -->
+            <g transform="translate(154,186)">
+              <g class="cf-check">
+                <circle class="cf-check-circulo" cx="0" cy="0" r="22"/>
+                <path class="cf-check-tilde" d="M-9 1 l6 7 l13 -15"/>
+              </g>
+            </g>
+
+            <!-- la noche del acto 2 -->
+            <rect class="cf-noche" x="0" y="0" width="900" height="400"/>
+            <g clip-path="url(#cfSoloCielo)">
+              <g class="cf-astros"><circle class="cf-luna" cx="608" cy="1060" r="20"/></g>
+            </g>
+          </g>
+        </svg>
+
+        <ol class="cf-anim__pasos">
+          <li class="cf-anim__paso"><span class="cf-anim__punto"></span>Se corta el agua</li>
+          <li class="cf-anim__paso"><span class="cf-anim__punto"></span>Pasan las horas y nadie se entera</li>
+          <li class="cf-anim__paso"><span class="cf-anim__punto"></span>El nodo lo detecta y avisa</li>
+          <li class="cf-anim__paso"><span class="cf-anim__punto"></span>Vas derecho al problema</li>
+        </ol>
+
+        <p class="cf-anim__cierre">
+          Hoy, entre que se corta el agua y alguien se entera pasa en promedio
+          <strong>la mitad del tiempo entre recorridas</strong>. Con AguaSens, <strong>15 minutos</strong>.
+          <a href="retorno.html">Calculá lo que eso vale en tu campo &rarr;</a>
+        </p>
+      </div>
       <div class="como-funciona__grid">
         <div class="paso reveal">
           <div class="paso__num">1</div>
@@ -880,7 +1032,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=2"></script>
+  <script src="js/main.js?v=3"></script>
   <script>
     lucide.createIcons();
   </script>

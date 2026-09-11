@@ -55,6 +55,20 @@ document.addEventListener('DOMContentLoaded', () => {
     reveals.forEach(el => observer.observe(el));
   }
 
+  /* ─── ANIMACIÓN "CÓMO FUNCIONA" ─── */
+  /* Sólo corre cuando está a la vista: fuera de pantalla no gasta batería. */
+  const anim = document.querySelector('.cf-anim');
+  if (anim) {
+    if ('IntersectionObserver' in window) {
+      const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => anim.classList.toggle('playing', entry.isIntersecting));
+      }, { threshold: 0.15 });
+      animObserver.observe(anim);
+    } else {
+      anim.classList.add('playing');
+    }
+  }
+
   /* ─── ACTIVE NAV HIGHLIGHT ─── */
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav a[href^="#"]');
