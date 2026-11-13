@@ -53,8 +53,7 @@
   const thi = (t, hr) => (1.8 * t + 32) - (0.55 - 0.0055 * hr) * (1.8 * t - 26);
 
   /* ─── El campo ficticio ─── */
-  const CENTRO = [-36.6075, -61.0480];
-  const GATEWAY = [-36.6058, -61.0512];
+  const CENTRO = [-36.2680, -59.2000];
 
   const MODELOS = {
     fijo: 'Nodo Fijo', movil: 'Nodo Móvil', bombaRed: 'Nodo Bomba Red',
@@ -68,15 +67,15 @@
     escenario = null;
     avisosAbiertos = {};
     nodos = [
-      { id: 1, nombre: 'Tanque australiano', modelo: 'fijo', lote: 'Casco', pos: [-36.6012, -61.0418],
+      { id: 1, nombre: 'Tanque australiano', modelo: 'fijo', lote: 'Casco', pos: [-36.2617, -59.1938],
         nivel: 72, altoM: 1.8, capL: 45000, tAgua: 18.6, tAire: 24, hr: 55, bat: 12.62, rssi: -78, snr: 10, rx: -72, consumo: [] },
-      { id: 2, nombre: 'Bebedero Lote 4', modelo: 'movil', lote: 'Lote 4', pos: [-36.6172, -61.0330],
+      { id: 2, nombre: 'Bebedero Lote 4', modelo: 'movil', lote: 'Lote 4', pos: [-36.2777, -59.1850],
         nivel: 66, altoM: 0.6, capL: 4000, tAgua: 19.4, tAire: 24.5, hr: 52, bat: 12.48, rssi: -97, snr: 4, rx: -91, consumo: [] },
-      { id: 3, nombre: 'Bomba casco', modelo: 'bombaRed', lote: 'Casco', pos: [-36.6098, -61.0560],
+      { id: 3, nombre: 'Bomba casco', modelo: 'bombaRed', lote: 'Casco', pos: [-36.2703, -59.2080],
         marcha: false, corriente: 0, caudal: 0, horasHoy: 2.6, arranques: 4, volHoy: 9.4, bat: 12.71, rssi: -64, snr: 12, rx: -60 },
-      { id: 4, nombre: 'Bomba solar Lote 7', modelo: 'bombaSolar', lote: 'Lote 7', pos: [-36.5958, -61.0275],
+      { id: 4, nombre: 'Bomba solar Lote 7', modelo: 'bombaSolar', lote: 'Lote 7', pos: [-36.2563, -59.1795],
         marcha: true, panelV: 98, potencia: 285, caudal: 17.5, horasHoy: 3.1, arranques: 3, whHoy: 860, bat: 12.55, rssi: -101, snr: 2, rx: -95 },
-      { id: 5, nombre: 'Molino del bajo', modelo: 'molino', lote: 'Lote 2', pos: [-36.6195, -61.0610],
+      { id: 5, nombre: 'Molino del bajo', modelo: 'molino', lote: 'Lote 2', pos: [-36.2800, -59.2130],
         golpes: 9, caudal: 8.2, horasHoy: 5.4, volHoy: 2.7, bat: 12.66, rssi: -94, snr: 5, rx: -88 },
     ];
     nodos.forEach((n, i) => {
@@ -280,10 +279,6 @@
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Imágenes &copy; Esri', maxZoom: 18
     }).addTo(mapa);
-    L.marker(GATEWAY, {
-      icon: L.divIcon({ className: '', html: '<div class="gw-marker" title="Gateway"><i data-lucide="radio-tower"></i></div>', iconSize: [30, 30], iconAnchor: [15, 15] }),
-      keyboard: false
-    }).addTo(mapa).bindTooltip('Gateway (casco)', { direction: 'top', offset: [0, -14] });
     nodos.forEach((n) => {
       const m = L.marker(n.pos, { title: n.nombre }).addTo(mapa);
       m.on('click', () => abrirFicha(n.id));
@@ -291,9 +286,29 @@
     });
     encuadrar();
   }
+  let filtroLote = '';
+  const visibles = () => nodos.filter((n) => !filtroLote || n.lote === filtroLote);
   function encuadrar() {
-    const b = L.latLngBounds(nodos.map((n) => n.pos).concat([GATEWAY]));
-    mapa.fitBounds(b, { paddingTopLeft: [20, 110], paddingBottomRight: [120, 30] });
+    const pts = visibles().map((n) => n.pos);
+    if (pts.length === 1) { mapa.setView(pts[0], 16); return; }
+    mapa.fitBounds(L.latLngBounds(pts), { paddingTopLeft: [20, 110], paddingBottomRight: [120, 30], maxZoom: 16 });
+  }
+  function llenarFiltros() {
+    const lotes = [...new Set(nodos.map((n) => n.lote))].sort();
+    $('#f-lote').innerHTML = '<option value="">Todos los lotes</option>'
+      + lotes.map((l) => '<option' + (l === filtroLote ? ' selected' : '') + '>' + esc(l) + '</option>').join('');
+    $('#f-nodo').innerHTML = '<option value="">Todos los nodos</option>'
+      + visibles().map((n) => '<option value="' + n.id + '">' + esc(n.nombre) + '</option>').join('');
+    $('#f-lote').classList.toggle('activo', !!filtroLote);
+  }
+  function aplicarLote(lote) {
+    filtroLote = lote;
+    nodos.forEach((n) => {
+      const ver = !lote || n.lote === lote;
+      if (ver && !mapa.hasLayer(marcadores[n.id])) marcadores[n.id].addTo(mapa);
+      if (!ver && mapa.hasLayer(marcadores[n.id])) marcadores[n.id].remove();
+    });
+    llenarFiltros(); cerrarFicha(); encuadrar();
   }
   const colorPin = {};
   function pintarPines() {
@@ -393,14 +408,14 @@
   }
 
   function htmlLista() {
-    const items = nodos.map((n) => {
+    const items = visibles().map((n) => {
       const st = estadoNodo(n);
       const lvl = st.lvl === 'blue' ? 'green' : st.lvl;
       return '<li><button type="button" data-nodo="' + n.id + '"><span class="lista__punto" style="background:' + COLORES[lvl] + '"></span>'
         + '<span><span class="lista__nom">' + esc(n.nombre) + '</span><span class="lista__mod">' + MODELOS[n.modelo] + ' · ' + hace(n).replace('Reportó ', '') + '</span></span>'
         + '<span class="chip chip-' + lvl + '">' + st.txt + '</span></button></li>';
     }).join('');
-    return '<div class="ficha__cab"><div><h2 class="ficha__titulo">Nodos</h2><p class="ficha__sub">Estancia La Demo · 5 nodos · 1 gateway</p></div>'
+    return '<div class="ficha__cab"><div><h2 class="ficha__titulo">Nodos</h2><p class="ficha__sub">Estancia La Demo · ' + (filtroLote ? esc(filtroLote) + ' · ' + visibles().length + (visibles().length === 1 ? ' nodo' : ' nodos') : '5 nodos') + '</p></div>'
       + '<button type="button" class="ficha__cerrar" data-cerrar aria-label="Cerrar"><i data-lucide="x"></i></button></div>'
       + '<ul class="lista">' + items + '</ul>';
   }
@@ -420,12 +435,16 @@
     renderSheet();
     if (id !== 'lista') {
       const n = nodos.find((x) => x.id === id);
+      if (filtroLote && n.lote !== filtroLote) aplicarLote('');   // un aviso de otro lote: mostrar todo
+      fichaAbierta = id; $('#sheet').hidden = false; $('#scrim').hidden = false; renderSheet();
+      $('#f-nodo').value = String(id);
       mapa.panTo(n.pos);
     }
   }
   function cerrarFicha() {
     fichaAbierta = null;
     $('#sheet').hidden = true; $('#scrim').hidden = true;
+    $('#f-nodo').value = '';
   }
 
   /* ─── Escenarios ─── */
@@ -491,11 +510,14 @@
   document.addEventListener('DOMContentLoaded', () => {
     estadoInicial();
     iniciarMapa();
+    llenarFiltros();
     pintarPines();
     lucide.createIcons();
 
     $('#btn-lista').addEventListener('click', () => abrirFicha('lista'));
     $('#btn-centrar').addEventListener('click', () => { cerrarFicha(); encuadrar(); });
+    $('#f-lote').addEventListener('change', (e) => aplicarLote(e.target.value));
+    $('#f-nodo').addEventListener('change', (e) => { if (e.target.value) abrirFicha(Number(e.target.value)); else cerrarFicha(); });
     $('#btn-refresh').addEventListener('click', (e) => {
       const b = e.currentTarget; b.classList.remove('girando'); void b.offsetWidth; b.classList.add('girando');
     });
@@ -508,10 +530,13 @@
     $('#escenarios').addEventListener('click', (e) => {
       const b = e.target.closest('.d-esc'); if (!b || b.disabled) return;
       if (escenario && escenario.id === b.dataset.esc) resolverEscenario();
-      else if (!escenario) iniciarEscenario(b.dataset.esc);
+      else if (!escenario) {
+        iniciarEscenario(b.dataset.esc);
+        if (matchMedia('(max-width: 900px)').matches) $('#telefono').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
     $('#reset').addEventListener('click', () => {
-      estadoInicial(); cerrarFicha(); $('#notifs').innerHTML = '';
+      estadoInicial(); aplicarLote(''); $('#notifs').innerHTML = '';
       Object.keys(colorPin).forEach((k) => delete colorPin[k]);
       pintarPines(); actualizarBotones(); estado('Todo funcionando normalmente.', '');
     });
