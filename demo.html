@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Simulador de la app | AguaSens</title>
+  <meta name="description"
+    content="Probá cómo se ve la app de AguaSens: un campo simulado con nodos de tanque, bebedero, bomba de red, bomba solar y molino. Provocá una falla y mirá cómo llega el aviso.">
+  <meta name="theme-color" content="#0d1b33">
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="canonical" href="https://www.aguasens.com.ar/demo.html">
+
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="css/demo.css?v=1">
+</head>
+
+<body>
+
+  <!-- Barra de la página (no es parte de la app) -->
+  <header class="d-top">
+    <a href="index.html" class="d-top__volver"><i data-lucide="arrow-left"></i> AguaSens</a>
+    <span class="d-top__marca"><i data-lucide="flask-conical"></i> Simulación con datos ficticios</span>
+  </header>
+
+  <main class="d-layout">
+
+    <!-- Guía y escenarios -->
+    <aside class="d-guia">
+      <h1>Probá la app</h1>
+      <p class="d-guia__intro">Tocá un nodo en el mapa para ver su ficha, o provocá una falla y mirá cómo llega el
+        aviso al celular.</p>
+
+      <h2>Provocá una situación</h2>
+      <div class="d-escenarios" id="escenarios">
+        <button type="button" class="d-esc" data-esc="tanque">
+          <i data-lucide="cylinder"></i>
+          <span><b>Tanque australiano sin agua</b><small>Una pérdida lo vacía aunque la bomba funciona</small></span>
+        </button>
+        <button type="button" class="d-esc" data-esc="bebedero">
+          <i data-lucide="droplets"></i>
+          <span><b>Bebedero sin agua</b><small>Se corta el agua del bebedero móvil</small></span>
+        </button>
+        <button type="button" class="d-esc" data-esc="bomba">
+          <i data-lucide="zap"></i>
+          <span><b>Bomba en seco</b><small>Consume corriente pero no pasa agua</small></span>
+        </button>
+        <button type="button" class="d-esc" data-esc="solar">
+          <i data-lucide="sun"></i>
+          <span><b>Bomba solar que no rinde</b><small>Hay sol pero bombea mucho menos de lo normal</small></span>
+        </button>
+        <button type="button" class="d-esc" data-esc="calor">
+          <i data-lucide="thermometer-sun"></i>
+          <span><b>Ola de calor</b><small>Sube el índice de estrés por calor</small></span>
+        </button>
+        <button type="button" class="d-esc" data-esc="sinreporte">
+          <i data-lucide="wifi-off"></i>
+          <span><b>Equipo sin reportar</b><small>El molino deja de mandar datos</small></span>
+        </button>
+      </div>
+      <p class="d-estado" id="estado" aria-live="polite">Todo funcionando normalmente.</p>
+      <button type="button" class="d-reset" id="reset"><i data-lucide="rotate-ccw"></i> Volver a empezar</button>
+
+      <p class="d-guia__nota">En la simulación el tiempo corre más rápido: cada segundo equivale a dos minutos en el
+        campo. Los avisos de verdad llegan por Telegram y/o mail.</p>
+      <a class="d-guia__cta" href="https://wa.me/5491168452098?text=Hola%2C%20vi%20el%20simulador%20de%20la%20app%20y%20quiero%20consultar%20por%20AguaSens"
+        target="_blank" rel="noopener"><i data-lucide="message-circle"></i> Consultanos por WhatsApp</a>
+    </aside>
+
+    <!-- El "celular" con la app -->
+    <div class="d-telefono">
+      <div class="app" id="app">
+
+        <div class="app-map" id="map" aria-label="Mapa del campo"></div>
+
+        <div class="app-topstack">
+          <header class="app-topbar">
+            <img class="app-logo" src="img/icon-192.png" alt="AguaSens" width="30" height="30">
+            <div class="app-actions">
+              <button type="button" class="app-btn" id="btn-refresh" aria-label="Actualizar"><i data-lucide="refresh-cw"></i></button>
+              <button type="button" class="app-btn" id="btn-lista" aria-label="Lista de nodos"><i data-lucide="list"></i></button>
+              <button type="button" class="app-btn" id="btn-centrar" aria-label="Ver todo el campo"><i data-lucide="house"></i></button>
+              <button type="button" class="app-btn" disabled aria-label="Configuración (no disponible en la simulación)"><i data-lucide="settings"></i></button>
+            </div>
+          </header>
+          <div class="app-filtros">
+            <span class="app-chip app-chip--on">Todos los sitios</span>
+            <span class="app-chip">Estancia La Demo</span>
+            <span class="app-chip">Todos los lotes</span>
+          </div>
+        </div>
+
+        <!-- Avisos que llegan (estilo notificación de Telegram) -->
+        <div class="app-notifs" id="notifs" aria-live="assertive"></div>
+
+        <!-- Ficha del nodo / lista -->
+        <div class="app-scrim" id="scrim" hidden></div>
+        <section class="app-sheet" id="sheet" aria-modal="true" role="dialog" hidden>
+          <div class="app-sheet__grip"></div>
+          <div id="sheet-body"></div>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/demo.js?v=3"></script>
+</body>
+
+</html>

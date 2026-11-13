@@ -6,10 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AguaSens — Monitoreo inteligente del agua para ganadería</title>
   <meta name="description"
-    content="Sistema modular de sensores para monitorear tanques australianos, bebederos y represas en tiempo real. Nivel de agua, alertas al celular, GPS y dashboard unificado. Ganadería de precisión.">
+    content="Sistema modular de sensores para monitorear tanques australianos, bebederos, represas, bombas de red y solares y molinos en tiempo real. Alertas por Telegram y mail, GPS y una sola app. Ganadería de precisión.">
   <meta name="theme-color" content="#152238">
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="canonical" href="https://www.aguasens.com.ar/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AguaSens">
+  <meta property="og:url" content="https://www.aguasens.com.ar/">
+  <meta property="og:title" content="AguaSens — Monitoreo inteligente del agua para ganadería">
+  <meta property="og:description" content="Nivel de tanques y bebederos, bombas de red y solares y molinos, con avisos al celular. Sin señal de celular en las aguadas.">
+  <meta property="og:image" content="https://www.aguasens.com.ar/img/ASlogo.png">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +24,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap"
     rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 
-  <link rel="stylesheet" href="css/styles.css?v=4">
+  <link rel="stylesheet" href="css/styles.css?v=6">
   <link rel="stylesheet" href="css/animacion.css?v=4">
 </head>
 
@@ -34,8 +41,8 @@
       <nav class="nav" id="main-nav">
         <a href="#producto">Producto</a>
         <a href="#sensores">Sensores</a>
-        <a href="#economia">Economía</a>
         <a href="#herramientas">Herramientas</a>
+        <a href="#preguntas">Preguntas</a>
         <a href="#nosotros">Nosotros</a>
         <a href="#contacto">Contacto</a>
         <a href="cotizar.html" class="nav-cta">Pedir presupuesto</a>
@@ -50,10 +57,11 @@
   <div class="mobile-nav" id="mobile-nav">
     <a href="#producto">Producto</a>
     <a href="#sensores">Sensores</a>
-    <a href="#economia">Economía</a>
     <a href="#herramientas">Herramientas</a>
+    <a href="#preguntas">Preguntas</a>
     <a href="#nosotros">Nosotros</a>
     <a href="#contacto">Contacto</a>
+    <a href="https://app.aguasens.com.ar" target="_blank" rel="noopener">Ingresar a la app</a>
     <a href="cotizar.html">Pedir presupuesto</a>
   </div>
 
@@ -71,7 +79,7 @@
           El control del agua
           <span class="accent">desde cualquier lugar</span>
         </h1>
-        <p class="hero__subtitle">Monitoreo para tanques, bebederos y represas. En tiempo real,
+        <p class="hero__subtitle">Monitoreo para tanques, bebederos, represasn y bombas de agua. En tiempo real,
           alertas al celular, todo en una sola app.</p>
         <div class="hero__actions">
           <a href="https://wa.me/5491168452098" target="_blank" class="btn btn--primary">
@@ -96,8 +104,8 @@
           <div class="stat__label">Datos en vivo</div>
         </div>
         <div class="stat">
-          <div class="stat__num">∞</div>
-          <div class="stat__label">Multi-nodo</div>
+          <div class="stat__num">LoRa</div>
+          <div class="stat__label">Sin señal en las aguadas</div>
         </div>
         <div class="stat">
           <div class="stat__num">−60%</div>
@@ -115,7 +123,7 @@
   <section class="intro" id="producto">
     <div class="container">
       <div class="intro__header reveal" style="max-width: 800px; margin: 0 auto 48px; text-align: center;">
-        <div class="section-label" style="justify-content: center;">Cuatro modelos, un ecosistema</div>
+        <div class="section-label" style="justify-content: center;">Cinco modelos, un ecosistema</div>
         <h2
           style="font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--verde-oscuro); margin-bottom: 16px;">
           El nodo correcto para cada aguada</h2>
@@ -128,92 +136,83 @@
         </p>
       </div>
 
-      <div class="intro__grid reveal" style="align-items: start;">
-        <!-- NODO TANQUE -->
-        <div class="product-card"
-          style="background: var(--blanco); border-radius: var(--radius-lg); padding: 32px; border: .5px solid var(--calc-border); text-align: center;">
-          <img src="img/nodo-tanque.webp" alt="Nodo Tanque"
-            style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; margin-bottom: 24px;">
-          <h3 style="font-size: 24px; color: var(--verde-oscuro); margin-bottom: 8px;">Nodo Fijo</h3>
-          <p
-            style="color: var(--verde-vivo); font-weight: 600; margin-bottom: 16px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-            Para Tanques, bebederos fijos y Represas</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 24px; text-align: left;">
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="waves" style="color: var(--verde-vivo); width: 18px;"></i> Nivel de agua</li>
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="thermometer" style="color: var(--verde-vivo); width: 18px;"></i> Temperatura del agua</li>
-          </ul>
-          <p
-            style="font-size: 14px; color: var(--gris); text-align: left; padding-top: 16px; border-top: 1px solid var(--calc-border);">
-            Ideal para conocer el estado de la reserva estratégica de agua de tu campo.</p>
-        </div>
+      <!-- Fila 1: el agua almacenada -->
+      <div class="nodos-grupo reveal">
+        <div class="nodos-grupo__titulo"><i data-lucide="droplets"></i> El agua que tenés</div>
+        <div class="nodos-grid nodos-grid--2">
 
-        <!-- NODO BEBEDERO -->
-        <div class="product-card"
-          style="background: var(--blanco); border-radius: var(--radius-lg); padding: 32px; border: .5px solid var(--calc-border); text-align: center;">
-          <img src="img/nodo-bebedero.webp" alt="Nodo Bebedero Móvil"
-            style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; margin-bottom: 24px;">
-          <h3 style="font-size: 24px; color: var(--verde-oscuro); margin-bottom: 8px;">Nodo Móvil</h3>
-          <p
-            style="color: var(--verde-vivo); font-weight: 600; margin-bottom: 16px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-            Para Bebederos Móviles</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 24px; text-align: left;">
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="waves" style="color: var(--verde-vivo); width: 18px;"></i> Nivel de agua</li>
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="map-pin" style="color: var(--verde-vivo); width: 18px;"></i> GPS integrado</li>
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="sun" style="color: var(--verde-vivo); width: 18px;"></i> Índice de Estrés por calor (THI
-              Aire)</li>
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="thermometer" style="color: var(--verde-vivo); width: 18px;"></i> Temperatura del agua</li>
-          </ul>
-          <p
-            style="font-size: 14px; color: var(--gris); text-align: left; padding-top: 16px; border-top: 1px solid var(--calc-border);">
-            Pensado para acompañar la rotación de parcelas y prevenir estrés térmico.</p>
-        </div>
+          <!-- NODO FIJO -->
+          <div class="nodo-card">
+            <h3 class="nodo-card__nombre">Nodo Fijo</h3>
+            <p class="nodo-card__para">Para tanques, bebederos fijos y represas</p>
+            <ul class="nodo-card__lista">
+              <li><i data-lucide="waves"></i> Nivel de agua</li>
+              <li><i data-lucide="thermometer"></i> Temperatura del agua</li>
+              <li><i data-lucide="sun"></i> Índice de estrés por calor (THI aire)</li>
+            </ul>
+            <p class="nodo-card__pie">Ideal para conocer el estado de la reserva estratégica de agua de tu campo.</p>
+          </div>
 
-        <!-- NODO BOMBA -->
-        <div class="product-card"
-          style="background: var(--blanco); border-radius: var(--radius-lg); padding: 32px; border: .5px solid var(--calc-border); text-align: center;">
-          <img src="img/nodo-bomba.webp" alt="Nodo Bomba"
-            style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; margin-bottom: 24px;">
-          <h3 style="font-size: 24px; color: var(--verde-oscuro); margin-bottom: 8px;">Nodo Bomba</h3>
-          <p
-            style="color: var(--verde-vivo); font-weight: 600; margin-bottom: 16px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-            Para Bombas eléctricas</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 24px; text-align: left;">
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="waves" style="color: var(--verde-vivo); width: 18px;"></i> Flujo de agua</li>
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="zap" style="color: var(--verde-vivo); width: 18px;"></i> Consumo eléctrico</li>
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="arrow-down-circle" style="color: var(--verde-vivo); width: 18px;"></i> Nivel de pozo</li>
-          </ul>
-          <p
-            style="font-size: 14px; color: var(--gris); text-align: left; padding-top: 16px; border-top: 1px solid var(--calc-border);">
-            Control total sobre el funcionamiento y rendimiento de la bomba de extracción.</p>
-        </div>
+          <!-- NODO MÓVIL -->
+          <div class="nodo-card">
+            <h3 class="nodo-card__nombre">Nodo Móvil</h3>
+            <p class="nodo-card__para">Para tanques y bebederos móviles</p>
+            <ul class="nodo-card__lista">
+              <li><i data-lucide="waves"></i> Nivel de agua</li>
+              <li><i data-lucide="map-pin"></i> GPS integrado</li>
+              <li><i data-lucide="sun"></i> Índice de estrés por calor (THI aire)</li>
+              <li><i data-lucide="thermometer"></i> Temperatura del agua</li>
+            </ul>
+            <p class="nodo-card__pie">Pensado para acompañar la rotación de parcelas.</p>
+          </div>
 
-        <!-- NODO MOLINO -->
-        <div class="product-card"
-          style="background: var(--blanco); border-radius: var(--radius-lg); padding: 32px; border: .5px solid var(--calc-border); text-align: center;">
-          <img src="img/nodo-molino.webp" alt="Nodo Molino"
-            style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; margin-bottom: 24px;">
-          <h3 style="font-size: 24px; color: var(--verde-oscuro); margin-bottom: 8px;">Nodo Molino</h3>
-          <p
-            style="color: var(--verde-vivo); font-weight: 600; margin-bottom: 16px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
-            Para Molinos de Viento</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 24px; text-align: left;">
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="waves" style="color: var(--verde-vivo); width: 18px;"></i> Flujo de agua</li>
-            <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--gris);"><i
-                data-lucide="move-vertical" style="color: var(--verde-vivo); width: 18px;"></i> Carrera de varilla</li>
-          </ul>
-          <p
-            style="font-size: 14px; color: var(--gris); text-align: left; padding-top: 16px; border-top: 1px solid var(--calc-border);">
-            Supervisá la actividad del molino y asegurá el funcionamiento.</p>
+        </div>
+      </div>
+
+      <!-- Fila 2: la extracción -->
+      <div class="nodos-grupo reveal">
+        <div class="nodos-grupo__titulo"><i data-lucide="arrow-up-from-line"></i> El agua que sacás</div>
+        <div class="nodos-grid nodos-grid--3">
+
+          <!-- NODO BOMBA RED -->
+          <div class="nodo-card">
+            <span class="nodo-card__energia nodo-card__energia--red"><i data-lucide="plug-zap"></i> Energía de red</span>
+            <h3 class="nodo-card__nombre">Nodo Bomba Red</h3>
+            <p class="nodo-card__para">Para bombas eléctricas conectadas a la red</p>
+            <ul class="nodo-card__lista">
+              <li><i data-lucide="waves"></i> Flujo de agua</li>
+              <li><i data-lucide="zap"></i> Consumo eléctrico</li>
+              <li><i data-lucide="timer"></i> Horas de bombeo y arranques del día</li>
+            </ul>
+            <p class="nodo-card__pie">Control total sobre el funcionamiento y rendimiento de la bomba de extracción.</p>
+          </div>
+
+          <!-- NODO BOMBA SOLAR -->
+          <div class="nodo-card">
+            <span class="nodo-card__energia nodo-card__energia--solar"><i data-lucide="sun"></i> Energía solar</span>
+            <h3 class="nodo-card__nombre">Nodo Bomba Solar</h3>
+            <p class="nodo-card__para">Para bombas alimentadas con paneles solares</p>
+            <ul class="nodo-card__lista">
+              <li><i data-lucide="waves"></i> Flujo de agua</li>
+              <li><i data-lucide="zap"></i> Tensión y corriente del panel</li>
+              <li><i data-lucide="gauge"></i> Potencia y energía entregada a la bomba</li>
+              <li><i data-lucide="timer"></i> Horas de bombeo y arranques del día</li>
+            </ul>
+            <p class="nodo-card__pie">Comprobá si la bomba está trabajando con el sol que hay. /p>
+          </div>
+
+          <!-- NODO MOLINO -->
+          <div class="nodo-card">
+            <span class="nodo-card__energia nodo-card__energia--viento"><i data-lucide="wind"></i> Energía eólica</span>
+            <h3 class="nodo-card__nombre">Nodo Molino</h3>
+            <p class="nodo-card__para">Para molinos de viento</p>
+            <ul class="nodo-card__lista">
+              <li><i data-lucide="waves"></i> Flujo de agua</li>
+              <li><i data-lucide="move-vertical"></i> Carrera de varilla</li>
+            </ul>
+            <p class="nodo-card__pie">Supervisá la actividad del molino y asegurá el funcionamiento.</p>
+          </div>
+
         </div>
       </div>
 
@@ -244,7 +243,7 @@
             <div class="spec-item__dot"></div><span>Mapa en tiempo real con semáforo visual de los sensores</span>
           </div>
           <div class="spec-item">
-            <div class="spec-item__dot"></div><span>Alertas configurables por nivel mínimo o máximo</span>
+            <div class="spec-item__dot"></div><span>Alertas configurables por equipo: nivel, caudal, consumo y temperatura</span>
           </div>
           <div class="spec-item">
             <div class="spec-item__dot"></div><span>Historial de mediciones</span>
@@ -252,9 +251,14 @@
           <div class="spec-item">
             <div class="spec-item__dot"></div><span>Dashboard multi-campo y multi-nodo</span>
           </div>
-          
           <div class="spec-item">
             <div class="spec-item__dot"></div><span>Notificaciones por Telegram y/o mail</span>
+          </div>
+          <div class="spec-item">
+            <div class="spec-item__dot"></div><span>Resumen diario con el estado de cada equipo</span>
+          </div>
+          <div class="spec-item">
+            <div class="spec-item__dot"></div><span>Pausa de avisos mientras hacés mantenimiento</span>
           </div>
         </div>
       </div>
@@ -412,7 +416,6 @@
         <p class="cf-anim__cierre">
           Hoy, entre que se corta el agua y alguien se entera pasa en promedio
           <strong>la mitad del tiempo entre recorridas</strong>. Con AguaSens, <strong>15 minutos</strong>.
-          <a href="retorno.html">Calculá lo que eso vale en tu campo &rarr;</a>
         </p>
       </div>
       <div class="como-funciona__grid">
@@ -420,7 +423,7 @@
           <div class="paso__num">1</div>
           <div class="paso__icon"><i data-lucide="wrench" style="width:32px;height:32px;"></i></div>
           <h3>Instalación del nodo</h3>
-          <p>Se instala sobre el tanque, bebedero, represa o bomba.</p>
+          <p>Se instala sobre el tanque, bebedero, represa, bomba o molino.</p>
         </div>
         <div class="paso reveal">
           <div class="paso__num">2</div>
@@ -436,6 +439,44 @@
           <p>Desde el celular ves todos tus puntos de medición, recibís alertas y tomás decisiones con datos reales.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONECTIVIDAD ═══ -->
+  <section class="conectividad" id="conectividad">
+    <div class="container">
+      <div class="section-label reveal">Conectividad</div>
+      <h2 class="conectividad__heading reveal">Un gateway para todo el campo</h2>
+      <p class="conectividad__sub reveal">Los nodos no necesitan señal de celular: le hablan por radio LoRa al
+        gateway, que es el único equipo que necesita internet. Elegí el que mejor se adapta a tu campo.</p>
+
+      <div class="gw-grid reveal">
+        <div class="gw-card">
+          <div class="gw-card__icon"><i data-lucide="wifi"></i></div>
+          <h3>Gateway WiFi</h3>
+          <p>Para el casco o cualquier punto con WiFi. Recibe los datos de todos los nodos y los sube a la nube.</p>
+        </div>
+        <div class="gw-card">
+          <div class="gw-card__icon"><i data-lucide="radio-tower"></i></div>
+          <h3>Gateway 4G</h3>
+          <p>Para campos sin WiFi: se conecta por datos móviles y funciona con panel solar y batería, sin red
+            eléctrica.</p>
+        </div>
+        <div class="gw-card">
+          <div class="gw-card__icon"><i data-lucide="repeat-2"></i></div>
+          <h3>Repetidor</h3>
+          <p>Para aguadas lejanas o detrás de una loma: recibe los datos de los nodos y los retransmite al gateway.</p>
+        </div>
+      </div>
+
+      <ul class="conectividad__puntos reveal">
+        <li><i data-lucide="check"></i> Alcance de varios kilómetros por radio, según el terreno y la altura de las
+          antenas.</li>
+        <li><i data-lucide="check"></i> Si se corta internet, el gateway guarda las mediciones y las sube cuando
+          vuelve la conexión.</li>
+        <li><i data-lucide="check"></i> Antes de instalar, marcamos juntos en el <a href="cotizar.html">mapa de tu
+            campo</a> dónde va cada equipo para asegurar la cobertura.</li>
+      </ul>
     </div>
   </section>
 
@@ -490,7 +531,7 @@
             <span class="sensor-card__icon">🌡️</span>
             <div style="margin-bottom: 8px;"><span
                 style="display:inline-block; background:rgba(255,255,255,60); padding: 2px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Nodo
-                Móvil</span></div>
+                Fijo y Móvil</span></div>
             <h3 style="margin-top: 0;">Índice de estrés por calor bovino (THI)</h3>
             <p>Mide temperatura y humedad ambiente y calcula el estrés térmico del ganado en tiempo real. Recibís alerta
               antes de
@@ -533,7 +574,7 @@
             <span class="sensor-card__icon">🔄</span>
             <div style="margin-bottom: 8px;"><span
                 style="display:inline-block; background:rgba(255,255,255,60); padding: 2px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Nodo
-                Bomba y Molino</span></div>
+                Bomba Red, Bomba Solar y Molino</span></div>
             <h3 style="margin-top: 0;">Flujo de agua</h3>
             <p>Monitorea el caudal de extracción en tiempo real. Permite detectar obstrucciones o caídas de rendimiento
               antes de que falte agua en los tanques.</p>
@@ -543,19 +584,30 @@
             <span class="sensor-card__icon">⚡</span>
             <div style="margin-bottom: 8px;"><span
                 style="display:inline-block; background:rgba(255,255,255,60); padding: 2px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Nodo
-                Bomba</span></div>
+                Bomba Red</span></div>
             <h3 style="margin-top: 0;">Consumo de energía eléctrica</h3>
-            <p>Supervisa el amperaje y voltaje de la bomba. Previene quemaduras de motor por sobrecarga o trabajo en
+            <p>Supervisa el amperaje de la bomba. Previene quemaduras de motor por sobrecarga o trabajo en
               vacío.</p>
           </div>
 
           <div class="sensor-card reveal">
-            <span class="sensor-card__icon">🕳️</span>
+            <span class="sensor-card__icon">☀️</span>
             <div style="margin-bottom: 8px;"><span
                 style="display:inline-block; background:rgba(255,255,255,60); padding: 2px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Nodo
-                Bomba</span></div>
-            <h3 style="margin-top: 0;">Nivel de agua en perforación</h3>
-            <p>Mide la profundidad del nivel dinámico del pozo, asegurando que la bomba trabaje siempre sumergida.</p>
+                Bomba Solar</span></div>
+            <h3 style="margin-top: 0;">Rendimiento de la bomba solar</h3>
+            <p>Mide tensión y corriente del panel y calcula la potencia y la energía que recibe la bomba. Comparando
+              con la historia de la propia bomba se ve si está rindiendo menos de lo normal.</p>
+          </div>
+
+          <div class="sensor-card reveal">
+            <span class="sensor-card__icon">⏱️</span>
+            <div style="margin-bottom: 8px;"><span
+                style="display:inline-block; background:rgba(255,255,255,60); padding: 2px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Nodo
+                Bomba Red y Bomba Solar</span></div>
+            <h3 style="margin-top: 0;">Horas de bombeo y arranques</h3>
+            <p>Registra cuántas horas trabajó la bomba y cuántas veces arrancó en el día. Un cambio brusco respecto de
+              lo normal delata una pérdida, un flotante trabado o una bomba que no rinde.</p>
           </div>
 
           <div class="sensor-card reveal">
@@ -604,56 +656,51 @@
     </div>
   </section>
 
-  <!-- ═══ FEATURES ═══ -->
+  <!-- ═══ POR QUÉ AGUASENS ═══ -->
   <section class="features" id="features">
     <div class="container">
-      <div class="section-label reveal">Todo lo que resuelve</div>
+      <div class="section-label reveal">Por qué AguaSens</div>
       <div class="features__grid">
         <div class="feature reveal">
           <div class="feature__num">01</div>
           <div>
-            <h3>Nivel de agua en cada aguada</h3>
-            <p>Un nodo por tanque, bebedero o represa. Todos reportando de manera automática. Sabés el estado de cada
-              aguada sin moverte de donde estés.</p>
+            <h3>Datos al momento, no al día siguiente</h3>
+            <p>Cada nodo reporta cada pocos minutos. Te enterás de un problema el mismo día, no en la próxima recorrida.</p>
           </div>
         </div>
         <div class="feature reveal">
           <div class="feature__num">02</div>
           <div>
-            <h3>Alertas automáticas al celular</h3>
-            <p>Cuando el nivel baja del umbral configurado, recibís un mensaje al instante. Sin esperar al recorrido del
-              encargado.</p>
+            <h3>Sin señal de celular en las aguadas</h3>
+            <p>Los nodos se comunican por radio LoRa con el gateway, a varios kilómetros. Alcanza con tener internet en un solo punto del campo.</p>
           </div>
         </div>
         <div class="feature reveal">
           <div class="feature__num">03</div>
           <div>
-            <h3>Escalable</h3>
-            <p>Arrancá con 1 nodo y sumá más cuando quieras. Cada nodo nuevo se agrega al sistema.</p>
+            <h3>Avisos que sirven</h3>
+            <p>Por Telegram y mail, con umbrales para cada equipo. También te avisa si un equipo deja de reportar y cuando el problema se resolvió.</p>
           </div>
         </div>
         <div class="feature reveal">
           <div class="feature__num">04</div>
           <div>
             <h3>Detecta fallas antes del daño</h3>
-            <p>Bomba rota, flotante atascado, pérdida de agua, molino trabado... El sistema lo detecta en minutos, no
-              días.</p>
+            <p>Bomba rota, flotante atascado, pérdida de agua, molino trabado, bomba solar que no rinde... El sistema lo detecta en minutos, no días.</p>
           </div>
         </div>
         <div class="feature reveal">
           <div class="feature__num">05</div>
           <div>
-            <h3>Historial y mantenimiento preventivo</h3>
-            <p>Registro completo del consumo. Detecta tendencias anormales antes de que se conviertan en emergencias.
-            </p>
+            <h3>Crece con tu campo</h3>
+            <p>Arrancá con un nodo y sumá más cuando quieras, en uno o varios campos. Todo se ve en la misma app.</p>
           </div>
         </div>
         <div class="feature reveal">
           <div class="feature__num">06</div>
           <div>
-            <h3>Gestión desde cualquier lugar</h3>
-            <p>El productor que no reside en el campo tiene el mismo control que si estuviera ahí. Mapa, datos y alertas
-              en el celular.</p>
+            <h3>Hecho en Argentina</h3>
+            <p>Diseño y fabricación propios. Nosotros desarrollamos todo el sistema.</p>
           </div>
         </div>
       </div>
@@ -733,9 +780,8 @@
         <p style="font-size: 1.05rem; line-height: 1.85; color: var(--negro); margin-bottom: 28px;">
           En la práctica, un rodeo de invernada de <strong>100 novillos</strong> que bebe de un bebedero en lugar de
           una represa gana <strong>1.000 kg de carne más en un ciclo de engorde de 100 días</strong>
-          (100 g/día por animal, diferencia medida y publicada por Bica <em>et al.</em>, 2021). Al precio de
-          mercado del novillo (~ US$ 2,85/kg, SIO Carnes - Agosto 2026), eso son unos
-          <strong>US$ 2.850 por ciclo</strong>. AguaSens no instala el bebedero: avisa cuando dejó de funcionar,
+          (100 g/día por animal, diferencia medida y publicada por Bica <em>et al.</em>, 2021). AguaSens no
+          instala el bebedero: avisa cuando dejó de funcionar,
           que es justo cuando el animal vuelve a la represa o se queda sin agua.
         </p>
 
@@ -753,164 +799,13 @@
     </div>
   </section>
 
-
-
-
-
-  <!-- ═══ ANÁLISIS ECONÓMICO ═══ -->
-  <section class="economia" id="economia">
-    <div class="container">
-      <div class="section-label reveal">Análisis Económico</div>
-      <h2 class="economia__heading reveal">Hablemos en kilos de carne</h2>
-
-      <!-- BLOQUE: La inversión -->
-      <div class="eco-block reveal">
-        <div class="eco-block__label eco-block__label--verde">Lo que cuesta el sistema</div>
-        <div class="eco-cards">
-
-          <div class="eco-card">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Nodo Fijo</div>
-              <div class="eco-card__price">US$ 659<span style="font-size:0.55em;font-weight:400;">/unidad</span></div>
-              <div class="eco-card__equiv">Con sensor de nivel de agua y temperatura de agua<br><span class="eco-card__ref">Equivale a
-                  <strong>≈ 231 kg de novillo</strong> · Precio ~US$ 2,85/kg</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="eco-card">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Nodo Movil</div>
-              <div class="eco-card__price">US$ 729<span style="font-size:0.55em;font-weight:400;">/unidad</span></div>
-              <div class="eco-card__equiv">Con sensor de nivel de agua, temperatura de agua, estrés por calor y GPS<br><span
-                  class="eco-card__ref">Equivale a
-                  <strong>≈ 256 kg de novillo</strong> · Precio ~US$ 2,85/kg</span></div>
-            </div>
-          </div>
-
-          <div class="eco-card">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Nodo Bomba</div>
-              <div class="eco-card__price">US$ 529<span style="font-size:0.55em;font-weight:400;">/unidad</span></div>
-              <div class="eco-card__equiv">Con sensor de consumo eléctrico y flujo de agua <br><span
-                  class="eco-card__ref">Equivale a
-                  <strong>≈ 186 kg de novillo</strong> · Precio ~US$ 2,85/kg</span></div>
-            </div>
-          </div>
-
-          <div class="eco-card">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Nodo Molino</div>
-              <div class="eco-card__price">US$ 639<span style="font-size:0.55em;font-weight:400;">/unidad</span></div>
-              <div class="eco-card__equiv">Con sensor de flujo de agua y carrera de varilla<br><span
-                  class="eco-card__ref">Equivale a
-                  <strong>≈ 224 kg de novillo</strong> · Precio ~US$ 2,85/kg</span></div>
-            </div>
-          </div>
-
-          <div class="eco-card">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Gateway (concentrador)</div>
-              <div class="eco-card__price">US$ 449</div>
-              <div class="eco-card__equiv">Recibe datos de todos los nodos por radio<br><span class="eco-card__ref">Equivale a
-                  <strong>≈ 158 kg de novillo</strong> · Precio ~US$ 2,85/kg</span></div>
-            </div>
-          </div>
-
-          <div class="eco-card">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Suscripción mensual</div>
-              <div class="eco-card__price">US$ 29,99<span style="font-size:0.55em;font-weight:400;">/mes</span></div>
-              <div class="eco-card__equiv">Incluye app, alertas y dashboard para 1 nodo<br><span
-                  class="eco-card__ref">Cada nodo adicional: <strong>US$ 4,99/mes</strong></span></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- SEPARADOR -->
-      <div class="eco-vs reveal">VS.</div>
-
-      <!-- BLOQUE: Las pérdidas -->
-      <div class="eco-block reveal">
-        <div class="eco-block__label eco-block__label--rojo">Lo que cuesta NO tenerlo</div>
-        <div class="eco-cards">
-
-          <div class="eco-card eco-card--danger">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Bebedero sin agua vs. bebedero andando</div>
-              <div class="eco-card__price" style="color: #b03030;">US$ 855<span
-                  style="font-size:0.55em;font-weight:400;">/mes</span></div>
-              <div class="eco-card__equiv">100 animales que vuelven a la represa ganan <strong>100 g/día menos de
-                  GDP</strong>.<br>En 30 días: 300 kg menos de carne. A US$ 2,85/kg son US$ 855 al
-                mes.<br><span class="eco-card__ref">El sensor no pone el bebedero: avisa cuando dejó de
-                  andar, que es <strong>cuando el animal vuelve a la represa</strong>.</span></div>
-            </div>
-          </div>
-
-          <div class="eco-card eco-card--danger">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Pérdida de un solo animal</div>
-              <div class="eco-card__price" style="color: #b03030;">~US$ 1.140</div>
-              <div class="eco-card__equiv">Un novillo muerto por falla en bomba, empantanamiento o estrés
-                hídrico.<br><span class="eco-card__ref">Salvar <strong>1 solo animal</strong> cubre un Nodo Fijo más el
-                  Gateway (US$ 1.108), sin contar instalación ni suscripción.</span></div>
-            </div>
-          </div>
-
-          <div class="eco-card eco-card--danger">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Estrés térmico no detectado</div>
-              <div class="eco-card__price" style="color: #b03030;">−20%</div>
-              <div class="eco-card__equiv">De eficiencia de conversión alimenticia en verano sin detección
-                temprana.<br><span class="eco-card__ref">Sobre animales en engorde, equivale a semanas de crecimiento
-                  perdidas sin recuperación.</span></div>
-            </div>
-          </div>
-
-          <div class="eco-card eco-card--danger">
-            <div class="eco-card__body">
-              <div class="eco-card__title">Gastos en recorridas diarias</div>
-              <div class="eco-card__price" style="color: #b03030;">US$ 450<span style="font-size:0.55em;font-weight:400;">/mes</span></div>
-              <div class="eco-card__equiv">Combustible, desgaste de camioneta y horas de personal solo para revisar aguadas físicamente.<br><span class="eco-card__ref">Con este ahorro, <strong>1 Nodo Fijo se amortiza en el primer mes</strong>.</span></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- CONCLUSIÓN -->
-      <div class="eco-conclusion reveal">
-        <div class="eco-conclusion__inner">
-          <div>
-            <h3>La conclusión del número</h3>
-            <p>Una falla de bomba descubierta tarde, un verano sin monitoreo o animales que caminan de más pueden costar
-              más que la inversión total del sistema en cuestión de semanas. <strong>AguaSens no es un
-                gasto: es el seguro productivo más barato del campo.</strong></p>
-          </div>
-        </div>
-      </div>
-
-      <p class="reveal"
-        style="font-size: 0.85rem; color: var(--gris); text-align: center; margin-top: 20px; line-height: 1.6;">
-        Los valores de equipos no incluyen el costo de instalación: varía según la distancia, el tipo de
-        infraestructura y la cantidad de puntos a monitorear en cada campo. <a href="cotizar.html"
-          style="color: var(--verde-medio); font-weight: 600;">Pedí tu presupuesto</a> marcando tus aguadas en el mapa
-        y te lo cotizamos a medida. Y si querés ver si se paga en tu campo con tus propios números, usá la
-        <a href="retorno.html" style="color: var(--verde-medio); font-weight: 600;">calculadora de retorno</a>.
-      </p>
-
-    </div>
-  </section>
-
   <!-- ═══ HERRAMIENTAS ═══ -->
   <section class="tools" id="herramientas">
     <div class="container">
       <div class="section-label section-label--light reveal">Herramientas Interactivas</div>
       <h2 class="tools__heading reveal">Calculadoras para tu campo</h2>
-      <p class="tools__sub reveal">Usá nuestras herramientas de cálculo para dimensionar tus aguadas y analizar el
-        impacto de la distancia al agua en la producción.</p>
+      <p class="tools__sub reveal">Usá nuestras herramientas para dimensionar tus aguadas, analizar el impacto de
+        la distancia al agua en la producción y marcar en el mapa dónde va cada equipo.</p>
       <div class="tools__grid">
         <div class="tool-card reveal">
           <div class="tool-card__icon tool-card__icon--agua"><i data-lucide="droplet"></i></div>
@@ -933,13 +828,79 @@
             presupuesto a medida.</p>
           <a href="cotizar.html" class="btn">Pedir presupuesto →</a>
         </div>
-        <div class="tool-card reveal">
-          <div class="tool-card__icon tool-card__icon--roi"><i data-lucide="trending-up"></i></div>
-          <h3>Calculadora de Retorno</h3>
-          <p>Cargá tus recorridas y las fallas de agua que tuviste el último año, y calculá en cuánto tiempo se paga
-            el sistema en tu campo.</p>
-          <a href="retorno.html" class="btn">Calcular retorno →</a>
-        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VER FUNCIONANDO ═══ -->
+  <section class="ver" id="ver-funcionando">
+    <div class="container">
+      <div class="section-label reveal">Miralo funcionando</div>
+      <div class="ver__grid reveal">
+        <a class="ver-card" href="demo.html">
+          <div class="ver-card__icon"><i data-lucide="smartphone"></i></div>
+          <h3>Probá la app</h3>
+          <p>Recorré un campo simulado con los cinco nodos, abrí sus fichas y provocá una falla para ver cómo llega
+            el aviso al celular.</p>
+          <span class="ver-card__cta">Abrir el simulador →</span>
+        </a>
+        <a class="ver-card" href="https://www.instagram.com/aguasens/" target="_blank" rel="noopener">
+          <div class="ver-card__icon"><svg class="ig-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+          <h3>Instalaciones realizadas</h3>
+          <p>Visitanos en Instagram para más información.</p>
+          <span class="ver-card__cta">Ver en Instagram →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PREGUNTAS FRECUENTES ═══ -->
+  <section class="faq" id="preguntas">
+    <div class="container">
+      <div class="section-label reveal">Preguntas frecuentes</div>
+      <h2 class="faq__heading reveal">Lo que nos preguntan siempre</h2>
+      <div class="faq__lista reveal">
+        <details class="faq__item">
+          <summary>¿Necesito señal de celular en cada aguada?<i data-lucide="chevron-down"></i></summary>
+          <p>No. Los nodos se comunican por radio con el gateway. Solo el gateway necesita internet, por WiFi o por datos móviles (4G).</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Qué alcance tiene la radio?<i data-lucide="chevron-down"></i></summary>
+          <p>Depende del terreno y de la altura de las antenas: en campo abierto, varios kilómetros. Para aguadas muy lejanas o detrás de lomas se suma un repetidor. Antes de instalar lo planificamos sobre el mapa de tu campo.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Qué pasa si se corta internet?<i data-lucide="chevron-down"></i></summary>
+          <p>El gateway guarda las mediciones y las sube cuando vuelve la conexión, así que no se pierde el historial.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Y en días nublados?<i data-lucide="chevron-down"></i></summary>
+          <p>Los nodos funcionan con panel solar y batería, dimensionados para seguir midiendo varios días seguidos sin sol. Desde la app ves el estado de la batería de cada equipo.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Cómo me llegan los avisos?<i data-lucide="chevron-down"></i></summary>
+          <p>Por Telegram y/o mail, a las personas que elijas. Los umbrales se configuran para cada equipo, y también recibís un resumen diario con el estado de todo el campo.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Funciona con los equipos que ya tengo?<i data-lucide="chevron-down"></i></summary>
+          <p>Sí. Los nodos se montan sobre tanques, bebederos, represas, bombas y molinos existentes.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Quién lo instala?<i data-lucide="chevron-down"></i></summary>
+          <p>Nosotros, y lo coordinamos con vos: relevamos el campo, definimos dónde va cada equipo y dejamos el sistema funcionando.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Tiene costo mensual?<i data-lucide="chevron-down"></i></summary>
+          <p>Sí, un abono que cubre la app, los avisos y el guardado del historial. Armamos cada propuesta a medida: consultanos.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Puedo ver la app antes de decidir?<i data-lucide="chevron-down"></i></summary>
+          <p>Sí. En el <a href="demo.html">simulador de la app</a> recorrés un campo de ejemplo con los cinco nodos,
+            y podés provocar una falla para ver cómo llega el aviso.</p>
+        </details>
+        <details class="faq__item">
+          <summary>¿Puedo empezar con pocos nodos?<i data-lucide="chevron-down"></i></summary>
+          <p>Sí. Podés arrancar con un nodo y un gateway y sumar equipos cuando quieras.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -1000,7 +961,7 @@
       <div class="reveal" style="text-align: center; max-width: 600px; margin: 0 auto;">
         <div class="section-label section-label--light">Contacto</div>
         <h2 class="contact__heading">¿Cuántas aguadas tenés<br>sin monitoreo?</h2>
-        <p class="contact__sub">Escribinos y te ayudamos a dimensionar el sistema para tu campo. Sin compromiso.</p>
+        <p class="contact__sub">Escribinos y te ayudamos a dimensionar el sistema para tu campo.</p>
         <div class="contact__links" style="align-items: center; margin-top: 32px;">
           <a href="https://wa.me/5491168452098" target="_blank" class="btn btn--primary"
             style="font-size: 15px; padding: 16px 36px;">
@@ -1008,6 +969,12 @@
           </a>
           <a href="mailto:aguasens.ar@gmail.com" class="contact__link" style="margin-top: 16px;">
             <i data-lucide="mail" style="width: 20px; height: 20px;"></i> aguasens.ar@gmail.com
+          </a>
+          <a href="https://www.instagram.com/aguasens/" target="_blank" rel="noopener" class="contact__link">
+            <svg class="ig-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram
+          </a>
+          <a href="https://app.aguasens.com.ar" target="_blank" rel="noopener" class="contact__link">
+            <i data-lucide="log-in" style="width: 20px; height: 20px;"></i> Ingresar a la app (clientes)
           </a>
         </div>
       </div>
@@ -1024,6 +991,10 @@
         <span class="footer__tag">Agricultura 4.0</span>
         <span class="footer__tag">IoT Campo</span>
         <span class="footer__tag">LoRa</span>
+      </div>
+      <div class="footer__links">
+        <a href="https://www.instagram.com/aguasens/" target="_blank" rel="noopener" aria-label="Instagram de AguaSens"><svg class="ig-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://app.aguasens.com.ar" target="_blank" rel="noopener">Ingresar a la app</a>
       </div>
       <div class="footer__copy">© 2026 AguaSens&reg;. Todos los derechos reservados.</div>
     </div>
