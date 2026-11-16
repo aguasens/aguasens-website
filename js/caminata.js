@@ -24,23 +24,31 @@ const factoresCamino = {
 };
 
 const visitasSegunDistancia = (distancia_m, factorClima) => {
-  if (distancia_m <= 50) return 5 * factorClima;
   const visitas = (1 + 4 * Math.exp(-distancia_m / 600)) * factorClima;
   return Math.max(0.8, visitas);
 };
 
+// Puntos de referencia (Ohio State / Pinheiro Machado): 250 m → 5 %, 500 m → ~18 %, 1000 m → ~35 %.
+// Se interpola entre ellos: antes era una escalera y 249 m vs 251 m saltaba de 5 % a 10 %.
+const REDUCCION_AGUA = [[100, 0], [250, 5], [500, 18], [800, 27], [1000, 35], [1500, 45]];
 const reduccionConsumoAguaPct = (distancia_m) => {
-  if (distancia_m <= 100) return 0;
-  if (distancia_m <= 250) return 5;
-  if (distancia_m <= 400) return 10;
-  if (distancia_m <= 600) return 18;
-  if (distancia_m <= 800) return 25;
-  if (distancia_m <= 1200) return 35;
-  return 45;
+  const T = REDUCCION_AGUA;
+  if (distancia_m <= T[0][0]) return 0;
+  for (let i = 1; i < T.length; i++) {
+    if (distancia_m <= T[i][0]) {
+      const [d0, r0] = T[i - 1], [d1, r1] = T[i];
+      return r0 + (r1 - r0) * (distancia_m - d0) / (d1 - d0);
+    }
+  }
+  return T[T.length - 1][1];
 };
 
-// Estado UI
-let bebederos = [{x: 0.5, y: 0.5}];
+// Estado: el lote es un polígono [lat,lng] dibujado sobre el satélite; los bebederos, puntos [lat,lng].
+// Arranca vacío: el usuario dibuja su lote.
+let lote = [];
+let bebederos = [];
+let modo = 'lote';          // 'bebedero' | 'lote'
+let borrador = [];              // vértices mientras se dibuja
 
 // DOM Helpers
 const d = (id) => document.getElementById(id);
@@ -52,88 +60,236 @@ const fmtMoneyShort = (n) => {
   return '$' + fmt(n, 0);
 };
 
-// SVG Interaction
-const svgMap = d('svg_map');
-svgMap.addEventListener('click', (e) => {
-  const rect = svgMap.getBoundingClientRect();
-  const x = (e.clientX - rect.left) / rect.width;
-  const y = (e.clientY - rect.top) / rect.height;
-  if (x >= 0 && x <= 1 && y >= 0 && y <= 1) {
-    bebederos.push({x, y});
-    calculate();
+/* ─── Geometría: plano local en metros alrededor del lote ─── */
+function plano(ref) {
+  const kx = 111320 * Math.cos(ref[0] * Math.PI / 180), ky = 110540;
+  return {
+    a: (p) => [(p[1] - ref[1]) * kx, (p[0] - ref[0]) * ky],
+    ll: (x, y) => [ref[0] + y / ky, ref[1] + x / kx],
+  };
+}
+function dentro(x, y, poli) {
+  let r = false;
+  for (let i = 0, j = poli.length - 1; i < poli.length; j = i++) {
+    const [xi, yi] = poli[i], [xj, yj] = poli[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) r = !r;
   }
-});
-
-function removeBebedero(idx, e) {
-  e.stopPropagation();
-  bebederos.splice(idx, 1);
-  calculate();
+  return r;
+}
+function areaM2(poli) {
+  let s = 0;
+  for (let i = 0, j = poli.length - 1; i < poli.length; j = i++) s += poli[j][0] * poli[i][1] - poli[i][0] * poli[j][1];
+  return Math.abs(s) / 2;
+}
+// Celdas dentro del lote (centro de cada una) con su distancia al bebedero más cercano
+function celdasDelLote() {
+  const P = plano(lote[0]), poli = lote.map(P.a);
+  const xs = poli.map(p => p[0]), ys = poli.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const area = areaM2(poli);
+  const lado = Math.max(4, Math.sqrt(area / 1100));
+  const beb = bebederos.map(P.a), celdas = [];
+  for (let x = x0 + lado / 2; x < x1; x += lado)
+    for (let y = y0 + lado / 2; y < y1; y += lado) {
+      if (!dentro(x, y, poli)) continue;
+      let min = Infinity;
+      for (const b of beb) { const dd = Math.hypot(x - b[0], y - b[1]); if (dd < min) min = dd; }
+      celdas.push({ x, y, d: min });
+    }
+  return { P, poli, area, lado, celdas };
 }
 
-// Global scope for HTML onclick
-window.setPos = function(type) {
-  if(type===0) bebederos = [];
-  if(type===1) bebederos = [{x:0.5,y:0.5}];
-  if(type===2) bebederos = [{x:0.05,y:0.05}];
-  if(type===3) bebederos = [{x:0.25,y:0.5},{x:0.75,y:0.5}];
-  if(type===4) bebederos = [{x:0.25,y:0.25},{x:0.75,y:0.25},{x:0.25,y:0.75},{x:0.75,y:0.75}];
-  calculate();
-}
+/* ─── Mapa satelital ─── */
+const mapa = L.map('lote_map', { doubleClickZoom: false, zoomSnap: 0.25, maxZoom: 18 });
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri', maxZoom: 18, maxNativeZoom: 17,   // en el campo no hay foto más allá de z17 ("Map data not yet available")
+}).addTo(mapa);
+// rutas y caminos, para ubicar el campo
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 18, opacity: 0.85,
+}).addTo(mapa);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 18, opacity: 0.9,
+}).addTo(mapa);
+const lienzo = L.canvas({ padding: 0.3 });
+const capaCalor = L.layerGroup().addTo(mapa);
+const capaLote = L.layerGroup().addTo(mapa);
+const capaBeb = L.layerGroup().addTo(mapa);
+mapa.setView([-35.6, -61.0], 6);   // región pampeana; el usuario busca su campo
 
-function heatColor(dist, maxD) {
-  const t = Math.min(1, dist / Math.max(maxD, 1));
-  if (t < 0.33) {
-    const k = t / 0.33;
-    return `rgba(25, 199, 163, ${0.20 + k*0.30})`;
-  } else if (t < 0.66) {
-    const k = (t - 0.33) / 0.33;
-    return `rgba(255, 181, 71, ${0.40 + k*0.20})`;
-  } else {
-    const k = (t - 0.66) / 0.34;
-    return `rgba(255, 107, 107, ${0.50 + k*0.40})`;
-  }
-}
+const iconoVertice = (primero) => L.divIcon({ className: '', html: `<div class="lote-vertice${primero ? ' lote-vertice--primero' : ''}"></div>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+const iconoBeb = L.divIcon({ className: '', html: '<div class="lote-beb"><span></span></div>', iconSize: [30, 30], iconAnchor: [15, 15] });
 
-function renderMap(largoLote, anchoLote, maxDistancia) {
-  const grid = 16;
-  let svg = '';
-  
-  // Heatmap rects
-  for (let i = 0; i < grid; i++) {
-    for (let j = 0; j < grid; j++) {
-      const px = (i / (grid-1)) * largoLote;
-      const py = (j / (grid-1)) * anchoLote;
-      let minD = Infinity;
-      bebederos.forEach(b => {
-        const d = Math.sqrt(Math.pow(px - b.x*largoLote, 2) + Math.pow(py - b.y*anchoLote, 2));
-        if (d < minD) minD = d;
-      });
-      const dVal = bebederos.length > 0 ? minD : 0;
-      const cellW = 100 / grid;
-      const cellH = 60 / grid;
-      svg += `<rect x="${i*cellW}" y="${j*cellH}" width="${cellW+0.1}" height="${cellH+0.1}" fill="${heatColor(dVal, maxDistancia)}"></rect>`;
+// Escala fija: verde hasta 100 m, amarillo en 250 m (la distancia máxima recomendada), rojo desde 500 m.
+const ESCALA = [[0, [25, 199, 163]], [100, [25, 199, 163]], [250, [255, 196, 71]], [500, [255, 80, 80]]];
+function heatColor(dist) {
+  let c = ESCALA[ESCALA.length - 1][1];
+  for (let i = 1; i < ESCALA.length; i++) {
+    if (dist <= ESCALA[i][0]) {
+      const [d0, c0] = ESCALA[i - 1], [d1, c1] = ESCALA[i], t = (dist - d0) / (d1 - d0);
+      c = c0.map((v, k) => Math.round(v + (c1[k] - v) * t));
+      break;
     }
   }
-
-  // Grid lines
-  for(let i=1; i<10; i++) svg += `<line x1="${i*10}" y1="0" x2="${i*10}" y2="60" stroke="#152238" stroke-width="0.05" opacity="0.1"></line>`;
-  for(let i=1; i<6; i++) svg += `<line x1="0" y1="${i*10}" x2="100" y2="${i*10}" stroke="#152238" stroke-width="0.05" opacity="0.1"></line>`;
-
-  // Bebederos
-  bebederos.forEach((b, idx) => {
-    svg += `<g ondblclick="removeBebedero(${idx}, event)" style="cursor: pointer;">
-              <circle cx="${b.x*100}" cy="${b.y*60}" r="3.5" fill="var(--c-deep)" stroke="white" stroke-width="0.8"></circle>
-              <circle cx="${b.x*100}" cy="${b.y*60}" r="1.5" fill="var(--c-accent)"></circle>
-              <circle cx="${b.x*100}" cy="${b.y*60}" r="5.5" fill="none" stroke="var(--c-deep)" stroke-width="0.25" opacity="0.5"></circle>
-            </g>`;
-  });
-
-  svgMap.innerHTML = svg;
+  return [`rgb(${c.join(',')})`, 0.5];
 }
 
+let poligonoLote = null;
+function dibujarLote() {
+  capaLote.clearLayers(); poligonoLote = null;
+  if (modo === 'lote') {
+    if (borrador.length > 1) L.polyline(borrador, { color: '#fff', weight: 2.5, dashArray: '6 6', interactive: false }).addTo(capaLote);
+    borrador.forEach((p, i) => {
+      const m = L.marker(p, { icon: iconoVertice(i === 0), zIndexOffset: 1000 }).addTo(capaLote);
+      if (i === 0) m.on('click', (e) => { L.DomEvent.stop(e); if (borrador.length >= 3) cerrarLote(); });
+    });
+    return;
+  }
+  if (lote.length < 3) return;
+  poligonoLote = L.polygon(lote, { color: '#fff', weight: 2.5, fill: false, interactive: false }).addTo(capaLote);
+  lote.forEach((p, i) => {
+    const m = L.marker(p, { icon: iconoVertice(false), draggable: true, zIndexOffset: 500 }).addTo(capaLote);
+    m.on('drag', (e) => { const q = e.target.getLatLng(); lote[i] = [q.lat, q.lng]; if (poligonoLote) poligonoLote.setLatLngs(lote); programar(); });
+    m.on('dragend', () => calculate());
+  });
+}
+
+function dibujarBebederos() {
+  capaBeb.clearLayers();
+  bebederos.forEach((p, i) => {
+    const m = L.marker(p, { icon: iconoBeb, draggable: true, zIndexOffset: 2000 }).addTo(capaBeb);
+    m.on('drag', (e) => { const q = e.target.getLatLng(); bebederos[i] = [q.lat, q.lng]; programar(); });
+    m.on('dragend', () => calculate());
+    const quitar = document.createElement('button');
+    quitar.type = 'button'; quitar.className = 'lote-quitar'; quitar.textContent = 'Quitar bebedero';
+    quitar.addEventListener('click', () => { bebederos.splice(i, 1); mapa.closePopup(); dibujarBebederos(); calculate(); });
+    m.bindPopup(quitar, { closeButton: false, offset: [0, -10] });
+  });
+}
+
+function dibujarCalor(info) {
+  capaCalor.clearLayers();
+  if (!info || !bebederos.length) return;
+  const h = info.lado / 2;
+  for (const c of info.celdas) {
+    const [col, op] = heatColor(c.d);
+    L.rectangle([info.P.ll(c.x - h, c.y - h), info.P.ll(c.x + h, c.y + h)],
+      { renderer: lienzo, stroke: false, fillColor: col, fillOpacity: op, interactive: false }).addTo(capaCalor);
+  }
+}
+
+// Mientras se arrastra algo, recalcular a lo sumo una vez por cuadro
+let enCola = false;
+function programar() { if (enCola) return; enCola = true; requestAnimationFrame(() => { enCola = false; calculate(); }); }
+
+/* ─── Modos: dibujar el lote o marcar bebederos ─── */
+const AYUDA = {
+  bebedero: 'Tocá el mapa para agregar un bebedero. Arrastralo para moverlo, o tocalo para quitarlo. Las esquinas blancas del lote también se pueden mover.',
+  lote: 'Buscá tu campo y acercate. Después tocá cada esquina del lote siguiendo el alambrado; para terminar, tocá el primer punto o "Cerrar lote".',
+};
+function setModo(m) {
+  modo = m;
+  d('m_lote').classList.toggle('activo', m === 'lote');
+  d('m_beb').classList.toggle('activo', m === 'bebedero');
+  d('lote_dibujo').hidden = m !== 'lote';
+  d('lote_ayuda_txt').textContent = AYUDA[m];
+  d('lote_map').classList.toggle('dibujando', m === 'lote');
+  // mientras se dibuja, el calor y los bebederos del lote anterior estorban: se esconden
+  [capaCalor, capaBeb].forEach(c => m === 'lote' ? mapa.removeLayer(c) : mapa.addLayer(c));
+  if (m === 'lote') actualizarBorrador(); else dibujarLote();
+}
+function actualizarBorrador() {
+  const n = borrador.length;
+  d('lote_dibujo_txt').textContent = n === 0 ? (mapa.getZoom() < 13 ? 'Buscá tu campo y acercate' : 'Tocá la primera esquina') : `${n} esquina${n > 1 ? 's' : ''} marcada${n > 1 ? 's' : ''}`;
+  d('lote_cerrar').disabled = n < 3;
+  dibujarLote();
+}
+function cerrarLote() {
+  lote = borrador.slice(); borrador = [];
+  // los bebederos del lote anterior que quedan lejos del nuevo se descartan
+  // (se conservan los de adentro y los que están sobre el alambrado, hasta 30 m afuera)
+  const P = plano(lote[0]), poli = lote.map(P.a);
+  const xs = poli.map(q => q[0]), ys = poli.map(q => q[1]);
+  bebederos = bebederos.filter((b) => {
+    const [x, y] = P.a(b);
+    return dentro(x, y, poli) || (x > Math.min(...xs) - 30 && x < Math.max(...xs) + 30 && y > Math.min(...ys) - 30 && y < Math.max(...ys) + 30);
+  });
+  setModo('bebedero');
+  mapa.fitBounds(lote, { padding: [30, 30], maxZoom: 17 });
+  dibujarBebederos(); calculate();
+}
+d('m_lote').addEventListener('click', () => { borrador = []; setModo('lote'); });
+d('m_beb').addEventListener('click', () => { borrador = []; setModo('bebedero'); });
+d('lote_cerrar').addEventListener('click', cerrarLote);
+d('lote_cancelar').addEventListener('click', () => { borrador = []; setModo('bebedero'); });
+d('m_loc').addEventListener('click', () => {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition((pos) => mapa.flyTo([pos.coords.latitude, pos.coords.longitude], 15), () => {}, { enableHighAccuracy: true, timeout: 10000 });
+});
+
+mapa.on('zoomend', () => { if (modo === 'lote' && !borrador.length) actualizarBorrador(); });
+mapa.on('click', (e) => {
+  const p = [e.latlng.lat, e.latlng.lng];
+  if (modo === 'lote') {
+    if (mapa.getZoom() < 13) {
+      d('lote_dibujo_txt').textContent = 'Acercate más a tu campo para dibujar (buscalo arriba o usá el zoom)';
+      return;
+    }
+    borrador.push(p); actualizarBorrador(); return;
+  }
+  bebederos.push(p); dibujarBebederos(); calculate();
+});
+
+/* ─── Buscador (Nominatim/OSM, igual que el mapa de instalación) ─── */
+(() => {
+  const inp = d('lote_buscar'), res = d('lote_buscar_res'); let t = null, vuelta = 0;
+  async function buscar(q) {
+    clearTimeout(t);
+    const yo = ++vuelta;   // una respuesta vieja no reabre la lista
+    if (!q || q.length < 3) { res.classList.remove('open'); return; }
+    try {
+      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=ar&q=${encodeURIComponent(q)}`, { headers: { 'Accept-Language': 'es' } });
+      const data = await r.json();
+      if (yo !== vuelta) return;
+      res.innerHTML = data.length ? '' : '<div>Sin resultados</div>';
+      data.forEach((it) => {
+        const div = document.createElement('div'); div.textContent = it.display_name;
+        div.addEventListener('click', () => { vuelta++; clearTimeout(t); mapa.flyTo([+it.lat, +it.lon], 15); res.classList.remove('open'); });
+        res.appendChild(div);
+      });
+      res.classList.add('open');
+    } catch { /* sin geocoder: se navega a mano */ }
+  }
+  inp.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => buscar(inp.value.trim()), 450); });
+  inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); buscar(inp.value.trim()); } });
+  d('lote_buscar_btn').addEventListener('click', () => buscar(inp.value.trim()));
+  document.addEventListener('click', (e) => { if (!e.target.closest('.lote-buscar')) res.classList.remove('open'); });
+})();
+
+// Ubicaciones automáticas, relativas al lote dibujado (si un punto cae afuera, se corre hacia el centro)
+window.setPos = function(type) {
+  if (type === 0) { bebederos = []; dibujarBebederos(); calculate(); return; }
+  if (lote.length < 3) return;
+  const P = plano(lote[0]), poli = lote.map(P.a);
+  const xs = poli.map(p => p[0]), ys = poli.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const ancho = x1 - x0, alto = y1 - y0;
+  let cx = 0, cy = 0; poli.forEach(p => { cx += p[0]; cy += p[1]; }); cx /= poli.length; cy /= poli.length;
+  if (!dentro(cx, cy, poli)) { cx = x0 + ancho / 2; cy = y0 + alto / 2; }
+  const largoEnX = ancho >= alto;
+  let fr = [];
+  if (type === 1) fr = [null];
+  if (type === 3) fr = largoEnX ? [[.25, .5], [.75, .5]] : [[.5, .25], [.5, .75]];
+  if (type === 4) fr = [[.25, .25], [.75, .25], [.25, .75], [.75, .75]];
+  bebederos = fr.map((f) => {
+    let x = f ? x0 + f[0] * ancho : cx, y = f ? y0 + f[1] * alto : cy;
+    for (let k = 0; k < 20 && !dentro(x, y, poli); k++) { x += (cx - x) * 0.25; y += (cy - y) * 0.25; }
+    return P.ll(x, y);
+  });
+  dibujarBebederos(); calculate();
+};
+
 function calculate() {
-  const largoLote = Math.max(50, v('in_largo'));
-  const anchoLote = Math.max(50, v('in_ancho'));
   const cantidadAnimales = v('in_animales');
   const cat = categorias[d('in_categoria').value];
   const clima = situacionesClima[d('in_clima').value];
@@ -142,16 +298,18 @@ function calculate() {
   const pendiente = v('in_pendiente');
   const factCamino = factoresCamino[d('in_camino').value].factor;
 
-  const areaHa = (largoLote * anchoLote) / 10000;
+  const hayLote = lote.length >= 3;
+  const info = hayLote ? celdasDelLote() : null;
+  const areaHa = info ? info.area / 10000 : 0;
   d('out_area').innerText = `${fmt(areaHa, 1)} ha`;
   d('out_bebederos_cant').innerText = bebederos.length;
 
-  d('map_container').style.paddingBottom = `${Math.min(60, (anchoLote/largoLote)*100)}%`;
-
-  if (bebederos.length === 0) {
+  if (!hayLote || !bebederos.length || !info.celdas.length) {
+    d('sin_titulo').innerText = hayLote ? 'Ahora marcá los bebederos' : 'Empezá dibujando tu lote';
+    d('sin_txt').innerText = hayLote ? 'Tocá en el mapa dónde está (o dónde iría) el bebedero.' : 'Buscá tu campo en el mapa y marcá las esquinas del lote.';
     d('card_sin_bebederos').style.display = 'block';
     d('resultados_wrap').style.display = 'none';
-    renderMap(largoLote, anchoLote, 1);
+    dibujarCalor(null);
     d('out_max_d').innerText = '0';
     return;
   }
@@ -159,28 +317,12 @@ function calculate() {
   d('card_sin_bebederos').style.display = 'none';
   d('resultados_wrap').style.display = 'block';
 
-  // Distancias
-  const grid = 30;
-  let sumaDistancias = 0;
-  let maxDistancia = 0;
-  for (let i = 0; i < grid; i++) {
-    for (let j = 0; j < grid; j++) {
-      const px = (i / (grid-1)) * largoLote;
-      const py = (j / (grid-1)) * anchoLote;
-      let minD = Infinity;
-      bebederos.forEach(b => {
-        const bx = b.x * largoLote;
-        const by = b.y * anchoLote;
-        const d_m = Math.sqrt(Math.pow(px-bx, 2) + Math.pow(py-by, 2));
-        if (d_m < minD) minD = d_m;
-      });
-      sumaDistancias += minD;
-      if (minD > maxDistancia) maxDistancia = minD;
-    }
-  }
-  const distanciaPromedio = sumaDistancias / (grid*grid);
-  
-  renderMap(largoLote, anchoLote, maxDistancia);
+  // Distancias: de cada punto del lote al bebedero más cercano
+  let sumaDistancias = 0, maxDistancia = 0;
+  for (const c of info.celdas) { sumaDistancias += c.d; if (c.d > maxDistancia) maxDistancia = c.d; }
+  const distanciaPromedio = sumaDistancias / info.celdas.length;
+
+  dibujarCalor(info);
 
   // Visitas y Caminata
   const visitasPorDia = visitasSegunDistancia(distanciaPromedio, clima.factorVisitasBase);
@@ -212,7 +354,7 @@ function calculate() {
 
   // Energía y Pérdidas
   const elevacionPorKm = pendiente / 100 * 1000;
-  const energiaPorKm = 0.00045 + (0.0067 * (elevacionPorKm / 1000));
+  const energiaPorKm = 0.00045 + (0.0067 * (elevacionPorKm / 1000) * 0.5);   // la mitad del camino es subida
   const energiaCaminataMcalAnimalDia = caminataDiariaKm * cat.pesoProm * energiaPorKm;
   const kgPerdidosEnergiaCaminata = energiaCaminataMcalAnimalDia / 6.5; // 6.5 Mcal = 1kg GDP
   
@@ -233,7 +375,7 @@ function calculate() {
   const kgMSExtraPorAnimalDia = (energiaCaminataMcalAnimalDia + (cat.gdpObjetivo > 0 ? (kgPerdidosPorReduccionMS + kgPerdidosPorTiempo) * 6.5 : 0)) / 2.5;
   const comidaExtraPct = (kgMSExtraPorAnimalDia / consumoMSBasal) * 100;
 
-  if (cat.gdpObjetivo > 0 && comidaExtraPct > 0) {
+  if (comidaExtraPct > 0.05) {
     d('card_comida').style.display = 'block';
     d('out_comida_pct').innerText = `${fmt(comidaExtraPct, 1)}%`;
     d('out_ms_basal').innerText = `${fmt(consumoMSBasal, 1)} kg/día`;
@@ -277,8 +419,9 @@ function calculate() {
   }
 
   let rec = '';
-  if (distanciaPromedio < 200) rec = '✓ Distancia promedio óptima. Los animales acceden al agua sin esfuerzo significativo.';
-  else if (distanciaPromedio < 400) rec = '⚠ Distancia dentro del límite recomendado (250m). Evaluar redistribución para reducir pérdidas marginales.';
+  if (distanciaPromedio < 150) rec = '✓ Distancia promedio óptima. Los animales acceden al agua sin esfuerzo significativo.';
+  else if (distanciaPromedio <= 250) rec = '✓ Distancia dentro del límite recomendado (250 m). Pérdidas chicas; revisá las zonas amarillas o rojas del mapa.';
+  else if (distanciaPromedio < 400) rec = '⚠ Distancia por encima de los 250 m recomendados. Evaluar redistribuir o sumar un bebedero para reducir pérdidas.';
   else if (distanciaPromedio < 700) rec = '⚠ Distancia excesiva. Caída de visitas y consumo de agua. Subdividir el lote o agregar puntos de agua.';
   else rec = '✗ Caminata crítica. Pérdida significativa de GDP por menor ingesta de agua y mayor gasto energético. Implementar aguadas distribuidas.';
   d('out_recomendacion').innerText = rec;
@@ -288,8 +431,6 @@ function calculate() {
   d('ref_clima_factor').innerText = fmt(clima.factorVisitasBase, 1);
   d('ref_visitas').innerText = `${fmt(visitasPorDia, 1)}/día`;
 
-  // Reactivate lucide icons if needed
-  if (window.lucide) lucide.createIcons();
 }
 
 // Bind events
@@ -300,5 +441,6 @@ document.querySelectorAll('.calc-input').forEach(el => {
 
 // Init
 window.addEventListener('DOMContentLoaded', () => {
+  setModo('lote');
   calculate();
 });

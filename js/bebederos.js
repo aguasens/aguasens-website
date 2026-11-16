@@ -74,62 +74,88 @@ const fmtMoneyShort = (n) => {
   return 'US$ ' + fmt(n, 0);
 };
 
-// SVG render
+// SVG render — vista superior: el bebedero y una cabeza de vaca (Angus, vista desde arriba)
+// por cada animal que entra a tomar al mismo tiempo, con el hocico sobre el borde.
+const VACA_ARRIBA = `<linearGradient id="vacaLomo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#26262b"/><stop offset=".7" stop-color="#26262b"/><stop offset="1" stop-color="#26262b" stop-opacity="0"/>
+    </linearGradient>
+    <symbol id="vacaArriba" viewBox="-14 -2 28 54" overflow="visible">
+    <ellipse cx="1.5" cy="32" rx="13" ry="18" fill="#000" opacity=".12"/>
+    <path d="M-6 17 C-7 22 -12 26 -12.5 33 C-13 41 -11 47 -9.5 52 L9.5 52 C11 47 13 41 12.5 33 C12 26 7 22 6 17 Z" fill="url(#vacaLomo)"/>
+    <path d="M0 23 V48" stroke="#3b3b42" stroke-width="1" stroke-linecap="round"/>
+    <ellipse cx="-8.6" cy="15.2" rx="4.4" ry="2.1" transform="rotate(-14 -8.6 15.2)" fill="#1f1f23"/>
+    <ellipse cx="8.6" cy="15.2" rx="4.4" ry="2.1" transform="rotate(14 8.6 15.2)" fill="#1f1f23"/>
+    <ellipse cx="-8.9" cy="15.3" rx="2.6" ry="1" transform="rotate(-14 -8.9 15.3)" fill="#6d5c54"/>
+    <ellipse cx="8.9" cy="15.3" rx="2.6" ry="1" transform="rotate(14 8.9 15.3)" fill="#6d5c54"/>
+    <path d="M-3.6 1 C-3.6 -0.5 3.6 -0.5 3.6 1 L5.8 12 C6.4 16.2 4.6 19.6 0 19.6 C-4.6 19.6 -6.4 16.2 -5.8 12 Z" fill="#1c1c20"/>
+    <path d="M-2.4 9 C-1 7.6 1 7.6 2.4 9" stroke="#3b3b42" stroke-width=".7" fill="none"/>
+    <ellipse cx="0" cy="2.6" rx="3.1" ry="2.3" fill="#4a4245"/>
+    <path d="M-1.2 1.8 v1.5 M1.2 1.8 v1.5" stroke="#18181b" stroke-width=".8" stroke-linecap="round"/>
+  </symbol>`;
+const ESCALA_VACA = 0.5;
+
+// x,y = punta del hocico; (dx,dy) = hacia dónde mira (hacia el agua)
+function vaca(x, y, dx, dy) {
+  const rot = Math.atan2(dy, dx) * 180 / Math.PI + 90;   // el símbolo mira hacia arriba
+  return `<use href="#vacaArriba" width="28" height="54" x="-14" y="-2" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(1)}) scale(${ESCALA_VACA})"/>`;
+}
+
 function renderSVG(largo, ancho, diametro, acceso, animalesQueEntran) {
   const W = 320, H = 180, cx = W/2, cy = H/2;
-  let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;">`;
-  
+  let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;" role="img" aria-label="Vista superior del bebedero con los animales tomando"><defs>${VACA_ARRIBA}</defs>`;
+
   const cant = Math.min(animalesQueEntran, 26);
-  const animales = [];
+  const vacas = [];
 
   if (tipoBebedero === 'circular') {
     const r = Math.min(W, H) * 0.30;
     const cantC = Math.min(animalesQueEntran, 24);
-    for(let i=0; i<cantC; i++) {
-      const ang = (i / cantC) * Math.PI * 2;
-      animales.push({ x: cx + Math.cos(ang) * (r + 18), y: cy + Math.sin(ang) * (r + 18) });
-    }
-    animales.forEach(a => {
-      svg += `<g><circle cx="${a.x}" cy="${a.y}" r="7" fill="var(--c-primary)" opacity="0.85" /><circle cx="${a.x-2}" cy="${a.y-2}" r="1.5" fill="white" /></g>`;
-    });
+    svg += `<circle cx="${cx}" cy="${cy}" r="${r + 3}" fill="#9eacb9"/>`;
     svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#aac8eb" stroke="var(--c-deep)" stroke-width="2.5" />`;
     svg += `<circle cx="${cx}" cy="${cy}" r="${r-5}" fill="none" stroke="var(--c-deep)" stroke-width="0.8" opacity="0.4" stroke-dasharray="3 4" />`;
+    for (let i = 0; i < cantC; i++) {
+      const ang = (i / cantC) * Math.PI * 2 - Math.PI / 2;
+      const ux = Math.cos(ang), uy = Math.sin(ang);
+      vacas.push(vaca(cx + ux * (r - 1), cy + uy * (r - 1), -ux, -uy));
+    }
+    svg += vacas.join('');
     svg += `<text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="13" font-family="Barlow" fill="var(--c-deep)" font-weight="700">⌀ ${diametro} m</text>`;
-    svg += `<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="9" font-family="monospace" fill="var(--c-muted)">${(Math.PI*diametro).toFixed(2)} m borde</text>`;
+    svg += `<text x="${cx}" y="${H-4}" text-anchor="middle" font-size="9" font-family="monospace" fill="var(--c-muted)">${(Math.PI*diametro).toFixed(2)} m borde</text>`;
   } else {
     const aspect = largo / Math.max(ancho, 0.1);
     const maxW = 220, maxH = 70;
     let bw = maxW, bh = maxW / aspect;
     if (bh > maxH) { bh = maxH; bw = maxH * aspect; }
     const bx = (W - bw) / 2, by = (H - bh) / 2;
-    
+    const arriba = (n) => { for (let i = 0; i < n; i++) vacas.push(vaca(bx + (bw/(n+1))*(i+1), by + 1, 0, 1)); };
+    const abajo  = (n) => { for (let i = 0; i < n; i++) vacas.push(vaca(bx + (bw/(n+1))*(i+1), by + bh - 1, 0, -1)); };
+
     if (acceso === 'un_lado_largo') {
-      for (let i=0; i<cant; i++) animales.push({ x: bx + (bw/(cant+1))*(i+1), y: by - 13 });
+      arriba(cant);
     } else if (acceso === 'dos_lados_largos') {
       const mitad = Math.ceil(cant/2);
-      for (let i=0; i<mitad; i++) animales.push({ x: bx + (bw/(mitad+1))*(i+1), y: by - 13 });
-      for (let i=0; i<cant-mitad; i++) animales.push({ x: bx + (bw/(cant-mitad+1))*(i+1), y: by + bh + 13 });
+      arriba(mitad); abajo(cant - mitad);
     } else {
-      const cuarto = Math.ceil(cant/4);
-      for (let i=0; i<cuarto; i++) {
-        animales.push({ x: bx + (bw/(cuarto+1))*(i+1), y: by - 13 });
-        animales.push({ x: bx + (bw/(cuarto+1))*(i+1), y: by + bh + 13 });
-      }
-      for (let i=0; i<Math.ceil(cuarto/2); i++) {
-        animales.push({ x: bx - 13, y: by + (bh/(Math.ceil(cuarto/2)+1))*(i+1) });
-        animales.push({ x: bx + bw + 13, y: by + (bh/(Math.ceil(cuarto/2)+1))*(i+1) });
+      // se reparten según el largo de cada lado: en las cabeceras entran pocas
+      // (y nunca más de las que caben dibujadas sin encimarse)
+      const enCabecera = Math.min(Math.round(cant * ancho / (2 * (largo + ancho))), Math.max(1, Math.floor(bh / 15)));
+      const resto = cant - 2 * enCabecera;
+      arriba(Math.ceil(resto / 2)); abajo(Math.floor(resto / 2));
+      for (let i = 0; i < enCabecera; i++) {
+        const y = by + (bh/(enCabecera+1))*(i+1);
+        vacas.push(vaca(bx + 1, y, 1, 0));
+        vacas.push(vaca(bx + bw - 1, y, -1, 0));
       }
     }
 
-    animales.forEach(a => {
-      svg += `<g><circle cx="${a.x}" cy="${a.y}" r="6.5" fill="var(--c-primary)" opacity="0.85" /><circle cx="${a.x-1.5}" cy="${a.y-1.5}" r="1.2" fill="white" /></g>`;
-    });
+    svg += `<rect x="${bx-3}" y="${by-3}" width="${bw+6}" height="${bh+6}" rx="6" fill="#9eacb9"/>`;
     svg += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="4" fill="#aac8eb" stroke="var(--c-deep)" stroke-width="2.5" />`;
     svg += `<rect x="${bx+3}" y="${by+3}" width="${bw-6}" height="${bh-6}" rx="2" fill="none" stroke="var(--c-deep)" stroke-width="0.8" opacity="0.3" stroke-dasharray="3 4" />`;
+    svg += vacas.join('');
     svg += `<text x="${bx + bw/2}" y="${by + bh/2 + 5}" text-anchor="middle" font-size="12" font-family="Barlow" fill="var(--c-deep)" font-weight="700">${largo} × ${ancho} m</text>`;
-    svg += `<text x="${bx + bw/2}" y="${H-5}" text-anchor="middle" font-size="9" font-family="monospace" fill="var(--c-muted)">${largo} m largo</text>`;
+    svg += `<text x="${bx + bw/2}" y="${H-3}" text-anchor="middle" font-size="9" font-family="monospace" fill="var(--c-muted)">${largo} m largo</text>`;
   }
-  
+
   svg += `</svg>`;
   d('svg_wrap').innerHTML = svg;
 }

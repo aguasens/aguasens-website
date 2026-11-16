@@ -4,86 +4,83 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Calculadora de Caminata — AguaSens</title>
-  <meta name="theme-color" content="#f7f3ec">
+  <meta name="theme-color" content="#152238">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
   
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=6">
   <link rel="stylesheet" href="css/calculadoras.css">
+  <link rel="stylesheet" href="css/campo.css?v=1">
+  <link rel="stylesheet" href="css/campo-herramientas.css?v=3">
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body class="calc-page">
 
+  <div class="calc-banda">
+    <div class="calc-banda__in">
+      <div class="calc-banda__top">
+        <a href="./#herramientas" class="calc-back-btn" aria-label="Volver a herramientas"><i data-lucide="chevron-left"></i></a>
+        <a href="./" class="calc-banda__logo"><img src="img/ASlogoBl.png" alt="AguaSens"></a>
+      </div>
+      <p class="section-label">Herramienta interactiva</p>
+      <h1 class="calc-banda__titulo">Análisis de caminata</h1>
+      <p class="calc-banda__sub">Analizá cuántos kilos de ganancia diaria se pierden por la distancia que los animales caminan hasta el agua.</p>
+    </div>
+  </div>
+
   <div class="calc-container">
+
     
-    <!-- HEADER -->
-    <header class="calc-header">
-      <a href="index.html" class="calc-back-btn">
-        <i data-lucide="chevron-left"></i>
-      </a>
-      <div class="calc-header-title">
-        <span>Calculadora de</span>
-        <h1>Caminata</h1>
-      </div>
-      <div class="calc-header-brand" style="margin-left: auto;">
-        <img src="img/ASlogo.png" alt="Logo AguaSens" style="height: 48px; width: auto; display: block;">
-      </div>
-    </header>
-
-    <!-- LOTE -->
+    <!-- LOTE EN EL MAPA SATELITAL -->
     <div class="calc-section-title">
-      <i data-lucide="move" class="text-accent"></i><h2>Lote</h2>
+      <i data-lucide="map"></i><h2>Tu lote y sus bebederos</h2>
     </div>
-    <div class="calc-card">
-      <div class="calc-grid-2">
-        <label class="calc-field">
-          <div class="calc-field-label">Largo (m)</div>
-          <input type="number" id="in_largo" value="800" min="50" class="calc-input">
-        </label>
-        <label class="calc-field">
-          <div class="calc-field-label">Ancho (m)</div>
-          <input type="number" id="in_ancho" value="500" min="50" class="calc-input">
-        </label>
+    <div class="calc-card lote-card">
+      <div class="lote-modos" role="group" aria-label="Qué querés marcar">
+        <button type="button" id="m_lote" class="lote-modo"><i data-lucide="pen-tool"></i>Dibujar lote</button>
+        <button type="button" id="m_beb" class="lote-modo activo"><i data-lucide="droplet"></i>Marcar bebedero</button>
+        <button type="button" id="m_loc" class="lote-modo lote-modo--icono" aria-label="Ir a mi ubicación" title="Mi ubicación"><i data-lucide="locate-fixed"></i></button>
       </div>
-      <div class="flex items-center justify-between px-4 py-3 mt-2" style="background: rgba(114,196,138,0.1); border-radius: 16px;">
-        <span class="text-xs font-bold text-deep">Superficie total</span>
-        <span id="out_area" class="text-lg font-bold text-accent">0 ha</span>
-      </div>
-    </div>
-
-    <!-- MAPA -->
-    <div class="calc-section-title">
-      <i data-lucide="target" class="text-accent"></i><h2>Bebederos en el lote</h2>
-    </div>
-    <div class="calc-card">
-      <div class="calc-field-hint mb-3">Tocá el mapa para colocar bebederos. Doble clic para eliminarlos.</div>
-      
-      <div id="map_container" class="map-container" style="padding-bottom: 60%;">
-        <svg id="svg_map" viewBox="0 0 100 60" preserveAspectRatio="none" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;"></svg>
-      </div>
-      
-      <div class="flex items-center gap-2 mt-3 text-[10px] font-mono text-muted">
-        <span>CERCA</span>
-        <div style="flex:1; height:8px; border-radius:4px; background: linear-gradient(to right, rgba(25,199,163,0.5), rgba(255,181,71,0.6), rgba(255,107,107,0.85))"></div>
-        <span>LEJOS · <span id="out_max_d">0</span>m</span>
+      <div class="lote-buscar">
+        <input type="text" id="lote_buscar" placeholder="Buscar localidad o campo..." autocomplete="off">
+        <button type="button" id="lote_buscar_btn" aria-label="Buscar"><i data-lucide="search"></i></button>
+        <div class="lote-buscar__res" id="lote_buscar_res"></div>
       </div>
 
-      <div class="flex items-center justify-between mt-4 pb-2">
-        <span class="text-xs text-muted">Bebederos colocados:</span>
-        <span id="out_bebederos_cant" class="text-2xl font-bold text-deep">1</span>
+      <div class="lote-mapa-wrap">
+        <div id="lote_map" class="lote-mapa"></div>
+        <div class="lote-dibujo" id="lote_dibujo" hidden>
+          <span id="lote_dibujo_txt">Tocá las esquinas del lote</span>
+          <button type="button" id="lote_cerrar" disabled>Cerrar lote</button>
+          <button type="button" id="lote_cancelar" class="lote-dibujo__x" aria-label="Cancelar dibujo"><i data-lucide="x"></i></button>
+        </div>
       </div>
-      
-      <div class="calc-grid-2 mb-2">
-        <div class="calc-toggle" onclick="setPos(1)">1 centro</div>
-        <div class="calc-toggle" onclick="setPos(2)">1 esquina</div>
-        <div class="calc-toggle" onclick="setPos(3)">2 lados</div>
-        <div class="calc-toggle" onclick="setPos(4)">4 puntos</div>
+      <p class="lote-ayuda" id="lote_ayuda"><i data-lucide="info"></i><span id="lote_ayuda_txt"></span></p>
+
+      <div class="lote-leyenda">
+        <div class="lote-leyenda__barra"></div>
+        <div class="lote-leyenda__marcas"><span>0 m</span><span style="left:20%">100</span><span style="left:50%">250 m</span><span style="right:0">500 m o más</span></div>
+        <p>Distancia al bebedero más cercano. Lo recomendado es no pasar de 250 m. Punto más lejos del lote: <b><span id="out_max_d">0</span> m</b>.</p>
       </div>
-      <div class="calc-toggle" style="color: var(--c-danger); background: rgba(201,92,71,0.1)" onclick="setPos(0)">Limpiar mapa</div>
+
+      <div class="lote-datos">
+        <div><span>Superficie</span><strong id="out_area">0 ha</strong></div>
+        <div><span>Bebederos</span><strong id="out_bebederos_cant">0</strong></div>
+      </div>
+
+      <div class="calc-field-label mt-2" style="margin-bottom:8px">Ubicar automáticamente</div>
+      <div class="calc-grid-3 mb-2">
+        <div class="calc-toggle" onclick="setPos(1)">1 al centro</div>
+        <div class="calc-toggle" onclick="setPos(3)">2 bebederos</div>
+        <div class="calc-toggle" onclick="setPos(4)">4 bebederos</div>
+      </div>
+      <div class="calc-toggle" style="color: var(--c-danger); background: rgba(201,92,71,0.1)" onclick="setPos(0)">Quitar bebederos</div>
     </div>
 
     <!-- RODEO -->
@@ -160,9 +157,9 @@
       <i data-lucide="footprints" class="text-accent"></i><h2>Análisis</h2>
     </div>
 
-    <div id="card_sin_bebederos" class="risk-card bg-danger-10" style="display:none; padding: 16px;">
-      <div class="text-sm font-bold text-danger">Sin bebederos en el lote</div>
-      <div class="text-xs text-muted mt-1">Colocá al menos un bebedero en el mapa.</div>
+    <div id="card_sin_bebederos" class="risk-card bg-accent-10" style="display:none; padding: 16px;">
+      <div class="text-sm font-bold text-deep" id="sin_titulo">Sin bebederos en el lote</div>
+      <div class="text-xs text-muted mt-1" id="sin_txt">Colocá al menos un bebedero en el mapa.</div>
     </div>
 
     <div id="resultados_wrap">
@@ -305,13 +302,13 @@
           <p>• Visitas estimadas en este caso: <b id="ref_visitas"></b>.</p>
           
           <p class="mb-1 mt-3"><b class="text-deep">Consumo de agua y pasto</b></p>
-          <p>• Reducción de consumo de agua según distancia (Ohio State, Pinheiro Machado et al.): a 250m ~5%, a 500m ~18%, a 1000m ~35%.</p>
+          <p>• Reducción de consumo de agua según distancia (Ohio State, Pinheiro Machado et al.): a 250m ~5%, a 500m ~18%, a 1000m ~35% (interpolado entre esos puntos).</p>
           <p>• Cada 1% menos de agua → ~0,7% menos consumo de MS → ~0,7% menos GDP (relación lineal en rango operativo).</p>
           <p>• Tiempo de pastoreo perdido: caminata a 3 km/h, cada hora menos pastoreando = ~5% menos consumo MS.</p>
           
           <p class="mb-1 mt-3"><b class="text-deep">Energía de caminata</b></p>
           <p>• Costo horizontal: 0,00045 Mcal NEm/kg PV/km — NRC Dairy Cattle (2001), confirmado por Tedeschi & Fox.</p>
-          <p>• Costo vertical: 0,0067 Mcal NEm/kg/km de elevación.</p>
+          <p>• Costo vertical: 0,0067 Mcal NEm/kg/km de elevación, aplicado a la mitad del recorrido (la ida o la vuelta es en subida).</p>
           <p>• Conversión energía → ganancia: 6,5 Mcal NEm equivalentes por kg PV en engorde.</p>
           <p>• Conversión MS → energía: 2,5 Mcal NEm/kg de MS (dieta engorde típica).</p>
           
@@ -333,7 +330,7 @@
 
   </div> <!-- /container -->
 
-  <script src="js/caminata.js"></script>
+  <script src="js/caminata.js?v=4"></script>
   <script>lucide.createIcons();</script>
 </body>
 </html>

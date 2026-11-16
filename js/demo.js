@@ -53,6 +53,9 @@
   const thi = (t, hr) => (1.8 * t + 32) - (0.55 - 0.0055 * hr) * (1.8 * t - 26);
 
   /* ─── El campo ficticio ─── */
+  // ?embed=1 → sólo el teléfono, para la portada: se reproduce solo hasta que el visitante lo toca
+  const EMBED = /[?&]embed(=|&|$)/.test(location.search);
+  if (EMBED) document.documentElement.classList.add('embed');
   const CENTRO = [-36.2680, -59.2000];
 
   const MODELOS = {
@@ -275,7 +278,10 @@
   /* ─── Mapa ─── */
   let mapa, marcadores = {};
   function iniciarMapa() {
-    mapa = L.map('map', { zoomControl: false, attributionControl: true }).setView(CENTRO, 14);
+    mapa = L.map('map', { zoomControl: false, attributionControl: true,
+      // en la portada el mapa no se roba la rueda ni el deslizar de la página
+      dragging: !EMBED, scrollWheelZoom: !EMBED, touchZoom: !EMBED, doubleClickZoom: !EMBED,
+      zoomSnap: EMBED ? 0.25 : 1 }).setView(CENTRO, 14);
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Imágenes &copy; Esri', maxZoom: 18
     }).addTo(mapa);
@@ -291,7 +297,9 @@
   function encuadrar() {
     const pts = visibles().map((n) => n.pos);
     if (pts.length === 1) { mapa.setView(pts[0], 16); return; }
-    mapa.fitBounds(L.latLngBounds(pts), { paddingTopLeft: [20, 110], paddingBottomRight: [120, 30], maxZoom: 16 });
+    mapa.fitBounds(L.latLngBounds(pts), EMBED
+      ? { paddingTopLeft: [12, 100], paddingBottomRight: [125, 24], maxZoom: 16 }
+      : { paddingTopLeft: [20, 110], paddingBottomRight: [120, 30], maxZoom: 16 });
   }
   function llenarFiltros() {
     const lotes = [...new Set(nodos.map((n) => n.lote))].sort();
@@ -462,7 +470,7 @@
     if (id === 'bomba') nodos[2].ultimo = simMin - INTERVALO;   // que reporte ya
     actualizarBotones();
     estado(TEXTOS[id].espera, 'espera');
-    if (window.matchMedia('(max-width: 900px)').matches) $('#app').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!EMBED && window.matchMedia('(max-width: 900px)').matches) $('#app').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   function resolverEscenario() {
     if (!escenario) return;
@@ -532,7 +540,6 @@
       if (escenario && escenario.id === b.dataset.esc) resolverEscenario();
       else if (!escenario) {
         iniciarEscenario(b.dataset.esc);
-        if (matchMedia('(max-width: 900px)').matches) $('#telefono').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
     $('#reset').addEventListener('click', () => {
@@ -545,4 +552,34 @@
 
     setInterval(tick, 1000);
   });
+
+  /* ─── Reproducción automática (modo portada) ─── */
+  if (EMBED) {
+    let manual = false;
+    const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+    const hasta = async (cond) => { while (!manual && !cond()) await esperar(250); };
+    const tomarControl = (e) => {
+      if (!e.isTrusted || manual) return;
+      manual = true;
+      if (escenario && !escenario.resolviendo) setTimeout(resolverEscenario, 8000);
+      if (!matchMedia('(pointer: coarse)').matches) { mapa.dragging.enable(); mapa.doubleClickZoom.enable(); }
+      try { parent.postMessage({ aguasensDemo: 'manual' }, '*'); } catch (_) { /* sin portada */ }
+    };
+    document.addEventListener('DOMContentLoaded', async () => {
+      $('#app').addEventListener('pointerdown', tomarControl, true);
+      const ronda = ['tanque', 'bomba', 'solar', 'bebedero', 'calor'];
+      await esperar(3000);
+      for (let i = 0; !manual; i++) {
+        iniciarEscenario(ronda[i % ronda.length]);
+        await hasta(() => escenario && escenario.avisado);
+        await esperar(2600); if (manual) break;
+        const aviso = document.querySelector('.notif');
+        if (aviso) aviso.click();                       // abre la ficha del nodo, como el usuario
+        await esperar(5000); if (manual) break;
+        cerrarFicha(); resolverEscenario();
+        await hasta(() => !escenario);
+        await esperar(6000);
+      }
+    });
+  }
 })();

@@ -4,35 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Calculadora de Bebederos — AguaSens</title>
-  <meta name="theme-color" content="#f7f3ec">
+  <meta name="theme-color" content="#152238">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
   
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=6">
   <link rel="stylesheet" href="css/calculadoras.css">
+  <link rel="stylesheet" href="css/campo.css?v=1">
+  <link rel="stylesheet" href="css/campo-herramientas.css?v=1">
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="calc-page">
 
+  <div class="calc-banda">
+    <div class="calc-banda__in">
+      <div class="calc-banda__top">
+        <a href="./#herramientas" class="calc-back-btn" aria-label="Volver a herramientas"><i data-lucide="chevron-left"></i></a>
+        <a href="./" class="calc-banda__logo"><img src="img/ASlogoBl.png" alt="AguaSens"></a>
+      </div>
+      <p class="section-label">Herramienta interactiva</p>
+      <h1 class="calc-banda__titulo">Calculadora de bebederos</h1>
+      <p class="calc-banda__sub">Dimensioná la cantidad y tamaño de bebederos que necesita tu campo según cantidad de animales, clima y tipo de producción.</p>
+    </div>
+  </div>
+
   <div class="calc-container">
-    
-    <!-- HEADER -->
-    <header class="calc-header">
-      <a href="index.html" class="calc-back-btn">
-        <i data-lucide="chevron-left"></i>
-      </a>
-      <div class="calc-header-title">
-        <span>Calculadora de</span>
-        <h1>Bebederos</h1>
-      </div>
-      <div class="calc-header-brand" style="margin-left: auto;">
-        <img src="img/ASlogo.png" alt="Logo AguaSens" class="header-logo">
-      </div>
-    </header>
 
     <!-- RODEO -->
     <div class="calc-section-title">
@@ -331,7 +331,7 @@
 
   </div> <!-- /container -->
 
-  <script src="js/bebederos.js"></script>
+  <script src="js/bebederos.js?v=4"></script>
   <script>lucide.createIcons();</script>
 </body>
 </html>

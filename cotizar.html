@@ -22,7 +22,9 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 
   <link rel="stylesheet" href="css/styles.css?v=6">
-  <link rel="stylesheet" href="css/cotizar.css">
+  <link rel="stylesheet" href="css/cotizar.css?v=2">
+  <link rel="stylesheet" href="css/campo.css?v=1">
+  <link rel="stylesheet" href="css/campo-herramientas.css?v=1">
 </head>
 
 <body>
@@ -30,15 +32,15 @@
   <!-- ═══ HEADER ═══ -->
   <header class="header" id="top">
     <div class="container">
-      <a href="index.html" class="header-brand">
+      <a href="./" class="header-brand">
         <img src="img/ASlogoBl.png" alt="Logo AguaSens" class="header-logo">
       </a>
       <nav class="nav" id="main-nav">
-        <a href="index.html#producto">Producto</a>
-        <a href="index.html#sensores">Sensores</a>
-        <a href="index.html#herramientas">Herramientas</a>
-        <a href="index.html#preguntas">Preguntas</a>
-        <a href="index.html#nosotros">Nosotros</a>
+        <a href="./#producto">Producto</a>
+        <a href="./#sensores">Sensores</a>
+        <a href="./#herramientas">Herramientas</a>
+        <a href="./#preguntas">Preguntas</a>
+        <a href="./#nosotros">Nosotros</a>
         <a href="cotizar.html" class="active">Pedir presupuesto</a>
       </nav>
       <button class="hamburger" id="hamburger" aria-label="Menú">
@@ -49,11 +51,11 @@
 
   <!-- Mobile Nav -->
   <div class="mobile-nav" id="mobile-nav">
-    <a href="index.html#producto">Producto</a>
-    <a href="index.html#sensores">Sensores</a>
-    <a href="index.html#herramientas">Herramientas</a>
-    <a href="index.html#preguntas">Preguntas</a>
-    <a href="index.html#nosotros">Nosotros</a>
+    <a href="./#producto">Producto</a>
+    <a href="./#sensores">Sensores</a>
+    <a href="./#herramientas">Herramientas</a>
+    <a href="./#preguntas">Preguntas</a>
+    <a href="./#nosotros">Nosotros</a>
     <a href="cotizar.html">Pedir presupuesto</a>
   </div>
 
@@ -72,6 +74,7 @@
     <div class="container">
       <div class="cotizar-layout">
 
+        <div class="cotizar-izq">
         <!-- MAPA -->
         <div class="map-panel">
           <div class="map-toolbar">
@@ -94,15 +97,26 @@
           <div class="map-hint">
             <i data-lucide="info"></i>
             <span>Elegí "Marcar aguada" o "Marcar punto con señal" y después hacé clic en el mapa (podés marcar
-              varias). Arrastrá un pin para ajustarlo, o doble clic para borrarlo.</span>
+              varias). Arrastrá un pin para ajustarlo, o doble clic para borrarlo. La línea punteada muestra el
+              recorrido de la señal de cada aguada al Gateway más cercano.</span>
           </div>
+        </div>
+
+        <!-- INSTALACIÓN: puntos marcados + métricas de cada enlace -->
+        <div class="inst-panel">
+          <div class="inst-panel__cab">
+            <h2>Tu instalación</h2>
+            <div class="inst-cuentas" id="inst-cuentas"></div>
+          </div>
+          <div id="instalacion"></div>
+        </div>
         </div>
 
         <!-- FORM -->
         <div class="form-panel">
           <div id="form-panel-body">
             <h2>Tus datos</h2>
-            <div class="points-summary" id="points-summary"></div>
+            <p class="form-intro">Con lo que marcaste en el mapa y estos datos te armamos la propuesta.</p>
 
             <form id="quote-form" novalidate>
               <div class="field field--honeypot">
@@ -154,7 +168,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="js/main.js?v=2"></script>
-  <script src="js/cotizar.js"></script>
+  <script src="js/cotizar.js?v=3"></script>
   <script>
     lucide.createIcons();
   </script>

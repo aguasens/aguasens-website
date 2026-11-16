@@ -263,3 +263,17 @@ svg.lucide { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ── Modo portada (?embed=1): sólo el teléfono, a tamaño del iframe ── */
+html.embed, html.embed body { background: transparent; min-height: 0; height: 100%; overflow: hidden; }
+html.embed .d-top, html.embed .d-guia { display: none; }
+html.embed .d-layout { display: block; padding: 0; max-width: none; height: 100%; }
+html.embed .d-telefono {
+  width: 100%; height: 100%; min-height: 0; max-height: none; aspect-ratio: auto;
+  padding: 10px; border-radius: 42px; box-shadow: inset 0 0 0 2px #2b3546;
+}
+html.embed .app { border-radius: 33px; }
+@media (max-width: 300px) {
+  html.embed .app-filtro { font-size: 11.5px; padding: 5px 5px; }
+  html.embed .app-btn { width: 36px; height: 36px; }
+}

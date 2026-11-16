@@ -27,7 +27,8 @@
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 
   <link rel="stylesheet" href="css/styles.css?v=6">
-  <link rel="stylesheet" href="css/animacion.css?v=4">
+  <link rel="stylesheet" href="css/animacion.css?v=6">
+  <link rel="stylesheet" href="css/campo.css?v=1">
 </head>
 
 <body>
@@ -67,9 +68,7 @@
 
   <!-- ═══ HERO ═══ -->
   <section class="hero" id="inicio">
-    <div class="hero__circle hero__circle--1"></div>
-    <div class="hero__circle hero__circle--2"></div>
-    <div class="container">
+    <div class="container hero__grid">
       <div class="hero__content">
         <div class="hero__eyebrow">
           <div class="hero__eyebrow-dot"></div>
@@ -79,7 +78,7 @@
           El control del agua
           <span class="accent">desde cualquier lugar</span>
         </h1>
-        <p class="hero__subtitle">Monitoreo para tanques, bebederos, represasn y bombas de agua. En tiempo real,
+        <p class="hero__subtitle">Monitoreo para tanques, bebederos, represas y bombas de agua. En tiempo real,
           alertas al celular, todo en una sola app.</p>
         <div class="hero__actions">
           <a href="https://wa.me/5491168452098" target="_blank" class="btn btn--primary">
@@ -87,6 +86,18 @@
           </a>
           <a href="#producto" class="btn btn--outline">Conocer más ↓</a>
         </div>
+      </div>
+
+      <!-- La app funcionando: el simulador se reproduce solo hasta que el visitante lo toca -->
+      <div class="hero__demo">
+        <div class="hero__telefono">
+          <iframe src="demo.html?embed=1" title="Simulación de la app AguaSens con datos ficticios"></iframe>
+        </div>
+        <p class="hero__demo-pie">
+          <span class="hero__demo-punto"></span>
+          <span id="hero-demo-txt">Simulación en vivo · tocala para explorarla</span>
+          <a href="demo.html">Pantalla completa →</a>
+        </p>
       </div>
     </div>
   </section>
@@ -170,7 +181,7 @@
       </div>
 
       <!-- Fila 2: la extracción -->
-      <div class="nodos-grupo reveal">
+      <div class="nodos-grupo nodos-grupo--sacas reveal">
         <div class="nodos-grupo__titulo"><i data-lucide="arrow-up-from-line"></i> El agua que sacás</div>
         <div class="nodos-grid nodos-grid--3">
 
@@ -198,7 +209,7 @@
               <li><i data-lucide="gauge"></i> Potencia y energía entregada a la bomba</li>
               <li><i data-lucide="timer"></i> Horas de bombeo y arranques del día</li>
             </ul>
-            <p class="nodo-card__pie">Comprobá si la bomba está trabajando con el sol que hay. /p>
+            <p class="nodo-card__pie">Comprobá si la bomba está trabajando con el sol que hay.</p>
           </div>
 
           <!-- NODO MOLINO -->
@@ -284,11 +295,35 @@
 
           <defs>
             <linearGradient id="cfCielo" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#dbe9f8"/>
-              <stop offset="1" stop-color="#f4f8fc"/>
+              <stop offset="0" stop-color="#9fc6ea"/>
+              <stop offset=".55" stop-color="#d6e8f4"/>
+              <stop offset="1" stop-color="#f6efdf"/>
+            </linearGradient>
+            <radialGradient id="cfSolHalo">
+              <stop offset="0" stop-color="#ffe7a3" stop-opacity=".9"/>
+              <stop offset="1" stop-color="#ffe7a3" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="cfLejos" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#b7cfa3"/><stop offset="1" stop-color="#a9c494"/>
+            </linearGradient>
+            <linearGradient id="cfLoma" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#9ebf7f"/><stop offset="1" stop-color="#8db06d"/>
+            </linearGradient>
+            <linearGradient id="cfSuelo" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#86ab64"/><stop offset="1" stop-color="#6f9552"/>
+            </linearGradient>
+            <linearGradient id="cfChapa" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#e4eaef"/><stop offset=".5" stop-color="#c3ced8"/><stop offset="1" stop-color="#9eacb9"/>
+            </linearGradient>
+            <linearGradient id="cfAgua" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#5fa6e0"/><stop offset="1" stop-color="#2c5aa0"/>
+            </linearGradient>
+            <linearGradient id="cfPanel" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3b6aa8"/><stop offset="1" stop-color="#1b345c"/>
             </linearGradient>
             <clipPath id="cfMarco"><rect x="0" y="0" width="900" height="400" rx="8"/></clipPath>
             <clipPath id="cfSoloCielo"><rect x="0" y="0" width="900" height="312"/></clipPath>
+            <clipPath id="cfPantalla"><rect x="752" y="146" width="98" height="172" rx="7"/></clipPath>
           </defs>
 
           <g clip-path="url(#cfMarco)">
@@ -297,90 +332,240 @@
 
             <!-- sol y luna: giran una vuelta entera durante el acto 2 -->
             <g class="cf-astros">
-              <circle class="cf-sol" cx="300" cy="104" r="27"/>
+              <circle cx="300" cy="104" r="62" fill="url(#cfSolHalo)"/>
+              <circle class="cf-sol" cx="300" cy="104" r="26"/>
+            </g>
+
+            <!-- nubecitas que pasan -->
+            <g class="cf-nubecitas" fill="#fff" opacity=".85">
+              <g><ellipse cx="120" cy="70" rx="30" ry="9"/><ellipse cx="136" cy="63" rx="18" ry="10"/><ellipse cx="108" cy="65" rx="14" ry="8"/></g>
+              <g><ellipse cx="420" cy="46" rx="24" ry="7"/><ellipse cx="432" cy="41" rx="14" ry="8"/></g>
+              <g><ellipse cx="800" cy="58" rx="28" ry="8"/><ellipse cx="788" cy="52" rx="15" ry="8"/></g>
+            </g>
+
+            <!-- lomas lejanas con montes -->
+            <path d="M0 262 C90 246 170 256 250 251 C350 244 430 258 520 252 C620 245 700 238 800 248 C850 252 880 250 900 248 L900 320 L0 320 Z" fill="url(#cfLejos)"/>
+            <g fill="#86a56e"><circle cx="149.8" cy="248.5" r="6.2"/><circle cx="144.7" cy="252.6" r="4.6"/><circle cx="154.9" cy="252.1" r="4.9"/></g>
+            <g fill="#739460"><circle cx="158.8" cy="250.7" r="4.8"/><circle cx="154.8" cy="254.0" r="3.6"/><circle cx="162.8" cy="253.5" r="3.9"/></g>
+            <g fill="#86a56e"><circle cx="167.9" cy="250.0" r="4.8"/><circle cx="163.9" cy="253.2" r="3.6"/><circle cx="171.9" cy="252.8" r="3.9"/></g>
+            <g fill="#739460"><circle cx="176.2" cy="247.3" r="6.0"/><circle cx="171.2" cy="251.3" r="4.5"/><circle cx="181.2" cy="250.8" r="4.8"/></g>
+            <g fill="#86a56e"><circle cx="186.5" cy="249.6" r="5.2"/><circle cx="182.2" cy="253.0" r="3.9"/><circle cx="190.9" cy="252.6" r="4.2"/></g>
+            <g fill="#7d9c66"><circle cx="195.6" cy="250.1" r="4.8"/><circle cx="191.6" cy="253.3" r="3.6"/><circle cx="199.6" cy="252.9" r="3.8"/></g>
+            <g fill="#7d9c66"><circle cx="205.3" cy="248.6" r="4.6"/><circle cx="201.5" cy="251.7" r="3.4"/><circle cx="209.1" cy="251.3" r="3.7"/></g>
+            <g fill="#739460"><circle cx="330.4" cy="246.2" r="5.1"/><circle cx="326.2" cy="249.6" r="3.8"/><circle cx="334.6" cy="249.2" r="4.1"/></g>
+            <g fill="#86a56e"><circle cx="340.4" cy="244.9" r="5.7"/><circle cx="335.7" cy="248.7" r="4.2"/><circle cx="345.1" cy="248.2" r="4.5"/></g>
+            <g fill="#86a56e"><circle cx="346.0" cy="243.6" r="5.7"/><circle cx="341.3" cy="247.4" r="4.3"/><circle cx="350.8" cy="246.9" r="4.5"/></g>
+            <g fill="#739460"><circle cx="359.0" cy="246.0" r="6.0"/><circle cx="354.0" cy="250.0" r="4.5"/><circle cx="364.0" cy="249.5" r="4.8"/></g>
+            <g fill="#7d9c66"><circle cx="365.0" cy="245.9" r="5.4"/><circle cx="360.5" cy="249.5" r="4.1"/><circle cx="369.5" cy="249.0" r="4.3"/></g>
+            <g fill="#86a56e"><circle cx="718.3" cy="242.1" r="5.2"/><circle cx="713.9" cy="245.6" r="3.9"/><circle cx="722.6" cy="245.1" r="4.2"/></g>
+            <g fill="#7d9c66"><circle cx="728.5" cy="241.8" r="6.0"/><circle cx="723.5" cy="245.9" r="4.5"/><circle cx="733.6" cy="245.4" r="4.8"/></g>
+            <g fill="#86a56e"><circle cx="736.9" cy="243.2" r="4.6"/><circle cx="733.0" cy="246.2" r="3.4"/><circle cx="740.7" cy="245.9" r="3.7"/></g>
+            <g fill="#739460"><circle cx="748.9" cy="241.6" r="4.6"/><circle cx="745.1" cy="244.6" r="3.5"/><circle cx="752.8" cy="244.3" r="3.7"/></g>
+            <g fill="#86a56e"><circle cx="754.8" cy="241.9" r="5.1"/><circle cx="750.5" cy="245.3" r="3.8"/><circle cx="759.0" cy="244.9" r="4.1"/></g>
+            <g fill="#7d9c66"><circle cx="764.3" cy="242.0" r="5.9"/><circle cx="759.4" cy="245.9" r="4.4"/><circle cx="769.2" cy="245.4" r="4.7"/></g>
+            <g fill="#86a56e"><circle cx="858.5" cy="246.6" r="4.5"/><circle cx="854.8" cy="249.6" r="3.4"/><circle cx="862.3" cy="249.2" r="3.6"/></g>
+            <g fill="#86a56e"><circle cx="870.2" cy="244.0" r="5.5"/><circle cx="865.6" cy="247.7" r="4.1"/><circle cx="874.8" cy="247.2" r="4.4"/></g>
+            <g fill="#86a56e"><circle cx="878.0" cy="246.1" r="5.9"/><circle cx="873.1" cy="250.0" r="4.4"/><circle cx="882.9" cy="249.5" r="4.7"/></g>
+            <g fill="#7d9c66"><circle cx="887.6" cy="244.1" r="5.3"/><circle cx="883.2" cy="247.6" r="3.9"/><circle cx="892.0" cy="247.2" r="4.2"/></g>
+
+            <!-- molino a lo lejos -->
+            <g stroke="#7b8794" stroke-linecap="round" fill="none">
+              <path d="M672 262 L680 214 L688 262 M674.5 247 L685.5 247 M676.5 232 L683.5 232 M675 247 L684 232 M685 247 L676 232" stroke-width="1.4"/>
+              <path d="M680 211 L700 207 L700 215 Z" fill="#7b8794" stroke-width="1"/>
+              <g class="cf-aspas" stroke-width="1.6">
+                <line x1="680" y1="211" x2="695.0" y2="211.0"/>
+                <line x1="680" y1="211" x2="693.0" y2="218.5"/>
+                <line x1="680" y1="211" x2="687.5" y2="224.0"/>
+                <line x1="680" y1="211" x2="680.0" y2="226.0"/>
+                <line x1="680" y1="211" x2="672.5" y2="224.0"/>
+                <line x1="680" y1="211" x2="667.0" y2="218.5"/>
+                <line x1="680" y1="211" x2="665.0" y2="211.0"/>
+                <line x1="680" y1="211" x2="667.0" y2="203.5"/>
+                <line x1="680" y1="211" x2="672.5" y2="198.0"/>
+                <line x1="680" y1="211" x2="680.0" y2="196.0"/>
+                <line x1="680" y1="211" x2="687.5" y2="198.0"/>
+                <line x1="680" y1="211" x2="693.0" y2="203.5"/>
+                <circle cx="680" cy="211" r="15" stroke-width=".8"/>
+              </g>
             </g>
 
             <!-- campo -->
-            <path class="cf-loma" d="M0 300 C120 262 210 300 320 288 C440 274 520 300 640 282 C760 264 840 296 900 286 L900 400 L0 400 Z"/>
+            <path class="cf-loma" d="M0 296 C120 272 220 292 330 286 C450 279 530 296 650 284 C760 273 840 290 900 284 L900 400 L0 400 Z"/>
+
+            <!-- monte de eucaliptos -->
+            <g>
+              <rect x="618" y="214" width="4" height="70" fill="#8a7a62"/>
+              <rect x="640" y="222" width="3.5" height="62" fill="#8a7a62"/>
+              <ellipse cx="620" cy="214" rx="17" ry="30" fill="#5f8550"/>
+              <ellipse cx="642" cy="226" rx="14" ry="26" fill="#6b9259"/>
+              <ellipse cx="606" cy="236" rx="11" ry="20" fill="#678d55"/>
+              <ellipse cx="659" cy="244" rx="10" ry="18" fill="#5f8550"/>
+            </g>
+
+            <!-- alambrado -->
+            <g stroke="#8a7255" stroke-linecap="round">
+              <path d="M262 284 L452 280 M262 292 L452 288" stroke-width="1" opacity=".8" fill="none"/>
+              <line x1="266" y1="277.0" x2="266" y2="300.0" stroke-width="3"/>
+              <line x1="292" y1="276.5" x2="292" y2="299.5" stroke-width="3"/>
+              <line x1="318" y1="276.0" x2="318" y2="299.0" stroke-width="3"/>
+              <line x1="344" y1="275.5" x2="344" y2="298.5" stroke-width="3"/>
+              <line x1="370" y1="275.0" x2="370" y2="298.0" stroke-width="3"/>
+              <line x1="396" y1="274.5" x2="396" y2="297.5" stroke-width="3"/>
+              <line x1="422" y1="274.0" x2="422" y2="297.0" stroke-width="3"/>
+              <line x1="448" y1="273.5" x2="448" y2="296.5" stroke-width="3"/>
+            </g>
+
             <rect class="cf-suelo" x="0" y="312" width="900" height="88"/>
+            <path d="M10.4 385.4 q-1.5 -5.1 -5 -7.7 M10.4 385.4 q0 -7.7 1 -10.2 M10.4 385.4 q2 -5.1 5.5 -6.8" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M788.7 334.4 q-1.5 -7.2 -5 -10.8 M788.7 334.4 q0 -10.8 1 -14.4 M788.7 334.4 q2 -7.2 5.5 -9.6" stroke="#6f9a52" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M539.8 363.0 q-1.5 -7.2 -5 -10.8 M539.8 363.0 q0 -10.8 1 -14.3 M539.8 363.0 q2 -7.2 5.5 -9.6" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M197.7 338.1 q-1.5 -5.2 -5 -7.8 M197.7 338.1 q0 -7.8 1 -10.4 M197.7 338.1 q2 -5.2 5.5 -6.9" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M270.8 323.7 q-1.5 -4.8 -5 -7.2 M270.8 323.7 q0 -7.2 1 -9.7 M270.8 323.7 q2 -4.8 5.5 -6.4" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M570.2 319.2 q-1.5 -5.3 -5 -8.0 M570.2 319.2 q0 -8.0 1 -10.6 M570.2 319.2 q2 -5.3 5.5 -7.1" stroke="#6f9a52" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M408.8 392.8 q-1.5 -6.7 -5 -10.0 M408.8 392.8 q0 -10.0 1 -13.4 M408.8 392.8 q2 -6.7 5.5 -8.9" stroke="#6f9a52" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M129.4 348.1 q-1.5 -4.7 -5 -7.0 M129.4 348.1 q0 -7.0 1 -9.3 M129.4 348.1 q2 -4.7 5.5 -6.2" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M809.4 381.8 q-1.5 -6.4 -5 -9.6 M809.4 381.8 q0 -9.6 1 -12.8 M809.4 381.8 q2 -6.4 5.5 -8.5" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M149.5 367.1 q-1.5 -4.8 -5 -7.2 M149.5 367.1 q0 -7.2 1 -9.6 M149.5 367.1 q2 -4.8 5.5 -6.4" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M846.1 386.8 q-1.5 -4.4 -5 -6.7 M846.1 386.8 q0 -6.7 1 -8.9 M846.1 386.8 q2 -4.4 5.5 -5.9" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M51.7 326.5 q-1.5 -7.1 -5 -10.6 M51.7 326.5 q0 -10.6 1 -14.2 M51.7 326.5 q2 -7.1 5.5 -9.5" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M219.8 373.0 q-1.5 -5.5 -5 -8.2 M219.8 373.0 q0 -8.2 1 -10.9 M219.8 373.0 q2 -5.5 5.5 -7.3" stroke="#6f9a52" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M806.2 356.3 q-1.5 -4.7 -5 -7.1 M806.2 356.3 q0 -7.1 1 -9.5 M806.2 356.3 q2 -4.7 5.5 -6.3" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M643.9 323.4 q-1.5 -5.6 -5 -8.5 M643.9 323.4 q0 -8.5 1 -11.3 M643.9 323.4 q2 -5.6 5.5 -7.5" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M585.1 366.0 q-1.5 -5.0 -5 -7.6 M585.1 366.0 q0 -7.6 1 -10.1 M585.1 366.0 q2 -5.0 5.5 -6.7" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M817.3 333.9 q-1.5 -4.4 -5 -6.6 M817.3 333.9 q0 -6.6 1 -8.8 M817.3 333.9 q2 -4.4 5.5 -5.9" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M372.1 337.4 q-1.5 -4.7 -5 -7.1 M372.1 337.4 q0 -7.1 1 -9.5 M372.1 337.4 q2 -4.7 5.5 -6.3" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M334.5 362.6 q-1.5 -4.5 -5 -6.7 M334.5 362.6 q0 -6.7 1 -9.0 M334.5 362.6 q2 -4.5 5.5 -6.0" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M131.8 353.1 q-1.5 -6.2 -5 -9.3 M131.8 353.1 q0 -9.3 1 -12.3 M131.8 353.1 q2 -6.2 5.5 -8.2" stroke="#6f9a52" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M618.3 363.6 q-1.5 -6.0 -5 -9.0 M618.3 363.6 q0 -9.0 1 -11.9 M618.3 363.6 q2 -6.0 5.5 -8.0" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M822.8 355.0 q-1.5 -6.3 -5 -9.5 M822.8 355.0 q0 -9.5 1 -12.6 M822.8 355.0 q2 -6.3 5.5 -8.4" stroke="#6f9a52" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M857.2 319.7 q-1.5 -4.4 -5 -6.6 M857.2 319.7 q0 -6.6 1 -8.8 M857.2 319.7 q2 -4.4 5.5 -5.9" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M69.2 342.3 q-1.5 -7.2 -5 -10.8 M69.2 342.3 q0 -10.8 1 -14.4 M69.2 342.3 q2 -7.2 5.5 -9.6" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M76.2 360.6 q-1.5 -4.3 -5 -6.5 M76.2 360.6 q0 -6.5 1 -8.7 M76.2 360.6 q2 -4.3 5.5 -5.8" stroke="#7aa65c" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M833.9 375.5 q-1.5 -6.6 -5 -9.9 M833.9 375.5 q0 -9.9 1 -13.2 M833.9 375.5 q2 -6.6 5.5 -8.8" stroke="#5f8a45" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M815.2 301.6 q-1.5 -4.2 -5 -6.3 M815.2 301.6 q0 -6.3 1 -8.4 M815.2 301.6 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M612.9 310.4 q-1.5 -4.2 -5 -6.3 M612.9 310.4 q0 -6.3 1 -8.4 M612.9 310.4 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M776.6 302.7 q-1.5 -4.2 -5 -6.3 M776.6 302.7 q0 -6.3 1 -8.4 M776.6 302.7 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M705.7 309.8 q-1.5 -4.2 -5 -6.3 M705.7 309.8 q0 -6.3 1 -8.4 M705.7 309.8 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M514.1 306.0 q-1.5 -4.2 -5 -6.3 M514.1 306.0 q0 -6.3 1 -8.4 M514.1 306.0 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M346.5 305.3 q-1.5 -4.2 -5 -6.3 M346.5 305.3 q0 -6.3 1 -8.4 M346.5 305.3 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M545.8 297.3 q-1.5 -4.2 -5 -6.3 M545.8 297.3 q0 -6.3 1 -8.4 M545.8 297.3 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M572.7 311.9 q-1.5 -4.2 -5 -6.3 M572.7 311.9 q0 -6.3 1 -8.4 M572.7 311.9 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M784.2 307.7 q-1.5 -4.2 -5 -6.3 M784.2 307.7 q0 -6.3 1 -8.4 M784.2 307.7 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M351.8 307.8 q-1.5 -4.2 -5 -6.3 M351.8 307.8 q0 -6.3 1 -8.4 M351.8 307.8 q2 -4.2 5.5 -5.6" stroke="#7da35f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
 
             <!-- nube (internet) -->
             <g class="cf-nube">
-              <ellipse cx="612" cy="76" rx="34" ry="22"/>
-              <ellipse cx="648" cy="72" rx="28" ry="24"/>
-              <ellipse cx="632" cy="56" rx="26" ry="20"/>
-              <rect x="586" y="74" width="82" height="22" rx="11"/>
+              <ellipse cx="612" cy="78" rx="34" ry="20"/>
+              <ellipse cx="648" cy="74" rx="28" ry="22"/>
+              <ellipse cx="630" cy="58" rx="26" ry="20"/>
+              <rect x="584" y="74" width="88" height="24" rx="12"/>
             </g>
 
             <!-- enlaces gateway → nube → celular -->
-            <path class="cf-enlace cf-enlace--subida" d="M472 88 C500 56 548 48 590 68"/>
-            <path class="cf-enlace cf-enlace--bajada" d="M666 82 C704 98 722 116 746 148"/>
+            <path class="cf-enlace cf-enlace--subida" d="M472 86 C500 56 548 48 590 68"/>
+            <path class="cf-enlace cf-enlace--bajada" d="M668 84 C704 98 722 116 746 148"/>
 
-            <!-- bebedero -->
-            <rect class="cf-cuba-fondo" x="54" y="246" width="200" height="66" rx="8"/>
-            <rect class="cf-agua" x="62" y="254" width="184" height="50" rx="3"/>
-            <rect class="cf-cuba" x="54" y="246" width="200" height="66" rx="8"/>
-            <rect class="cf-estructura" x="54" y="238" width="200" height="12" rx="6"/>
+            <!-- bebedero de chapa (vista en corte: se ve el agua) -->
+            <ellipse cx="136" cy="314" rx="100" ry="6" fill="#000" opacity=".14"/>
+            <rect x="56" y="306" width="7" height="8" fill="#8c99a6"/>
+            <rect x="210" y="306" width="7" height="8" fill="#8c99a6"/>
+            <rect class="cf-cuba-fondo" x="46" y="272" width="180" height="36" rx="5"/>
+            <g class="cf-agua">
+              <rect x="52" y="277" width="168" height="27" rx="3" fill="url(#cfAgua)"/>
+              <path d="M62 282 h40 M118 284 h26 M160 281 h44" stroke="#cfe6fa" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>
+            </g>
+            <g class="cf-cuba">
+              <rect x="46" y="272" width="180" height="36" rx="5"/>
+              <path d="M82 274 v32 M118 274 v32 M154 274 v32 M190 274 v32"/>
+            </g>
+            <rect class="cf-estructura" x="42" y="266" width="188" height="9" rx="4.5"/>
 
-            <!-- hacienda (img/vaca.svg, mira hacia el bebedero) -->
-            <image href="img/vaca.svg" x="300" y="251.5" width="96" height="60.4"/>
-            <image href="img/vaca.svg" x="392" y="260" width="70" height="44" opacity=".82"/>
+            <!-- hacienda Angus (img/vaca-angus.svg, mira hacia el bebedero) -->
+            <image href="img/vaca-angus.svg?v=2" x="548" y="268" width="38" height="24" opacity=".75"/>
+            <image href="img/vaca-angus.svg?v=2" x="592" y="272" width="30" height="19" opacity=".7"/>
+            <ellipse cx="404" cy="308" rx="44" ry="4.5" fill="#000" opacity=".12"/>
+            <image href="img/vaca-angus.svg?v=2" x="352" y="243" width="104" height="65.4"/>
+            <ellipse cx="308" cy="313" rx="64" ry="5.5" fill="#000" opacity=".16"/>
+            <image href="img/vaca-angus.svg?v=2" x="236" y="219" width="150" height="94.3"/>
 
-            <!-- nodo sobre el bebedero -->
-            <line class="cf-sistema cf-poste" x1="44" y1="312" x2="44" y2="200"/>
-            <line class="cf-sistema cf-antena" x1="44" y1="160" x2="44" y2="128"/>
-            <rect class="cf-sistema cf-equipo" x="26" y="160" width="36" height="40" rx="5"/>
-            <rect class="cf-sistema cf-equipo-det" x="32" y="168" width="24" height="9" rx="2"/>
-            <circle class="cf-led" cx="54" cy="192" r="4"/>
+            <!-- nodo sobre el bebedero: poste, panel solar, gabinete y antena -->
+            <line class="cf-sistema cf-poste" x1="40" y1="312" x2="40" y2="150"/>
+            <g class="cf-sistema">
+              <polygon points="12,148 58,136 64,150 18,162" fill="url(#cfPanel)" stroke="#dfe6ee" stroke-width="1.5"/>
+              <path d="M27 144 L33 158 M42 140 L48 154 M15 155 L61 143" stroke="#9fb6d6" stroke-width=".8"/>
+            </g>
+            <line class="cf-sistema cf-antena" x1="56" y1="172" x2="56" y2="126"/>
+            <rect class="cf-sistema cf-equipo" x="24" y="170" width="38" height="40" rx="5"/>
+            <rect class="cf-sistema cf-equipo-det" x="30" y="178" width="26" height="8" rx="2"/>
+            <circle class="cf-led" cx="54" cy="201" r="4"/>
 
             <!-- ondas LoRa -->
-            <g transform="translate(54,128)">
+            <g transform="translate(60,126)">
               <path class="cf-onda cf-onda--a" d="M0 -13 A13 13 0 0 1 0 13"/>
               <path class="cf-onda cf-onda--b" d="M0 -21 A21 21 0 0 1 0 21"/>
               <path class="cf-onda cf-onda--c" d="M0 -29 A29 29 0 0 1 0 29"/>
             </g>
 
-            <!-- gateway -->
-            <line class="cf-sistema cf-poste" x1="470" y1="312" x2="470" y2="158"/>
+            <!-- gateway en el mástil del casco -->
+            <line class="cf-sistema cf-poste" x1="472" y1="300" x2="472" y2="158"/>
             <circle class="cf-gw-glow" cx="472" cy="140" r="36"/>
             <line class="cf-sistema cf-antena" x1="472" y1="118" x2="472" y2="90"/>
             <circle class="cf-sistema cf-antena-punta" cx="472" cy="88" r="4"/>
             <rect class="cf-sistema cf-equipo" x="450" y="118" width="44" height="44" rx="6"/>
             <rect class="cf-sistema cf-equipo-det" x="457" y="127" width="30" height="10" rx="2"/>
+            <circle class="cf-sistema" cx="485" cy="152" r="3" fill="#4caf50"/>
 
             <!-- la camioneta llega (img/pickup.webp, plano de adelante; va antes del celular para que la pantalla la tape) -->
             <g transform="translate(0,322)">
               <g class="cf-camioneta">
+                <ellipse cx="88" cy="64" rx="84" ry="5" fill="#000" opacity=".18"/>
                 <image href="img/pickup.webp" x="0" y="0" width="176" height="65.8"/>
               </g>
             </g>
 
-            <!-- celular -->
-            <rect class="cf-sistema cf-cel-marco" x="742" y="128" width="118" height="208" rx="16"/>
-            <rect class="cf-sistema cf-cel-pantalla" x="752" y="146" width="98" height="172" rx="7"/>
-            <rect class="cf-sistema cf-cel-marco" x="780" y="133" width="42" height="7" rx="3.5"/>
-            <rect class="cf-sistema cf-cel-fila" x="760" y="248" width="82" height="10" rx="5"/>
-            <rect class="cf-sistema cf-cel-fila" x="760" y="268" width="62" height="10" rx="5"/>
-            <rect class="cf-sistema cf-cel-fila" x="760" y="288" width="74" height="10" rx="5"/>
+            <!-- celular con la app -->
+            <g class="cf-sistema">
+              <rect x="742" y="128" width="118" height="208" rx="17" fill="#141c2b"/>
+              <rect x="744.5" y="130.5" width="113" height="203" rx="15" fill="none" stroke="#3a465a" stroke-width="1.5"/>
+              <g clip-path="url(#cfPantalla)">
+                <rect x="752" y="146" width="98" height="172" fill="#7e9a63"/>
+                <path d="M752 200 L850 186 L850 232 L752 248 Z" fill="#8eab70"/>
+                <path d="M752 262 L850 246 L850 290 L752 306 Z" fill="#738f59"/>
+                <path d="M790 146 L806 318" stroke="#b9a988" stroke-width="2"/>
+                <rect x="752" y="146" width="98" height="18" fill="#152238"/>
+                <circle cx="761" cy="155" r="4.5" fill="#fff"/>
+                <text x="769" y="158.5" font-family="Barlow, sans-serif" font-size="9" font-weight="700" fill="#fff">AguaSens</text>
+                <g transform="translate(824,256) scale(1)"><path d="M0 0 C-5 -7 -7 -10 -7 -13.5 A7 7 0 1 1 7 -13.5 C7 -10 5 -7 0 0Z" fill="#4caf50" stroke="#fff" stroke-width="1.4"/><circle cy="-13.5" r="2.6" fill="#fff"/></g>
+                <g transform="translate(776,292) scale(0.85)"><path d="M0 0 C-5 -7 -7 -10 -7 -13.5 A7 7 0 1 1 7 -13.5 C7 -10 5 -7 0 0Z" fill="#4caf50" stroke="#fff" stroke-width="1.4"/><circle cy="-13.5" r="2.6" fill="#fff"/></g>
+                <g transform="translate(836,302) scale(0.85)"><path d="M0 0 C-5 -7 -7 -10 -7 -13.5 A7 7 0 1 1 7 -13.5 C7 -10 5 -7 0 0Z" fill="#4caf50" stroke="#fff" stroke-width="1.4"/><circle cy="-13.5" r="2.6" fill="#fff"/></g>
+                <g class="cf-cel-pin-verde" transform="translate(778,240) scale(1.1)"><path d="M0 0 C-5 -7 -7 -10 -7 -13.5 A7 7 0 1 1 7 -13.5 C7 -10 5 -7 0 0Z" fill="#4caf50" stroke="#fff" stroke-width="1.4"/><circle cy="-13.5" r="2.6" fill="#fff"/></g>
+                <g class="cf-cel-pin-rojo" transform="translate(778,240) scale(1.1)"><path d="M0 0 C-5 -7 -7 -10 -7 -13.5 A7 7 0 1 1 7 -13.5 C7 -10 5 -7 0 0Z" fill="#e5484d" stroke="#fff" stroke-width="1.4"/><circle cy="-13.5" r="2.6" fill="#fff"/></g>
+              </g>
+              <rect x="782" y="133" width="38" height="6" rx="3" fill="#000"/>
+            </g>
 
             <g class="cf-alerta">
-              <rect class="cf-alerta-caja" x="760" y="162" width="82" height="66" rx="7"/>
-              <circle class="cf-alerta-icono" cx="776" cy="181" r="9"/>
-              <rect fill="#fdecec" x="774.8" y="176" width="2.4" height="6" rx="1.2"/>
-              <rect fill="#fdecec" x="774.8" y="184" width="2.4" height="2.4" rx="1.2"/>
-              <rect class="cf-alerta-linea" x="792" y="175" width="42" height="7" rx="3.5"/>
-              <rect class="cf-alerta-linea" x="792" y="187" width="28" height="6" rx="3"/>
-              <rect class="cf-alerta-linea" x="768" y="204" width="66" height="6" rx="3"/>
-              <rect class="cf-alerta-linea" x="768" y="215" width="48" height="6" rx="3"/>
+              <rect x="756" y="168" width="90" height="50" rx="8" fill="#fff" stroke="#e3e8ee"/>
+              <circle cx="768" cy="180" r="6.5" fill="#2aabee"/>
+              <path d="M765 180.5 l7 -3 -2.2 6.2 -1.6 -2 z" fill="#fff"/>
+              <text x="778" y="183" font-family="Barlow, sans-serif" font-size="8" font-weight="700" fill="#0f172a">AguaSens</text>
+              <circle cx="764" cy="196" r="3.4" fill="#e5484d"/>
+              <text x="770" y="199" font-family="Barlow, sans-serif" font-size="8.5" font-weight="700" fill="#0f172a">Bebedero</text>
+              <text x="762" y="210" font-family="Barlow, sans-serif" font-size="8" fill="#475569">Sin agua · 2 %</text>
             </g>
 
             <g class="cf-ok">
-              <rect class="cf-ok-caja" x="760" y="162" width="82" height="66" rx="7"/>
-              <path class="cf-ok-tilde" d="M779 196 l9 10 l19 -24"/>
+              <rect x="756" y="168" width="90" height="50" rx="8" fill="#fff" stroke="#bfe3c2"/>
+              <circle cx="768" cy="180" r="6.5" fill="#2aabee"/>
+              <path d="M765 180.5 l7 -3 -2.2 6.2 -1.6 -2 z" fill="#fff"/>
+              <text x="778" y="183" font-family="Barlow, sans-serif" font-size="8" font-weight="700" fill="#0f172a">AguaSens</text>
+              <path d="M760 197 l3 3.4 5.6 -6.4" stroke="#2e7d32" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="772" y="200" font-family="Barlow, sans-serif" font-size="8.5" font-weight="700" fill="#0f172a">Resuelto</text>
+              <text x="762" y="210" font-family="Barlow, sans-serif" font-size="8" fill="#475569">Nivel 85 %</text>
             </g>
 
             <!-- resuelto -->
-            <g transform="translate(154,186)">
+            <g transform="translate(136,236)">
               <g class="cf-check">
                 <circle class="cf-check-circulo" cx="0" cy="0" r="22"/>
                 <path class="cf-check-tilde" d="M-9 1 l6 7 l13 -15"/>
@@ -389,6 +574,43 @@
 
             <!-- la noche del acto 2 -->
             <rect class="cf-noche" x="0" y="0" width="900" height="400"/>
+            <g class="cf-estrellas" fill="#fff">
+
+              <circle cx="521" cy="94" r="0.8"/>
+              <circle cx="466" cy="108" r="1.2"/>
+              <circle cx="539" cy="101" r="1.0"/>
+              <circle cx="853" cy="31" r="1.6"/>
+              <circle cx="235" cy="12" r="1.2"/>
+              <circle cx="136" cy="126" r="1.0"/>
+              <circle cx="673" cy="75" r="1.6"/>
+              <circle cx="449" cy="56" r="1.6"/>
+              <circle cx="596" cy="48" r="1.6"/>
+              <circle cx="717" cy="153" r="1.0"/>
+              <circle cx="785" cy="83" r="1.2"/>
+              <circle cx="195" cy="36" r="1.2"/>
+              <circle cx="747" cy="171" r="0.8"/>
+              <circle cx="846" cy="63" r="1.0"/>
+              <circle cx="109" cy="100" r="1.0"/>
+              <circle cx="741" cy="83" r="1.6"/>
+              <circle cx="601" cy="146" r="1.6"/>
+              <circle cx="292" cy="167" r="1.2"/>
+              <circle cx="778" cy="18" r="1.2"/>
+              <circle cx="512" cy="69" r="0.8"/>
+              <circle cx="574" cy="87" r="1.0"/>
+              <circle cx="32" cy="168" r="1.0"/>
+              <circle cx="696" cy="161" r="0.8"/>
+              <circle cx="403" cy="130" r="1.2"/>
+              <circle cx="853" cy="140" r="1.0"/>
+              <circle cx="735" cy="59" r="0.8"/>
+              <circle cx="674" cy="112" r="0.8"/>
+              <circle cx="168" cy="62" r="1.2"/>
+              <circle cx="485" cy="190" r="1.0"/>
+              <circle cx="356" cy="160" r="1.0"/>
+              <circle cx="87" cy="187" r="1.6"/>
+              <circle cx="124" cy="96" r="0.8"/>
+              <circle cx="342" cy="118" r="1.2"/>
+              <circle cx="418" cy="134" r="1.0"/>
+            </g>
             <g clip-path="url(#cfSoloCielo)">
               <g class="cf-astros"><circle class="cf-luna" cx="600" cy="1136" r="21"/></g>
             </g>
@@ -1003,6 +1225,14 @@
   <script src="js/main.js?v=4"></script>
   <script>
     lucide.createIcons();
+  </script>
+  <script>
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.aguasensDemo === 'manual') {
+        var t = document.getElementById('hero-demo-txt');
+        if (t) t.textContent = 'Ahora la manejás vos';
+      }
+    });
   </script>
 </body>
 

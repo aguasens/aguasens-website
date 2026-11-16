@@ -421,3 +421,38 @@
 
   .cf-anim__paso { opacity: 1; }
 }
+/* ═══ v3: escena ilustrada ═══ */
+.cf-loma  { fill: url(#cfLoma); }
+.cf-suelo { fill: url(#cfSuelo); }
+.cf-sol   { fill: #f6c453; }
+.cf-noche { fill: #0c1a30; }
+.cf-nube  { fill: #fff; }
+.cf-cuba-fondo { fill: #5b6b7b; }
+.cf-cuba  { fill: none; stroke: #8e9cab; stroke-width: 2.5; }
+.cf-cuba path { stroke-width: 1.2; opacity: .6; }
+.cf-estructura { fill: url(#cfChapa); stroke: #8e9cab; stroke-width: 1.5; }
+.cf-agua  { fill: none; }
+.cf-poste { stroke: #8f9aa6; }
+.cf-equipo { fill: #f8fafc; stroke: #8f9aa6; stroke-width: 2; }
+
+/* decorado vivo: aspas, nubes, estrellas, ventanas y el pin del celular */
+.cf-aspas     { transform-box: fill-box; transform-origin: center; animation: cf-aspas 2.4s linear infinite; }
+.cf-nubecitas { animation: cf-deriva 20s linear infinite; }
+.cf-estrellas { opacity: 0; animation: cf-estrellas 20s linear infinite; }
+.cf-ventanas  { opacity: 0; animation: cf-estrellas 20s linear infinite; }
+.cf-cel-pin-rojo  { opacity: 0; animation: cf-pin-rojo 20s linear infinite; }
+@keyframes cf-aspas { to { transform: rotate(360deg); } }
+@keyframes cf-deriva { from { transform: translateX(-30px); } to { transform: translateX(40px); } }
+@keyframes cf-estrellas {
+  0%, 29%   { opacity: 0; }
+  35%, 43%  { opacity: 1; }
+  49%, 100% { opacity: 0; }
+}
+@keyframes cf-pin-rojo {
+  0%, 76%   { opacity: 0; }
+  78%, 93%  { opacity: 1; }
+  95%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cf-cel-pin-rojo { opacity: 1; }
+}

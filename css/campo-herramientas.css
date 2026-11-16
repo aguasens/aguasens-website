@@ -1,0 +1,174 @@
+/* ═══════════════════════════════════════════
+   AGUASENS v3 — identidad "de campo" para las herramientas
+   (calculadoras + mapa de instalación). Va después de campo.css.
+   ═══════════════════════════════════════════ */
+:root {
+  --lomada: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 34' preserveAspectRatio='none'%3E%3Cpath d='M0 34V22C180 6 330 4 520 14s380 18 560 6 280-16 360-8v20Z'/%3E%3C/svg%3E");
+  --oscuro-campo: linear-gradient(135deg, var(--verde-oscuro) 0%, #0d1b33 100%);
+}
+
+/* ─── Lomada que separa la banda oscura del fondo crema ─── */
+.calc-banda::after, .cotizar-hero::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 36px; z-index: 1; pointer-events: none;
+  background: var(--crema);
+  -webkit-mask: var(--lomada) center / 100% 100% no-repeat;
+          mask: var(--lomada) center / 100% 100% no-repeat;
+}
+
+/* ═══ CALCULADORAS ═══ */
+body.calc-page {
+  --calc-bg: var(--crema);
+  --calc-surface: #fffef9;
+  --calc-border: var(--gris-claro);
+  --c-primary: var(--logo-azul);
+  --c-accent: #5a8fd0;
+  background: var(--curvas-verdes) right -360px top 280px / 1200px auto no-repeat, var(--crema);
+}
+
+.calc-banda {
+  position: relative; color: #fff; padding: 20px 20px 70px;
+  background: var(--curvas-claras) right -320px top -220px / 1300px auto no-repeat, var(--oscuro-campo);
+}
+.calc-banda__in { max-width: 520px; margin: 0 auto; }
+.calc-banda__top { display: flex; align-items: center; justify-content: space-between; }
+.calc-banda .calc-back-btn {
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+  color: #fff; box-shadow: none; text-decoration: none;
+}
+.calc-banda .calc-back-btn:hover { background: rgba(255,255,255,.16); }
+.calc-banda__logo img { height: 42px; width: auto; display: block; }
+.calc-banda .section-label { margin: 34px 0 10px; font-size: 13px; color: var(--pasto-claro); }
+.calc-banda__titulo {
+  font-family: var(--font-display); font-weight: 900; color: #fff;
+  font-size: clamp(32px, 6vw, 44px); line-height: 1.08; margin: 0 0 12px;
+}
+.calc-banda__sub { font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,.7); margin: 0; }
+
+.calc-container { max-width: 520px; padding-top: 18px; position: relative; }
+
+/* rótulos de bloque: como "El agua que tenés" de la portada */
+.calc-section-title { margin-top: 8px; }
+.calc-section-title i { color: var(--pasto); }
+.calc-section-title h2 {
+  font-family: var(--font-condensed); font-size: 17px; font-weight: 700;
+  letter-spacing: .04em; color: var(--verde-oscuro);
+}
+
+/* tarjetas y campos: papel cálido en vez de gris azulado */
+.calc-card, details, .metric-card {
+  background: #fffef9; border: 1px solid var(--gris-claro);
+  box-shadow: 0 2px 10px rgba(60, 50, 20, .05);
+}
+.calc-card { border-top: 3px solid var(--logo-azul); }
+.calc-input, .calc-toggle { background: var(--crema); border-color: #e7e1d2; }
+.calc-input:focus { border-color: var(--logo-azul); background: #fff; }
+.calc-toggle.active, .calc-toggle-accent.active { background: var(--logo-azul); color: #fff; }
+.svg-container { background: var(--crema); }
+
+/* tarjetas oscuras (impacto, recomendación): con curvas como la sección de herramientas */
+.economic-card.caminata, .calc-card[style*="c-deep"] {
+  background: var(--curvas-claras) right -200px top -160px / 700px auto no-repeat, var(--oscuro-campo) !important;
+  border: 0;
+}
+
+/* ═══ MAPA DE INSTALACIÓN ═══ */
+.cotizar-hero {
+  position: relative; padding-bottom: 72px;
+  background: var(--curvas-claras) right -320px top -240px / 1400px auto no-repeat, var(--oscuro-campo);
+}
+.cotizar-hero .section-label { color: var(--pasto-claro); }
+.cotizar {
+  padding-top: 32px;
+  background: var(--curvas-verdes) left -360px bottom -260px / 1200px auto no-repeat, var(--crema);
+}
+.map-panel, .form-panel, .cotizar .card { background: #fffef9; border-color: var(--gris-claro); }
+.form-panel h2 { color: var(--verde-oscuro); }
+
+/* ═══ CAMINATA: lote dibujado sobre el satélite ═══ */
+.lote-modos { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.lote-modo {
+  display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border-radius: 100px;
+  border: 1.5px solid var(--gris-claro); background: #fffef9; color: var(--verde-oscuro);
+  font: 600 13px var(--font-body, 'Barlow', sans-serif); cursor: pointer; transition: all .2s;
+}
+.lote-modo i, .lote-modo svg { width: 16px; height: 16px; }
+.lote-modo:hover { border-color: var(--logo-azul); }
+.lote-modo.activo { background: var(--logo-azul); border-color: var(--logo-azul); color: #fff; }
+#m_lote.activo { background: var(--pasto); border-color: var(--pasto); }
+.lote-modo--icono { margin-left: auto; padding: 9px 11px; }
+
+.lote-buscar { position: relative; display: flex; gap: 8px; margin-bottom: 10px; }
+.lote-buscar input {
+  flex: 1; min-width: 0; padding: 10px 14px; border-radius: 12px; border: 1.5px solid #e7e1d2;
+  background: var(--crema); font: 14px 'Barlow', sans-serif; color: var(--verde-oscuro);
+}
+.lote-buscar input:focus { outline: none; border-color: var(--logo-azul); background: #fff; }
+.lote-buscar > button {
+  padding: 0 12px; border-radius: 12px; border: 1.5px solid #e7e1d2; background: #fffef9;
+  color: var(--logo-azul); display: flex; align-items: center; cursor: pointer;
+}
+.lote-buscar > button svg { width: 18px; height: 18px; }
+.lote-buscar__res {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 1000; display: none;
+  background: #fff; border: 1px solid var(--gris-claro); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  max-height: 220px; overflow-y: auto;
+}
+.lote-buscar__res.open { display: block; }
+.lote-buscar__res div { padding: 10px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f0ece2; }
+.lote-buscar__res div:hover { background: var(--crema); }
+
+.lote-mapa-wrap { position: relative; }
+.lote-mapa { height: 380px; border-radius: 16px; overflow: hidden; border: 1px solid var(--gris-claro); background: #2b3a2a; z-index: 0; }
+.lote-mapa.dibujando, .lote-mapa.dibujando .leaflet-interactive { cursor: crosshair; }
+.lote-mapa:not(.dibujando) { cursor: copy; }
+.lote-dibujo {
+  margin-top: 10px;
+  display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 14px; border-radius: 14px;
+  background: rgba(13, 27, 51, .9); color: #fff; font-size: 13px; font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0,0,0,.3);
+}
+.lote-dibujo[hidden] { display: none; }
+.lote-dibujo span { flex: 1; }
+.lote-dibujo button {
+  border: 0; border-radius: 10px; padding: 8px 12px; font: 700 13px 'Barlow', sans-serif; cursor: pointer;
+  background: var(--pasto); color: #fff;
+}
+.lote-dibujo button:disabled { opacity: .4; cursor: default; }
+.lote-dibujo .lote-dibujo__x { background: rgba(255,255,255,.12); padding: 7px; display: flex; }
+.lote-dibujo__x svg { width: 16px; height: 16px; }
+
+.lote-vertice { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 3px solid var(--pasto); box-shadow: 0 1px 4px rgba(0,0,0,.4); cursor: grab; }
+.lote-vertice--primero { background: var(--pasto); border-color: #fff; transform: scale(1.25); cursor: pointer; }
+.lote-beb {
+  width: 30px; height: 30px; border-radius: 50%; background: var(--logo-azul); border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; cursor: grab;
+}
+.lote-beb span { width: 10px; height: 13px; background: #fff; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; clip-path: polygon(50% 0, 100% 62%, 100% 100%, 0 100%, 0 62%); }
+.lote-quitar { border: 0; background: none; color: var(--c-danger); font: 700 13px 'Barlow', sans-serif; cursor: pointer; padding: 2px 4px; }
+.lote-card .leaflet-popup-content { margin: 8px 10px; }
+
+.lote-ayuda { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; line-height: 1.5; color: var(--c-muted); margin: 10px 2px 0; }
+.lote-ayuda svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px; color: var(--logo-azul); }
+.lote-datos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.lote-datos div { background: var(--crema); border-radius: 12px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: baseline; }
+.lote-datos span { font-size: 12px; color: var(--c-muted); }
+.lote-datos strong { font-size: 18px; color: var(--logo-azul); }
+
+/* el mapa pide más ancho que la columna de la calculadora */
+@media (min-width: 760px) {
+  .calc-banda__in, .calc-container { max-width: 640px; }
+  .lote-mapa { height: 440px; }
+}
+@media (max-width: 420px) {
+  .lote-modo { padding: 8px 11px; font-size: 12.5px; }
+  .lote-mapa { height: 340px; }
+}
+
+.lote-leyenda { margin-top: 14px; }
+.lote-leyenda__barra { height: 9px; border-radius: 5px;
+  background: linear-gradient(to right, rgb(25,199,163) 0%, rgb(25,199,163) 20%, rgb(255,196,71) 50%, rgb(255,80,80) 100%); }
+.lote-leyenda__marcas { position: relative; height: 16px; margin-top: 4px; font-size: 11px; color: var(--c-muted); }
+.lote-leyenda__marcas span { position: absolute; top: 0; white-space: nowrap; }
+.lote-leyenda__marcas span[style*="left:20%"], .lote-leyenda__marcas span[style*="left:50%"] { transform: translateX(-50%); }
+.lote-leyenda p { font-size: 12px; color: var(--c-muted); margin: 6px 0 0; line-height: 1.5; }
+.lote-leyenda b { color: var(--verde-oscuro); }
